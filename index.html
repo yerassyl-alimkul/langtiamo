@@ -899,15 +899,27 @@ function openAwards(){
 let itVoice=null;
 function pickVoice(){try{const vs=speechSynthesis.getVoices();itVoice=vs.find(v=>v.lang==="it-IT")||vs.find(v=>(v.lang||"").toLowerCase().startsWith("it"))||null}catch(e){}}
 try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+// iOS (Telegram, Safari): первая фраза должна прозвучать прямо в обработчике нажатия,
+// а cancel() сразу перед speak() иногда «съедает» фразу. Поэтому разблокируем синтез
+// при первом касании и делаем паузу после cancel().
+let ttsUnlocked=false;
+function unlockTTS(){
+  if(ttsUnlocked||!("speechSynthesis" in window))return;ttsUnlocked=true;
+  try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;u.lang="it-IT";speechSynthesis.speak(u);pickVoice()}catch(e){}
+}
+["touchstart","pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,unlockTTS,{capture:true,passive:true}));
 function speak(text,slow){
   if(typeof dlg!=="undefined"&&dlg&&dlg.playing){stopDialog();render()}
   try{
     if(!("speechSynthesis" in window)){toast("Озвучка не поддерживается этим браузером");return}
-    speechSynthesis.cancel();
+    if(!itVoice)pickVoice();
     const u=new SpeechSynthesisUtterance(String(text).replace(/\(.*?\)/g,"").replace(/→/g,",").replace(/___/g," "));
     u.lang="it-IT"; if(itVoice)u.voice=itVoice;
-    u.rate=slow?0.6:state.settings.rate;
-    speechSynthesis.speak(u);
+    u.rate=slow?0.6:state.settings.rate; u.volume=1;
+    const busy=speechSynthesis.speaking||speechSynthesis.pending;
+    if(busy){speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),80)}
+    else speechSynthesis.speak(u);
+    try{speechSynthesis.resume()}catch(e){}
   }catch(e){toast("Озвучка недоступна")}
 }
 function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
