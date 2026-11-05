@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Piano Piano — итальянский с нуля</title>
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -29,7 +29,8 @@
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;font-size:16px;line-height:1.45}
 button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
-.wrap{max-width:560px;margin:0 auto;padding:16px 16px 96px}
+:root{--sat:max(env(safe-area-inset-top),var(--tg-st,0px));--sab:max(env(safe-area-inset-bottom),var(--tg-sb,0px));--sal:env(safe-area-inset-left);--sar:env(safe-area-inset-right)}
+.wrap{max-width:560px;margin:0 auto;padding:calc(16px + var(--sat)) calc(16px + var(--sar)) calc(100px + var(--sab)) calc(16px + var(--sal))}
 header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
 .logo{font-family:Fraunces,serif;font-weight:700;font-size:22px;letter-spacing:-.01em}
 .logo span{color:var(--terra)}
@@ -125,12 +126,14 @@ h3{font-size:17px}
 .ex .play{width:30px;height:30px}
 input[type=search],input[type=text]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
 input[type=range]{width:100%;accent-color:var(--terra)}
-nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px calc(4px + var(--sar)) calc(8px + var(--sab)) calc(4px + var(--sal));z-index:5}
 nav.tabs .in{display:flex;max-width:560px;width:100%}
-nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11.5px;font-weight:600;color:var(--muted);border-radius:10px}
+nav.tabs button{flex:1 1 0;min-width:0;display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 2px;font-size:11px;line-height:1.2;font-weight:600;color:var(--muted);border-radius:10px;overflow:visible}
+nav.tabs button span{max-width:100%;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+nav.tabs svg{flex:none}
 nav.tabs button.on{color:var(--terra)}
 nav.tabs svg{width:22px;height:22px}
-.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,480px);text-align:center;transition:.25s;z-index:20;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(90px + var(--sab));transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,480px);text-align:center;transition:.25s;z-index:20;pointer-events:none}
 .toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 .modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:30}
 .modal.on{display:flex}
@@ -165,7 +168,7 @@ nav.tabs svg{width:22px;height:22px}
 .answer-in.right{border-color:var(--olive);background:var(--olive-soft)}
 .answer-in.wrong{border-color:var(--red);background:var(--red-soft)}
 textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:13px/1.4 ui-monospace,monospace}
-.celeb{position:fixed;left:50%;top:12px;transform:translate(-50%,-160%);transition:transform .35s cubic-bezier(.2,.9,.3,1.25);z-index:40;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.18);border-radius:18px;padding:12px 16px;display:flex;gap:12px;align-items:center;min-width:260px;max-width:92vw;pointer-events:none}
+.celeb{position:fixed;left:50%;top:calc(12px + var(--sat));transform:translate(-50%,-160%);transition:transform .35s cubic-bezier(.2,.9,.3,1.25);z-index:40;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.18);border-radius:18px;padding:12px 16px;display:flex;gap:12px;align-items:center;min-width:260px;max-width:92vw;pointer-events:none}
 .celeb.on{transform:translate(-50%,0)}
 .celeb .e{font-size:32px;line-height:1}
 .conf{position:fixed;top:-14px;width:9px;height:14px;z-index:39;border-radius:2px;animation:fall linear forwards;pointer-events:none}
@@ -1277,6 +1280,8 @@ function listen(target,btn){
 const TG=(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData)?window.Telegram.WebApp:null;
 if(TG){try{TG.ready();TG.expand();document.documentElement.classList.add(TG.colorScheme==="dark"?"dark":"light");
   const bg=TG.colorScheme==="dark"?"#1B1816":"#FBF6EE";TG.setHeaderColor&&TG.setHeaderColor(bg);TG.setBackgroundColor&&TG.setBackgroundColor(bg);
+  const setSafe=()=>{try{const a=TG.safeAreaInset||{},c=TG.contentSafeAreaInset||{},r=document.documentElement.style;r.setProperty("--tg-st",((a.top||0)+(c.top||0))+"px");r.setProperty("--tg-sb",((a.bottom||0)+(c.bottom||0))+"px")}catch(e){}};
+  setSafe();TG.onEvent&&(TG.onEvent("safeAreaChanged",setSafe),TG.onEvent("contentSafeAreaChanged",setSafe),TG.onEvent("viewportChanged",setSafe));
   TG.onEvent&&TG.onEvent("themeChanged",()=>{const h=document.documentElement;h.classList.remove("dark","light");h.classList.add(TG.colorScheme==="dark"?"dark":"light")});
 }catch(e){}}
 /* ---- Telegram: хранение прогресса в CloudStorage и статистика для напоминаний ---- */
@@ -1457,7 +1462,7 @@ function vToday(){
   <h2>Фраза дня</h2>
   <div class="card row"><div class="grow"><div class="it">${esc(pd[0])}</div><div class="tr">${esc(pd[2])}</div><div class="ru">${esc(pd[1])}</div></div>${playBtns(pd[0],{slow:1})}</div>
   <h2>Путь новичка <span class="muted small" style="font-family:Manrope">${doneN}/${steps.length}</span></h2>
-  <div class="card"><ul class="path">${steps.map((s,i)=>`<li><div class="chk ${s[2]?"done":i===nextIdx?"next":""}">${s[2]?ICON.check:i+1}</div><div class="grow"><b>${s[0]}</b><div class="muted small">${s[1]}</div></div>${!s[2]?`<button class="link" data-step="${i}">${i===nextIdx?"Начать":"Открыть"}</button>`:""}</li>`).join("")}</ul></div>
+  <div class="card"><ul class="path">${steps.map((s,i)=>`<li><div class="chk ${s[2]?"done":i===nextIdx?"next":""}">${s[2]?ICON.check:i+1}</div><div class="grow"><b>${s[0]}</b><div class="muted small">${s[1]}</div></div><button class="link" data-step="${i}" style="${s[2]?"color:var(--muted)":""}">${s[2]?"Повторить":i===nextIdx?"Начать":"Открыть"}</button></li>`).join("")}</ul></div>
   <h2>Неделя</h2>
   <div class="card"><div class="week">${days.map((x,i)=>{const v=state.xp[x.k]||0;return `<div class="wcol ${i===6?"today":""}"><div class="wbar"><i class="${v>=goal?"full":""}" style="height:${Math.round(100*v/mx)}%"></i></div><span>${WD[x.d.getDay()]}</span></div>`}).join("")}</div>
   <div class="muted small">За 7 дней: ${weekSum} ${plural(weekSum,"очко","очка","очков")}. Яркий столбик — цель дня выполнена.</div></div>
