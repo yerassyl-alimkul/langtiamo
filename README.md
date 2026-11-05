@@ -1,0 +1,28 @@
+# Piano Piano — итальянский с нуля
+
+Приложение для изучения итальянского: 445 слов с интервальным повторением, фразы и диалоги для жизни в Италии, 16 уроков грамматики (до A2), тренировки на слух, уровни, награды и задания дня.
+
+Работает как Telegram Mini App в боте **@langtiamo_bot** и как обычная страница: https://yerassyl-alimkul.github.io/pianopiano/
+
+## Как устроено
+
+| Часть | Где | Что делает |
+| --- | --- | --- |
+| `index.html` | GitHub Pages | Всё приложение в одном файле. В Telegram прогресс хранится в Telegram CloudStorage, в обычном браузере — в localStorage |
+| `supabase/functions/pianopiano-bot` | Supabase Edge Functions | Вебхук бота (`/start`, `/time`, `/remind`), приём статистики из Mini App (с проверкой подписи `initData`), рассылка напоминаний |
+| Таблица `pp_users` | Supabase | Настройки напоминаний и краткая статистика (сколько карточек на повтор, серия) |
+| Задача `pianopiano-remind` | pg_cron | Каждый час вызывает рассылку; напоминание приходит в выбранный час, если сегодня ещё не занимался |
+
+## Настройка (уже сделано)
+
+1. Секрет `PP_BOT_TOKEN` в Supabase → Edge Functions → Secrets.
+2. Регистрация вебхука, команд и кнопки меню: открыть `https://sffknvpnbrgwmtlcouge.supabase.co/functions/v1/pianopiano-bot?a=setup`.
+3. GitHub Pages: Settings → Pages → Deploy from branch → `main` / root.
+
+Если адрес страницы поменяется, задай секрет `PP_APP_URL` и снова открой ссылку `?a=setup`.
+
+## Команды бота
+
+- `/start` — приветствие и кнопка приложения
+- `/time 9` — час напоминания (0–23, по твоему часовому поясу)
+- `/remind` — включить или выключить напоминания

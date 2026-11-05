@@ -1,0 +1,1540 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Piano Piano — итальянский с нуля</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF6EE; --card:#FFFFFF; --ink:#2A2522; --muted:#7A6F66; --line:#EADFD0;
+  --terra:#C4532D; --terra-soft:#F6E2D8; --sea:#1F5F8B; --sea-soft:#DDEAF3;
+  --olive:#5F7A2E; --olive-soft:#E6EDD6; --red:#B3261E; --red-soft:#F7DCDA;
+  --shadow:0 1px 2px rgba(60,40,20,.06),0 4px 14px rgba(60,40,20,.06);
+  --r:16px;
+}
+@media (prefers-color-scheme:dark){
+  :root:not(.light){--bg:#1B1816; --card:#26221F; --ink:#F3ECE4; --muted:#A99D92; --line:#3A3430;
+  --terra:#E07A52; --terra-soft:#3D2A22; --sea:#6FA8D6; --sea-soft:#1F3040;
+  --olive:#9DB86A; --olive-soft:#2B3320; --red:#F08B84; --red-soft:#3E2422;
+  --shadow:none}
+}
+:root.dark{--bg:#1B1816; --card:#26221F; --ink:#F3ECE4; --muted:#A99D92; --line:#3A3430;
+  --terra:#E07A52; --terra-soft:#3D2A22; --sea:#6FA8D6; --sea-soft:#1F3040;
+  --olive:#9DB86A; --olive-soft:#2B3320; --red:#F08B84; --red-soft:#3E2422;
+  --shadow:none}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font-family:Manrope,system-ui,sans-serif;font-size:16px;line-height:1.45}
+button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
+.wrap{max-width:560px;margin:0 auto;padding:16px 16px 96px}
+header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
+.logo{font-family:Fraunces,serif;font-weight:700;font-size:22px;letter-spacing:-.01em}
+.logo span{color:var(--terra)}
+.iconbtn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
+.iconbtn:hover{background:var(--line)}
+h1,h2,h3{font-family:Fraunces,serif;font-weight:700;letter-spacing:-.01em;margin:0}
+h1{font-size:28px;line-height:1.15}
+h2{font-size:21px;margin:22px 0 10px}
+h3{font-size:17px}
+.muted{color:var(--muted)}
+.small{font-size:13.5px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px;box-shadow:var(--shadow)}
+.stack>*+*{margin-top:10px}
+.row{display:flex;align-items:center;gap:10px}
+.between{justify-content:space-between}
+.grow{flex:1;min-width:0}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:12px;font-weight:700;background:var(--terra);color:#fff;transition:transform .08s}
+.btn:active{transform:scale(.98)}
+.btn.block{width:100%}
+.btn.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+.btn.sea{background:var(--sea)}
+.btn[disabled]{opacity:.45;cursor:default}
+.pill{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;border-radius:999px;font-size:13px;font-weight:600;background:var(--line)}
+.pill.ok{background:var(--olive-soft);color:var(--olive)}
+.pill.terra{background:var(--terra-soft);color:var(--terra)}
+.pill.sea{background:var(--sea-soft);color:var(--sea)}
+.hero{display:flex;gap:16px;align-items:center}
+.ring{width:84px;height:84px;flex:none;position:relative}
+.ring svg{display:block;transform:rotate(-90deg)}
+.ring .lbl{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;text-align:center;font-weight:700;font-size:15px;line-height:1.1}
+.ring .lbl small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
+.stat b{display:block;font-size:22px;font-family:Fraunces,serif}
+.stat span{font-size:12px;color:var(--muted)}
+.path li{list-style:none;display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
+.path li:last-child{border-bottom:0}
+.path{padding:0;margin:0}
+.chk{width:26px;height:26px;border-radius:50%;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:14px;font-weight:700}
+.chk.done{background:var(--olive);border-color:var(--olive);color:#fff}
+.chk.next{border-color:var(--terra);color:var(--terra)}
+.link{color:var(--sea);font-weight:600}
+.play{width:38px;height:38px;border-radius:50%;background:var(--sea-soft);color:var(--sea);display:grid;place-items:center;flex:none}
+.play.slow{background:transparent;border:1px solid var(--line);color:var(--muted);font-size:11px;font-weight:700}
+.play.mic{background:var(--terra-soft);color:var(--terra)}
+.play.mic.on{background:var(--terra);color:#fff;animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.6}}
+.it{font-weight:700;font-size:17px}
+.tr{color:var(--terra);font-size:13.5px;font-weight:600}
+.ru{color:var(--muted);font-size:14.5px}
+.list>.item{display:flex;gap:10px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.list>.item:last-child{border-bottom:0}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:var(--card);font-weight:600;font-size:14px}
+.chip.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.tile{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px;text-align:left;box-shadow:var(--shadow)}
+.tile b{display:block;font-size:15.5px;margin-bottom:2px}
+.tile .em{font-size:22px;display:block;margin-bottom:6px}
+.back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;margin-bottom:10px;padding:6px 0}
+.flash{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;cursor:pointer;user-select:none}
+.flash .big{font-family:Fraunces,serif;font-size:34px;font-weight:700;line-height:1.15}
+.flash .hint{font-size:13px;color:var(--muted)}
+.grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
+.grades button{padding:12px 4px;border-radius:12px;font-weight:700;font-size:14px;line-height:1.2}
+.grades small{display:block;font-weight:500;font-size:11px;opacity:.8;margin-top:2px}
+.g0{background:var(--red-soft);color:var(--red)}
+.g1{background:var(--terra-soft);color:var(--terra)}
+.g2{background:var(--olive-soft);color:var(--olive)}
+.g3{background:var(--sea-soft);color:var(--sea)}
+.bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--terra);border-radius:99px;transition:width .3s}
+.rule{font-size:15px}
+.rule p{margin:8px 0}
+.rule table{border-collapse:collapse;width:100%;margin:8px 0;font-size:14.5px}
+.rule td{padding:6px 8px;border-bottom:1px solid var(--line)}
+.rule td:first-child{color:var(--muted);width:42%}
+.rule b{color:var(--terra)}
+.opts{display:grid;gap:8px;margin-top:12px}
+.opt{padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);text-align:left;font-weight:600;font-size:16px}
+.opt.right{border-color:var(--olive);background:var(--olive-soft);color:var(--olive)}
+.opt.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
+.q{font-family:Fraunces,serif;font-size:22px;font-weight:700;line-height:1.3}
+.explain{margin-top:12px;padding:12px;border-radius:12px;background:var(--sea-soft);color:var(--ink);font-size:14.5px}
+.hidden-it .it,.hidden-it .tr{filter:blur(6px);transition:filter .2s}
+.hidden-it .item.show .it,.hidden-it .item.show .tr{filter:none}
+.ex{display:inline-flex;align-items:center;gap:8px;padding:6px 6px 6px 12px;border:1px solid var(--line);border-radius:999px;background:var(--card);margin:4px 6px 4px 0}
+.ex b{font-size:15px}
+.ex span{font-size:12.5px;color:var(--terra);font-weight:600}
+.ex .play{width:30px;height:30px}
+input[type=search],input[type=text]{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:inherit}
+input[type=range]{width:100%;accent-color:var(--terra)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:center;padding:6px 6px calc(6px + env(safe-area-inset-bottom));z-index:5}
+nav.tabs .in{display:flex;max-width:560px;width:100%}
+nav.tabs button{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;padding:6px 0;font-size:11.5px;font-weight:600;color:var(--muted);border-radius:10px}
+nav.tabs button.on{color:var(--terra)}
+nav.tabs svg{width:22px;height:22px}
+.toast{position:fixed;left:50%;bottom:86px;transform:translateX(-50%) translateY(20px);opacity:0;background:var(--ink);color:var(--bg);padding:11px 16px;border-radius:12px;font-size:14px;font-weight:600;max-width:min(92vw,480px);text-align:center;transition:.25s;z-index:20;pointer-events:none}
+.toast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.45);display:none;align-items:flex-end;justify-content:center;z-index:30}
+.modal.on{display:flex}
+.sheet{background:var(--bg);width:100%;max-width:560px;border-radius:20px 20px 0 0;padding:20px 16px calc(20px + env(safe-area-inset-bottom));max-height:88vh;overflow:auto}
+.setrow{padding:14px 0;border-bottom:1px solid var(--line)}
+.switch{width:46px;height:28px;border-radius:99px;background:var(--line);position:relative;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.2s}
+.switch.on{background:var(--olive)}
+.switch.on::after{left:21px}
+.center{text-align:center}
+.mt{margin-top:14px}
+.done-big{font-size:46px;line-height:1}
+.seg{display:flex;background:var(--line);border-radius:12px;padding:3px;margin:12px 0}
+.seg button{flex:1;padding:9px;border-radius:10px;font-weight:700;color:var(--muted)}
+.seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}
+.bub{max-width:88%;padding:10px 12px;border-radius:16px;margin:8px 0;display:flex;gap:8px;align-items:flex-start;cursor:default}
+.bub.them{background:var(--card);border:1px solid var(--line);border-bottom-left-radius:4px}
+.bub.me{background:var(--terra-soft);margin-left:auto;border-bottom-right-radius:4px}
+.bub.now{outline:2px solid var(--sea);outline-offset:1px}
+.bub.hid{cursor:pointer}
+.who{font-size:12px;font-weight:700;color:var(--muted);margin-bottom:2px}
+.week{display:flex;gap:8px;height:110px;margin-bottom:8px}
+.wcol{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px}
+.wbar{flex:1;width:100%;background:var(--line);border-radius:8px;display:flex;align-items:flex-end;overflow:hidden}
+.wbar i{display:block;width:100%;background:var(--terra);opacity:.45;border-radius:8px}
+.wbar i.full{opacity:1}
+.wcol span{font-size:11px;color:var(--muted)}
+.wcol.today span{color:var(--terra);font-weight:700}
+.bigplay{width:84px;height:84px;border-radius:50%;background:var(--sea);color:#fff;display:grid;place-items:center;margin:8px auto}
+.bigplay svg{width:34px;height:34px}
+.answer-in{font-size:20px;text-align:center;font-weight:700}
+.answer-in.right{border-color:var(--olive);background:var(--olive-soft)}
+.answer-in.wrong{border-color:var(--red);background:var(--red-soft)}
+textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px solid var(--line);background:var(--card);color:var(--ink);font:13px/1.4 ui-monospace,monospace}
+.celeb{position:fixed;left:50%;top:12px;transform:translate(-50%,-160%);transition:transform .35s cubic-bezier(.2,.9,.3,1.25);z-index:40;background:var(--card);border:1px solid var(--line);box-shadow:0 10px 30px rgba(0,0,0,.18);border-radius:18px;padding:12px 16px;display:flex;gap:12px;align-items:center;min-width:260px;max-width:92vw;pointer-events:none}
+.celeb.on{transform:translate(-50%,0)}
+.celeb .e{font-size:32px;line-height:1}
+.conf{position:fixed;top:-14px;width:9px;height:14px;z-index:39;border-radius:2px;animation:fall linear forwards;pointer-events:none}
+@keyframes fall{to{top:105vh;transform:rotate(760deg)}}
+.awards{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.aw{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px 6px;text-align:center}
+.aw .e{font-size:30px;display:block;line-height:1.2}
+.aw.lock .e{filter:grayscale(1);opacity:.3}
+.aw b{display:block;font-size:13px;margin-top:4px}
+.aw span{font-size:11px;color:var(--muted);display:block;line-height:1.3}
+.quest{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
+.combo{display:block;margin-top:6px;color:var(--terra);font-weight:800}
+.tile[disabled]{opacity:.5}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="top">
+    <div class="logo">Piano <span>Piano</span></div>
+    <div class="row" style="gap:6px"><button class="pill sea" id="lvchip" aria-label="Награды"></button><button class="iconbtn" id="gear" aria-label="Настройки">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
+    </button></div>
+  </header>
+  <main id="app"></main>
+</div>
+
+<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<div class="toast" id="toast"></div>
+<div class="celeb" id="celeb"></div>
+<div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
+
+<script>
+"use strict";
+/* ================== CONTENT ================== */
+const TOPICS={base:"Базовые",num:"Числа",time:"Время",months:"Месяцы",food:"Еда",city:"Город",money:"Деньги",home:"Дом",uni:"Учёба",people:"Люди",verbs:"Глаголы",adj:"Описания",colors:"Цвета",body:"Тело",clothes:"Одежда",weather:"Погода"};
+// [italiano, русский, транскрипция (заглавная = ударение), тема]
+const WORDS=[
+["sì","да","си","base"],["no","нет","но","base"],["grazie","спасибо","грАцие","base"],
+["prego","пожалуйста (в ответ на «спасибо»)","прЭго","base"],["per favore","пожалуйста (просьба)","пер фавОре","base"],
+["scusi","извините (вежливо)","скУзи","base"],["ciao","привет / пока","чАо","base"],["buongiorno","добрый день","буонджОрно","base"],
+["buonasera","добрый вечер","буонасЕра","base"],["arrivederci","до свидания","арриведЕрчи","base"],["va bene","хорошо, ладно","ва бЕне","base"],
+["allora","итак, ну тогда","аллОра","base"],["ecco","вот","Экко","base"],["forse","может быть","фОрсе","base"],
+["anche","тоже, также","Анке","base"],["molto","очень, много","мОльто","base"],["poco","мало","пОко","base"],
+["adesso","сейчас","адЭссо","base"],["sempre","всегда","сЭмпре","base"],["mai","никогда","май","base"],
+
+["uno","один","Уно","num"],["due","два","дУэ","num"],["tre","три","тре","num"],["quattro","четыре","куАттро","num"],
+["cinque","пять","чИнкуэ","num"],["sei","шесть","сэй","num"],["sette","семь","сЭтте","num"],["otto","восемь","Отто","num"],
+["nove","девять","нОве","num"],["dieci","десять","дьЕчи","num"],["venti","двадцать","вЕнти","num"],["cento","сто","чЕнто","num"],["mille","тысяча","мИлле","num"],
+
+["oggi","сегодня","Оджи","time"],["domani","завтра","домАни","time"],["ieri","вчера","йЕри","time"],
+["la mattina","утро","ла маттИна","time"],["la sera","вечер","ла сЕра","time"],["il giorno","день","иль джОрно","time"],
+["la settimana","неделя","ла сеттимАна","time"],["l'ora","час","лОра","time"],["lunedì","понедельник","лунедИ","time"],
+["sabato","суббота","сАбато","time"],["domenica","воскресенье","домЕника","time"],["presto","рано; скоро","прЭсто","time"],["tardi","поздно","тАрди","time"],
+
+["il pane","хлеб","иль пАне","food"],["l'acqua","вода","лАккуа","food"],["il latte","молоко","иль лАтте","food"],
+["il caffè","кофе (эспрессо)","иль каффЭ","food"],["il cornetto","круассан","иль корнЕтто","food"],["la carne","мясо","ла кАрне","food"],
+["il pollo","курица","иль пОлло","food"],["il pesce","рыба","иль пЕше","food"],["il formaggio","сыр","иль формАджо","food"],
+["l'uovo","яйцо","луОво","food"],["la frutta","фрукты","ла фрУтта","food"],["la verdura","овощи","ла вердУра","food"],
+["il pomodoro","помидор","иль помодОро","food"],["la mela","яблоко","ла мЕла","food"],["l'arancia","апельсин","ларАнча","food"],
+["il riso","рис","иль рИзо","food"],["lo zucchero","сахар","ло дзУккеро","food"],["il sale","соль","иль сАле","food"],
+["il conto","счёт (в кафе)","иль кОнто","food"],["il vino","вино","иль вИно","food"],["la birra","пиво","ла бИрра","food"],
+["la granita","гранита (сицилийский лёд-десерт)","ла гранИта","food"],
+
+["la strada","улица, дорога","ла стрАда","city"],["la piazza","площадь","ла пьЯцца","city"],["la stazione","вокзал","ла стацьОне","city"],
+["l'autobus","автобус","лАутобус","city"],["il biglietto","билет","иль бильЕтто","city"],["la fermata","остановка","ла фермАта","city"],
+["il treno","поезд","иль трЕно","city"],["il traghetto","паром","иль трагЕтто","city"],["la farmacia","аптека","ла фармачИя","city"],
+["l'ospedale","больница","лоспедАле","city"],["il supermercato","супермаркет","иль супермеркАто","city"],["il negozio","магазин","иль негОцио","city"],
+["la banca","банк","ла бАнка","city"],["la posta","почта","ла пОста","city"],["il mare","море","иль мАре","city"],
+["la spiaggia","пляж","ла спьЯджа","city"],["a destra","направо","а дЭстра","city"],["a sinistra","налево","а синИстра","city"],
+["dritto","прямо","дрИтто","city"],["vicino","близко","вичИно","city"],["lontano","далеко","лонтАно","city"],
+
+["la casa","дом","ла кАза","home"],["la camera","комната","ла кАмера","home"],["la cucina","кухня","ла кучИна","home"],
+["il bagno","ванная, туалет","иль бАньо","home"],["la chiave","ключ","ла кьЯве","home"],["la porta","дверь","ла пОрта","home"],
+["la finestra","окно","ла финЭстра","home"],["il letto","кровать","иль лЭтто","home"],["l'affitto","аренда","лаффИтто","home"],
+["la bolletta","счёт за коммуналку","ла боллЕтта","home"],
+
+["l'università","университет","луниверситА","uni"],["la lezione","лекция, урок","ла лецьОне","uni"],["l'esame","экзамен","лэзАме","uni"],
+["il professore","преподаватель","иль профессОре","uni"],["lo studente","студент","ло студЭнте","uni"],["il libro","книга","иль лИбро","uni"],
+["il quaderno","тетрадь","иль куадЭрно","uni"],["la biblioteca","библиотека","ла библиотЭка","uni"],["l'aula","аудитория","лАула","uni"],
+["la mensa","студенческая столовая","ла мЭнса","uni"],["il corso","курс","иль кОрсо","uni"],
+
+["io","я","Ио","people"],["tu","ты","ту","people"],["lui","он","лУи","people"],["lei","она; Вы (вежливо)","лЭй","people"],
+["noi","мы","нОй","people"],["voi","вы","вОй","people"],["loro","они","лОро","people"],["l'amico","друг","ламИко","people"],
+["la moglie","жена","ла мОлье","people"],["il marito","муж","иль марИто","people"],["la famiglia","семья","ла фамИлья","people"],
+["il ragazzo","парень","иль рагАццо","people"],["la ragazza","девушка","ла рагАцца","people"],["il signore","господин, мужчина","иль синьОре","people"],
+["la signora","госпожа, женщина","ла синьОра","people"],
+
+["essere","быть","Эссере","verbs"],["avere","иметь","авЕре","verbs"],["fare","делать","фАре","verbs"],["andare","идти, ехать","андАре","verbs"],
+["venire","приходить","венИре","verbs"],["volere","хотеть","волЕре","verbs"],["potere","мочь","потЕре","verbs"],["dovere","быть должным","довЕре","verbs"],
+["parlare","говорить","парлАре","verbs"],["capire","понимать","капИре","verbs"],["mangiare","есть (кушать)","манджАре","verbs"],["bere","пить","бЕре","verbs"],
+["prendere","брать","прЭндере","verbs"],["comprare","покупать","компрАре","verbs"],["pagare","платить","пагАре","verbs"],["abitare","жить, проживать","абитАре","verbs"],
+["lavorare","работать","лаворАре","verbs"],["studiare","учиться","студьЯре","verbs"],["aspettare","ждать","аспеттАре","verbs"],["cercare","искать","черкАре","verbs"],
+["sapere","знать","сапЕре","verbs"],["dormire","спать","дормИре","verbs"],
+
+["buono","хороший, вкусный","буОно","adj"],["cattivo","плохой","каттИво","adj"],["grande","большой","грАнде","adj"],["piccolo","маленький","пИкколо","adj"],
+["caldo","горячий, жарко","кАльдо","adj"],["freddo","холодный","фрЕддо","adj"],["nuovo","новый","нуОво","adj"],["vecchio","старый","вЭккьо","adj"],
+["bello","красивый","бЭлло","adj"],["caro","дорогой","кАро","adj"],["economico","дешёвый","эконОмико","adj"],["aperto","открыто","апЭрто","adj"],
+["chiuso","закрыто","кьУзо","adj"],["libero","свободный","лИберо","adj"],["occupato","занятый","оккупАто","adj"],
+
+["d'accordo","согласен, договорились","даккОрдо","base"],["certo","конечно","чЕрто","base"],["davvero","правда, действительно","даввЕро","base"],
+["magari","было бы здорово; может быть","магАри","base"],["dai!","давай! да ладно!","дай","base"],["basta","хватит, достаточно","бАста","base"],
+["subito","сразу","сУбито","base"],["già","уже","джа","base"],["ancora","ещё","анкОра","base"],["insieme","вместе","инсьЕме","base"],
+["qui","здесь","куи","base"],["lì","там","ли","base"],["tutto","всё","тУтто","base"],["niente","ничего","ньЕнте","base"],
+["qualcosa","что-нибудь","куалькОза","base"],["chi","кто","ки","base"],["cosa","что","кОза","base"],["dove","где, куда","дОве","base"],
+["quando","когда","куАндо","base"],["come","как","кОме","base"],["quanto","сколько","куАнто","base"],["perché","почему; потому что","перкЭ","base"],
+["mi dispiace","мне жаль, извините","ми диспьЯче","base"],["non importa","неважно, ничего страшного","нон импОрта","base"],
+
+["undici","одиннадцать","Ундичи","num"],["dodici","двенадцать","дОдичи","num"],["tredici","тринадцать","трЭдичи","num"],
+["quattordici","четырнадцать","куаттОрдичи","num"],["quindici","пятнадцать","куИндичи","num"],["sedici","шестнадцать","сЕдичи","num"],
+["diciassette","семнадцать","дичассЭтте","num"],["diciotto","восемнадцать","дичОтто","num"],["diciannove","девятнадцать","дичаннОве","num"],
+["trenta","тридцать","трЭнта","num"],["quaranta","сорок","куарАнта","num"],["cinquanta","пятьдесят","чинкуАнта","num"],
+["sessanta","шестьдесят","сессАнта","num"],["settanta","семьдесят","сеттАнта","num"],["ottanta","восемьдесят","оттАнта","num"],
+["novanta","девяносто","новАнта","num"],["duecento","двести","дуэчЕнто","num"],["mezzo","половина, пол-","мЭддзо","num"],
+["primo","первый","прИмо","num"],["secondo","второй","секОндо","num"],["terzo","третий","тЭрцо","num"],
+
+["martedì","вторник","мартедИ","time"],["mercoledì","среда","мерколедИ","time"],["giovedì","четверг","джоведИ","time"],
+["venerdì","пятница","венердИ","time"],["il pomeriggio","день (после обеда)","иль померИджо","time"],["la notte","ночь","ла нОтте","time"],
+["stasera","сегодня вечером","стасЕра","time"],["il mese","месяц","иль мЕзе","time"],["l'anno","год","лАнно","time"],
+["dopo","после, потом","дОпо","time"],["prima","до, сначала","прИма","time"],["il fine settimana","выходные","иль фИне сеттимАна","time"],
+["l'estate","лето","лестАте","time"],["l'inverno","зима","линвЭрно","time"],["la primavera","весна","ла примавЭра","time"],["l'autunno","осень","лаутУнно","time"],
+
+["gennaio","январь","дженнАйо","months"],["febbraio","февраль","феббрАйо","months"],["marzo","март","мАрцо","months"],
+["aprile","апрель","апрИле","months"],["maggio","май","мАджо","months"],["giugno","июнь","джУньо","months"],
+["luglio","июль","лУльо","months"],["agosto","август","агОсто","months"],["settembre","сентябрь","сеттЭмбре","months"],
+["ottobre","октябрь","оттОбре","months"],["novembre","ноябрь","новЭмбре","months"],["dicembre","декабрь","дичЭмбре","months"],
+
+["la colazione","завтрак","ла колацьОне","food"],["il pranzo","обед","иль прАндзо","food"],["la cena","ужин","ла чЕна","food"],
+["l'olio","масло (растительное)","лОльо","food"],["il burro","сливочное масло","иль бУрро","food"],["il gelato","мороженое","иль джелАто","food"],
+["l'insalata","салат","линсалАта","food"],["la patata","картофель","ла патАта","food"],["la cipolla","лук","ла чипОлла","food"],
+["l'aglio","чеснок","лАльо","food"],["il limone","лимон","иль лимОне","food"],["l'uva","виноград","лУва","food"],
+["il prosciutto","ветчина","иль прошУтто","food"],["il pesce spada","рыба-меч","иль пЕше спАда","food"],["l'arancino","аранчино (рисовый шарик)","ларанчИно","food"],
+["il cannolo","канноло (сицилийская трубочка)","иль каннОло","food"],["il tè","чай","иль тэ","food"],["il succo","сок","иль сУкко","food"],
+["il bicchiere","стакан","иль биккьЕре","food"],["la bottiglia","бутылка","ла боттИлья","food"],["il piatto","тарелка; блюдо","иль пьЯтто","food"],
+["la forchetta","вилка","ла форкЕтта","food"],["il coltello","нож","иль колтЭлло","food"],["il cucchiaio","ложка","иль куккьЯйо","food"],
+["piccante","острый","пиккАнте","food"],["dolce","сладкий; десерт","дОльче","food"],["il cameriere","официант","иль камерьЕре","food"],
+
+["il centro","центр","иль чЕнтро","city"],["il porto","порт","иль пОрто","city"],["la chiesa","церковь","ла кьЕза","city"],
+["il museo","музей","иль музЭо","city"],["il ristorante","ресторан","иль ристорАнте","city"],["il mercato","рынок","иль меркАто","city"],
+["il parcheggio","парковка","иль паркЕджо","city"],["la macchina","машина","ла мАккина","city"],["la bicicletta","велосипед","ла бичиклЕтта","city"],
+["l'aeroporto","аэропорт","лаэропОрто","city"],["il semaforo","светофор","иль семАфоро","city"],["il ponte","мост","иль пОнте","city"],
+["l'indirizzo","адрес","линдирИццо","city"],["il binario","путь (на вокзале)","иль бинАрио","city"],
+
+["l'euro","евро","лЭуро","money"],["il centesimo","цент","иль чентЭзимо","money"],["i soldi","деньги","и сОльди","money"],
+["il prezzo","цена","иль прЭццо","money"],["lo sconto","скидка","ло скОнто","money"],["la cassa","касса","ла кАсса","money"],
+["lo scontrino","чек","ло сконтрИно","money"],["il bancomat","банкомат; карта","иль бАнкомат","money"],["il resto","сдача","иль рЭсто","money"],
+["i contanti","наличные","и контАнти","money"],["gratis","бесплатно","грАтис","money"],["costare","стоить","костАре","money"],
+
+["il tavolo","стол","иль тАволо","home"],["la sedia","стул","ла сЭдья","home"],["l'armadio","шкаф","лармАдьо","home"],
+["il frigorifero","холодильник","иль фригорИферо","home"],["la lavatrice","стиральная машина","ла лаватрИче","home"],["la doccia","душ","ла дОчча","home"],
+["il riscaldamento","отопление","иль рискальдамЭнто","home"],["la luce","свет","ла лУче","home"],["il padrone di casa","хозяин квартиры","иль падрОне ди кАза","home"],
+["il coinquilino","сосед по квартире","иль коинкуилИно","home"],["la spazzatura","мусор","ла спаццатУра","home"],["il balcone","балкон","иль балкОне","home"],
+
+["il voto","оценка","иль вОто","uni"],["la tesi","дипломная работа","ла тЭзи","uni"],["gli appunti","конспект","льи аппУнти","uni"],
+["la penna","ручка","ла пЕнна","uni"],["il compito","задание","иль кОмпито","uni"],["la scadenza","дедлайн, срок","ла скадЭнца","uni"],
+["il compagno di corso","однокурсник","иль компАньо ди кОрсо","uni"],["l'orario","расписание","лорАрио","uni"],["la domanda","вопрос","ла домАнда","uni"],
+["la risposta","ответ","ла риспОста","uni"],["il gruppo","группа","иль грУппо","uni"],["la borsa di studio","стипендия","ла бОрса ди стУдьо","uni"],
+
+["il padre","отец","иль пАдре","people"],["la madre","мать","ла мАдре","people"],["il figlio","сын","иль фИльо","people"],
+["la figlia","дочь","ла фИлья","people"],["il fratello","брат","иль фратЭлло","people"],["la sorella","сестра","ла сорЭлла","people"],
+["il bambino","ребёнок","иль бамбИно","people"],["la persona","человек","ла персОна","people"],["la gente","люди","ла джЭнте","people"],
+["il collega","коллега","иль коллЭга","people"],["il vicino di casa","сосед","иль вичИно ди кАза","people"],["il nonno","дедушка","иль нОнно","people"],["la nonna","бабушка","ла нОнна","people"],
+
+["vedere","видеть","ведЕре","verbs"],["sentire","слышать; чувствовать","сентИре","verbs"],["uscire","выходить","ушИре","verbs"],
+["partire","уезжать","партИре","verbs"],["arrivare","прибывать","арривАре","verbs"],["tornare","возвращаться","торнАре","verbs"],
+["entrare","входить","энтрАре","verbs"],["chiamare","звать, звонить","кьямАре","verbs"],["chiedere","спрашивать","кьЕдере","verbs"],
+["rispondere","отвечать","риспОндере","verbs"],["scrivere","писать","скрИвере","verbs"],["leggere","читать","лЭджере","verbs"],
+["aprire","открывать","апрИре","verbs"],["chiudere","закрывать","кьУдере","verbs"],["cucinare","готовить","кучинАре","verbs"],
+["pulire","убирать, чистить","пулИре","verbs"],["finire","заканчивать","финИре","verbs"],["cominciare","начинать","коминчАре","verbs"],
+["preferire","предпочитать","преферИре","verbs"],["conoscere","знать (кого-то), знакомиться","конОшере","verbs"],["pensare","думать","пенсАре","verbs"],
+["vivere","жить","вИвере","verbs"],["usare","использовать","узАре","verbs"],["provare","пробовать, примерять","провАре","verbs"],
+["aiutare","помогать","айутАре","verbs"],["ricordare","помнить","рикордАре","verbs"],["dimenticare","забывать","диментикАре","verbs"],
+["mettere","класть, надевать","мЕттере","verbs"],["portare","нести, приносить","портАре","verbs"],["guardare","смотреть","гуардАре","verbs"],
+["ascoltare","слушать","аскольтАре","verbs"],["imparare","учить, изучать","импарАре","verbs"],["viaggiare","путешествовать","вьяджАре","verbs"],
+["camminare","ходить пешком","камминАре","verbs"],["prenotare","бронировать, записываться","пренотАре","verbs"],["perdere","терять","пЭрдере","verbs"],
+["trovare","находить","тровАре","verbs"],["vendere","продавать","вЕндере","verbs"],["giocare","играть","джокАре","verbs"],["cambiare","менять","камбьЯре","verbs"],
+
+["alto","высокий","Альто","adj"],["basso","низкий","бАссо","adj"],["lungo","длинный","лУнго","adj"],["corto","короткий","кОрто","adj"],
+["facile","лёгкий, простой","фАчиле","adj"],["difficile","трудный","диффИчиле","adj"],["veloce","быстрый","велОче","adj"],["lento","медленный","лЭнто","adj"],
+["pieno","полный","пьЕно","adj"],["vuoto","пустой","вуОто","adj"],["felice","счастливый","фелИче","adj"],["triste","грустный","трИсте","adj"],
+["stanco","уставший","стАнко","adj"],["contento","довольный","контЭнто","adj"],["pronto","готовый; алло","прОнто","adj"],["giusto","правильный","джУсто","adj"],
+["sbagliato","неправильный","збальЯто","adj"],["pulito","чистый","пулИто","adj"],["sporco","грязный","спОрко","adj"],["simpatico","приятный (о человеке)","симпАтико","adj"],
+["gentile","любезный, вежливый","джентИле","adj"],["importante","важный","импортАнте","adj"],["vero","настоящий, правда","вЕро","adj"],["bravo","молодец, умелый","брАво","adj"],
+["brutto","некрасивый, плохой","брУтто","adj"],["giovane","молодой","джОване","adj"],["tranquillo","спокойный","транкуИлло","adj"],["comodo","удобный","кОмодо","adj"],
+
+["rosso","красный","рОссо","colors"],["blu","синий","блу","colors"],["azzurro","голубой","аддзУрро","colors"],["verde","зелёный","вЕрде","colors"],
+["giallo","жёлтый","джАлло","colors"],["nero","чёрный","нЕро","colors"],["bianco","белый","бьЯнко","colors"],["grigio","серый","грИджо","colors"],
+["marrone","коричневый","маррОне","colors"],["rosa","розовый","рОза","colors"],["arancione","оранжевый","аранчОне","colors"],["viola","фиолетовый","вьОла","colors"],
+
+["la testa","голова","ла тЭста","body"],["l'occhio","глаз","лОккьо","body"],["l'orecchio","ухо","лорЕккьо","body"],["il naso","нос","иль нАзо","body"],
+["la bocca","рот","ла бОкка","body"],["il dente","зуб","иль дЭнте","body"],["la gola","горло","ла гОла","body"],["la mano","рука (кисть)","ла мАно","body"],
+["il braccio","рука (от плеча)","иль брАччо","body"],["la gamba","нога","ла гАмба","body"],["il piede","стопа","иль пьЕде","body"],["la schiena","спина","ла скьЕна","body"],
+["lo stomaco","желудок","ло стОмако","body"],["la febbre","температура","ла фЭббре","body"],["la tosse","кашель","ла тОссе","body"],
+["il raffreddore","простуда, насморк","иль раффреддОре","body"],["la medicina","лекарство","ла медичИна","body"],
+
+["la maglietta","футболка","ла мальЕтта","clothes"],["la camicia","рубашка","ла камИча","clothes"],["i pantaloni","брюки","и панталОни","clothes"],
+["la gonna","юбка","ла гОнна","clothes"],["il vestito","платье; костюм","иль вестИто","clothes"],["la giacca","куртка, пиджак","ла джАкка","clothes"],
+["il cappotto","пальто","иль каппОтто","clothes"],["le scarpe","обувь","ле скАрпе","clothes"],["la borsa","сумка","ла бОрса","clothes"],
+["la taglia","размер (одежды)","ла тАлья","clothes"],["il cappello","шапка, шляпа","иль каппЭлло","clothes"],["l'ombrello","зонт","ломбрЭлло","clothes"],
+
+["il tempo","погода; время","иль тЭмпо","weather"],["il sole","солнце","иль сОле","weather"],["la pioggia","дождь","ла пьОджа","weather"],
+["piove","идёт дождь","пьОве","weather"],["il vento","ветер","иль вЭнто","weather"],["la nuvola","облако","ла нУвола","weather"],
+["fa caldo","жарко","фа кАльдо","weather"],["fa freddo","холодно","фа фрЕддо","weather"],["c'è il sole","солнечно","чэ иль сОле","weather"],
+["umido","влажный","Умидо","weather"],["lo scirocco","сирокко (жаркий ветер из Африки)","ло ширОкко","weather"]
+];
+
+const PHRASES=[
+{id:"meet",em:"👋",t:"Знакомство",p:[
+["Mi chiamo Yera.","Меня зовут Ера.","ми кьЯмо Ера"],
+["Come ti chiami?","Как тебя зовут?","кОме ти кьЯми?"],
+["Piacere!","Приятно познакомиться!","пьячЕре!"],
+["Sono del Kazakistan.","Я из Казахстана.","сОно дель казакистАн"],
+["Studio all'Università di Messina.","Я учусь в Университете Мессины.","стУдьо аллуниверситА ди мессИна"],
+["Come stai?","Как дела?","кОме стай?"],
+["Sto bene, grazie. E tu?","Хорошо, спасибо. А ты?","сто бЕне, грАцие. э ту?"],
+["Non parlo bene l'italiano.","Я плохо говорю по-итальянски.","нон пАрло бЕне литальЯно"],
+["Parla inglese?","Вы говорите по-английски?","пАрла инглЕзе?"],
+["Può ripetere, per favore?","Можете повторить, пожалуйста?","пуО рипЕтере, пер фавОре?"],
+["Più piano, per favore.","Помедленнее, пожалуйста.","пью пьЯно, пер фавОре"],
+["Non ho capito.","Я не понял.","нон о капИто"]]},
+{id:"bar",em:"☕",t:"Бар и кафе",p:[
+["Un caffè, per favore.","Эспрессо, пожалуйста.","ун каффЭ, пер фавОре"],
+["Un cappuccino e un cornetto.","Капучино и круассан.","ун каппуччИно э ун корнЕтто"],
+["Vorrei una granita al limone e una brioche.","Я бы хотел гранита с лимоном и бриошь.","воррЭй Уна гранИта аль лимОне э Уна бриОш"],
+["Al banco o al tavolo?","У стойки или за столиком? (спросят тебя)","аль бАнко о аль тАволо?"],
+["Da portare via.","С собой.","да портАре вИа"],
+["Un tavolo per due, per favore.","Столик на двоих, пожалуйста.","ун тАволо пер дУэ, пер фавОре"],
+["Quanto costa?","Сколько стоит?","куАнто кОста?"],
+["Il conto, per favore.","Счёт, пожалуйста.","иль кОнто, пер фавОре"],
+["Posso pagare con la carta?","Можно оплатить картой?","пОссо пагАре кон ла кАрта?"]]},
+{id:"shop",em:"🛒",t:"Магазин и рынок",p:[
+["Dov'è il latte?","Где молоко?","довЭ иль лАтте?"],
+["Un etto di prosciutto, per favore.","100 грамм ветчины, пожалуйста.","ун Этто ди прошУтто, пер фавОре"],
+["Mezzo chilo di pomodori.","Полкило помидоров.","мЭддзо кИло ди помодОри"],
+["Basta così, grazie.","Достаточно, спасибо.","бАста козИ, грАцие"],
+["Le serve una busta?","Вам нужен пакет? (спросят тебя)","ле сЭрве Уна бУста?"],
+["Sì, una busta, grazie.","Да, пакет, спасибо.","си, Уна бУста, грАцие"],
+["Quanto viene?","Сколько выходит? (разговорное)","куАнто вьЕне?"],
+["A che ora chiudete?","Во сколько вы закрываетесь?","а ке Ора кьюдЭте?"]]},
+{id:"move",em:"🚌",t:"Транспорт",p:[
+["Dov'è la fermata dell'autobus?","Где автобусная остановка?","довЭ ла фермАта деллАутобус?"],
+["A che ora parte il treno per Catania?","Во сколько отходит поезд на Катанию?","а ке Ора пАрте иль трЕно пер катАнья?"],
+["Un biglietto per Palermo, andata e ritorno.","Билет до Палермо, туда и обратно.","ун бильЕтто пер палЕрмо, андАта э ритОрно"],
+["Devo convalidare il biglietto?","Нужно прокомпостировать билет?","дЭво конвалидАре иль бильЕтто?"],
+["Questo autobus va in centro?","Этот автобус едет в центр?","куЭсто Аутобус ва ин чЕнтро?"],
+["Scendo alla prossima.","Выхожу на следующей.","шЕндо Алла прОссима"],
+["Dove si prende il traghetto per Villa San Giovanni?","Где садиться на паром до Вилла-Сан-Джованни?","дОве си прЭнде иль трагЕтто пер вИлла сан джовАнни?"]]},
+{id:"uni",em:"🎓",t:"Университет",p:[
+["Dov'è l'aula tre?","Где аудитория три?","довЭ лАула тре?"],
+["A che ora è la lezione?","Во сколько лекция?","а ке Ора э ла лецьОне?"],
+["Quando è l'esame?","Когда экзамен?","куАндо э лэзАме?"],
+["Posso fare una domanda?","Можно задать вопрос?","пОссо фАре Уна домАнда?"],
+["Non ho capito l'ultima parte.","Я не понял последнюю часть.","нон о капИто лУльтима пАрте"],
+["Mi può mandare le slide?","Можете прислать мне слайды?","ми пуО мандАре ле слайд?"],
+["Dov'è la segreteria studenti?","Где студенческий офис (секретариат)?","довЭ ла сегретерИя студЭнти?"]]},
+{id:"docs",em:"📄",t:"Документы",p:[
+["Ho bisogno del codice fiscale.","Мне нужен codice fiscale (налоговый код).","о бизОньо дель кОдиче фискАле"],
+["Ho un appuntamento alle dieci.","У меня запись на десять.","о ун аппунтамЭнто Алле дьЕчи"],
+["Quali documenti servono?","Какие документы нужны?","куАли докумЭнти сЭрвоно?"],
+["Ecco il mio passaporto.","Вот мой паспорт.","Экко иль мИо пассапОрто"],
+["Devo compilare questo modulo?","Мне нужно заполнить эту форму?","дЭво компилАре куЭсто мОдуло?"],
+["Dove devo firmare?","Где мне расписаться?","дОве дЭво фирмАре?"],
+["Quanto tempo ci vuole?","Сколько времени это займёт?","куАнто тЭмпо чи вуОле?"],
+["A quale sportello devo andare?","К какому окошку мне подойти?","а куАле спортЭлло дЭво андАре?"]]},
+{id:"doc",em:"💊",t:"Врач и аптека",p:[
+["Ho mal di testa.","У меня болит голова.","о маль ди тЭста"],
+["Ho la febbre.","У меня температура.","о ла фЭббре"],
+["Mi fa male la gola.","У меня болит горло.","ми фа мАле ла гОла"],
+["Avete qualcosa per il raffreddore?","У вас есть что-нибудь от простуды?","авЕте куалькОза пер иль раффреддОре?"],
+["Serve la ricetta?","Нужен рецепт?","сЭрве ла ричЕтта?"],
+["Ho bisogno di un medico.","Мне нужен врач.","о бизОньо ди ун мЭдико"],
+["Quante volte al giorno?","Сколько раз в день?","куАнте вОльте аль джОрно?"]]},
+{id:"sos",em:"🆘",t:"Экстренное",p:[
+["Aiuto!","Помогите!","аЙуто!"],
+["Chiamate un'ambulanza!","Вызовите скорую!","кьямАте унамбулАнца!"],
+["È urgente.","Это срочно.","э урджЭнте"],
+["Ho perso il portafoglio.","Я потерял кошелёк.","о пЭрсо иль портафОльо"],
+["Mi sono perso.","Я заблудился.","ми сОно пЭрсо"],
+["Dov'è l'ospedale più vicino?","Где ближайшая больница?","довЭ лоспедАле пью вичИно?"],
+["Il numero di emergenza è 112.","Номер экстренных служб — 112.","иль нУмеро ди эмерджЭнца э чЕнто додИчи"]]}
+];
+
+// диалоги: [кто говорит: 0 — собеседник, 1 — ты, итальянский, перевод]
+const DIALOGS=[
+{id:"d-bar",em:"☕",t:"Утро в баре",who:"Бариста",l:[
+[0,"Buongiorno! Cosa prende?","Добрый день! Что будете?"],
+[1,"Buongiorno! Un caffè e un cornetto, per favore.","Добрый день! Эспрессо и круассан, пожалуйста."],
+[0,"Il cornetto vuoto o alla crema?","Круассан пустой или с кремом?"],
+[1,"Alla crema, grazie.","С кремом, спасибо."],
+[0,"Altro?","Что-нибудь ещё?"],
+[1,"No, basta così. Quanto pago?","Нет, это всё. Сколько с меня?"],
+[0,"Due euro e venti.","Два евро двадцать."],
+[1,"Ecco a lei. Grazie, buona giornata!","Вот, пожалуйста. Спасибо, хорошего дня!"],
+[0,"Grazie a lei, arrivederci!","Вам спасибо, до свидания!"]]},
+{id:"d-mercato",em:"🍅",t:"На рынке",who:"Продавец",l:[
+[0,"Prego, mi dica!","Слушаю вас!"],
+[1,"Vorrei un chilo di pomodori.","Я бы хотел килограмм помидоров."],
+[0,"Questi o quelli piccoli?","Эти или маленькие?"],
+[1,"Quelli piccoli. Quanto costano?","Маленькие. Сколько стоят?"],
+[0,"Due euro al chilo. Altro?","Два евро за кило. Ещё что-нибудь?"],
+[1,"Sì, anche tre limoni.","Да, ещё три лимона."],
+[0,"Ecco. In tutto sono tre euro.","Вот. Всего три евро."],
+[1,"Posso pagare con la carta?","Можно картой?"],
+[0,"Mi dispiace, solo contanti.","К сожалению, только наличные."],
+[1,"Va bene, ecco tre euro.","Хорошо, вот три евро."]]},
+{id:"d-stazione",em:"🚆",t:"Билет на поезд",who:"Кассир",l:[
+[1,"Buongiorno, un biglietto per Catania, per favore.","Добрый день, билет до Катании, пожалуйста."],
+[0,"Solo andata o andata e ritorno?","Только туда или туда и обратно?"],
+[1,"Andata e ritorno.","Туда и обратно."],
+[0,"Per oggi?","На сегодня?"],
+[1,"Sì, il treno delle dieci. Da che binario parte?","Да, на поезд в десять. С какого пути он отправляется?"],
+[0,"Dal binario tre. Sono diciotto euro.","С третьего пути. Восемнадцать евро."],
+[1,"Ecco. Il treno è in orario?","Вот. Поезд идёт по расписанию?"],
+[0,"Sì, per ora è in orario. Buon viaggio!","Пока да, по расписанию. Счастливого пути!"]]},
+{id:"d-segreteria",em:"🎓",t:"В секретариате",who:"Сотрудница",l:[
+[1,"Buongiorno, sono uno studente di Data Science. Ho una domanda.","Добрый день, я студент Data Science. У меня вопрос."],
+[0,"Mi dica.","Слушаю вас."],
+[1,"Come posso prenotare l'esame?","Как мне записаться на экзамен?"],
+[0,"Deve prenotarlo online, sul portale dello studente.","Нужно записаться онлайн, на портале студента."],
+[1,"E se non trovo l'esame nella lista?","А если я не найду экзамен в списке?"],
+[0,"Allora scriva una mail al professore.","Тогда напишите письмо преподавателю."],
+[1,"Perfetto. Fino a quando posso prenotare?","Отлично. До какого срока можно записаться?"],
+[0,"Fino a cinque giorni prima dell'esame.","За пять дней до экзамена."],
+[1,"Grazie mille, è stata molto gentile.","Большое спасибо, вы очень любезны."],
+[0,"Si figuri!","Не за что!"]]},
+{id:"d-farmacia",em:"💊",t:"В аптеке",who:"Фармацевт",l:[
+[0,"Buonasera, mi dica.","Добрый вечер, слушаю вас."],
+[1,"Buonasera. Ho mal di gola e un po' di febbre.","Добрый вечер. У меня болит горло и небольшая температура."],
+[0,"Da quanti giorni?","Сколько дней?"],
+[1,"Da ieri.","Со вчерашнего дня."],
+[0,"Ha allergie a qualche medicina?","У вас есть аллергия на лекарства?"],
+[1,"No, nessuna.","Нет, никакой."],
+[0,"Allora le do queste pastiglie per la gola.","Тогда дам вам эти пастилки для горла."],
+[1,"Serve la ricetta?","Нужен рецепт?"],
+[0,"No, non serve. Se non passa in tre giorni, vada dal medico.","Нет, не нужен. Если за три дня не пройдёт, сходите к врачу."],
+[1,"Grazie, arrivederci.","Спасибо, до свидания."]]},
+{id:"d-compagno",em:"🤝",t:"Новый однокурсник",who:"Лука",l:[
+[0,"Ciao! Sei nuovo? Non ti ho mai visto.","Привет! Ты новенький? Я тебя раньше не видел."],
+[1,"Ciao! Sì, sono arrivato a ottobre. Mi chiamo Yera.","Привет! Да, я приехал в октябре. Меня зовут Ера."],
+[0,"Piacere, io sono Luca. Di dove sei?","Приятно познакомиться, я Лука. Откуда ты?"],
+[1,"Sono del Kazakistan, di Almaty.","Я из Казахстана, из Алматы."],
+[0,"Che bello! E come ti trovi a Messina?","Здорово! И как тебе в Мессине?"],
+[1,"Mi trovo bene, ma l'italiano è ancora difficile.","Мне нравится, но итальянский пока трудный."],
+[0,"Tranquillo, parli già bene! Prendiamo un caffè dopo la lezione?","Не переживай, ты уже хорошо говоришь! Выпьем кофе после пары?"],
+[1,"Volentieri! A dopo.","С удовольствием! До встречи."],
+[0,"A dopo!","До встречи!"]]},
+{id:"d-ristorante",em:"🍝",t:"В ресторане",who:"Официант",l:[
+[0,"Buonasera, avete prenotato?","Добрый вечер, у вас бронь?"],
+[1,"No, siamo in due. C'è un tavolo libero?","Нет, нас двое. Есть свободный столик?"],
+[0,"Sì, prego, da questa parte. Ecco il menù.","Да, прошу сюда. Вот меню."],
+[0,"Cosa vi porto da bere?","Что принести попить?"],
+[1,"Una bottiglia d'acqua naturale, per favore.","Бутылку воды без газа, пожалуйста."],
+[0,"Siete pronti per ordinare?","Готовы сделать заказ?"],
+[1,"Sì. Per me il pesce spada alla griglia.","Да. Мне рыбу-меч на гриле."],
+[0,"E per la signora?","А для синьоры?"],
+[1,"Una pasta alla Norma, grazie.","Пасту алла Норма, спасибо."],
+[0,"Perfetto, arriva subito.","Отлично, сейчас принесу."],
+[1,"Scusi, ci porta il conto, per favore?","Извините, принесите нам счёт, пожалуйста."]]}
+];
+
+const SOUNDS=[
+{id:"stress",t:"Ударение",d:"Чаще всего падает на предпоследний слог. Если ударение на последнем слоге, над буквой стоит знак: città, caffè, perché. Бывают исключения, их запоминаешь со словом.",ex:[["pasta","пАста"],["amico","амИко"],["città","читтА"],["caffè","каффЭ"],["perché","перкЭ"],["telefono","телЕфоно"]]},
+{id:"c",t:"C и CH",d:"C перед e/i читается «ч», перед a/o/u — «к». CH всегда «к». Ловушка для русскоговорящих: che = «ке», а не «че».",ex:[["ciao","чАо"],["cena","чЕна"],["cinque","чИнкуэ"],["casa","кАза"],["che","ке"],["chiave","кьЯве"],["anche","Анке"]]},
+{id:"g",t:"G и GH",d:"G перед e/i читается «дж», перед a/o/u — «г». GH всегда «г».",ex:[["gelato","джелАто"],["giorno","джОрно"],["gatto","гАтто"],["spaghetti","спагЕтти"],["ghiaccio","гьЯччо"]]},
+{id:"gli",t:"GLI",d:"Мягкий звук, похожий на «ль» в слове «льёт». Не читай как «гли».",ex:[["famiglia","фамИлья"],["moglie","мОлье"],["figlio","фИльо"],["biglietto","бильЕтто"]]},
+{id:"gn",t:"GN",d:"Читается как «нь», как в слове «коньяк».",ex:[["bagno","бАньо"],["gnocchi","ньОкки"],["signora","синьОра"],["lasagna","лазАнья"]]},
+{id:"sc",t:"SC и SCH",d:"SC перед e/i читается «ш». SCH — «ск».",ex:[["pesce","пЕше"],["uscita","ушИта"],["scusi","скУзи"],["schiena","скьЕна"]]},
+{id:"h",t:"H не читается",d:"Буква H никогда не произносится. Она нужна только для написания: ho, hai, ha, hanno от глагола avere.",ex:[["ho","о"],["hai","ай"],["hanno","Анно"],["hotel","отЭль"]]},
+{id:"z",t:"Z: «ц» или «дз»",d:"Z читается «ц» или «дз», в зависимости от слова. Запоминай на слух.",ex:[["pizza","пИцца"],["grazie","грАцие"],["zucchero","дзУккеро"],["zero","дзЭро"]]},
+{id:"dbl",t:"Двойные согласные",d:"Двойную согласную держи заметно дольше. От этого меняется смысл: nono — девятый, nonno — дедушка.",ex:[["nono","нОно"],["nonno","нОнно"],["sete","сЕте"],["sette","сЭтте"],["caro","кАро"],["carro","кАрро"]]},
+{id:"vow",t:"Гласные без редукции",d:"В отличие от русского, гласные не «съедаются»: o всегда «о», e всегда «е», даже без ударения.",ex:[["molto","мОльто"],["pomodoro","помодОро"],["bene","бЕне"],["Messina","мессИна"]]},
+{id:"r",t:"Раскатистая R",d:"R звучит чётко, с вибрацией кончика языка. Двойная RR — ещё дольше.",ex:[["Roma","рОма"],["treno","трЕно"],["birra","бИрра"],["arrivederci","арриведЕрчи"]]},
+{id:"qu",t:"QU",d:"Читается «ку» + следующий гласный, слитно.",ex:[["quattro","куАттро"],["questo","куЭсто"],["acqua","Аккуа"]]}
+];
+
+const LESSONS=[
+{id:"g1",t:"Артикли и род",ex:[["il libro","книга"],["il treno","поезд"],["lo studente","студент"],["lo zucchero","сахар"],["l'amico","друг"],["la casa","дом"],["la stazione","вокзал"],["l'acqua","вода"],["un caffè","(один) кофе"],["uno zaino","рюкзак"],["una pizza","пицца"],["un'amica","подруга"]],
+rule:`<p>Мужской род обычно на <b>-o</b>, женский на <b>-a</b>. На <b>-e</b> бывает и тот и другой: il pane (м.), la stazione (ж.). Поэтому учи слова сразу с артиклем.</p>
+<table><tr><td>il</td><td>м. р. перед согласной: il treno</td></tr><tr><td>lo</td><td>м. р. перед s+согласная, z, gn, ps: lo studente, lo zaino</td></tr><tr><td>la</td><td>ж. р. перед согласной: la casa</td></tr><tr><td>l'</td><td>перед гласной, любой род: l'amico, l'acqua</td></tr></table>
+<p>Неопределённый артикль («какой-то, один»): <b>un</b> (м.), <b>uno</b> (там же, где lo), <b>una</b> (ж.), <b>un'</b> (ж. перед гласной).</p>`,
+q:[["___ treno",["il","lo","la"],0,"treno — м. р., начинается с обычной согласной → il."],
+["___ zaino (рюкзак)",["il","lo","l'"],1,"Перед z мужской артикль lo."],
+["___ mela",["la","il","l'"],0,"mela на -a, женский род, согласная → la."],
+["___ ospedale",["il","lo","l'"],2,"Перед гласной → l'."],
+["___ pane",["la","il","lo"],1,"pane — мужской род, хоть и на -e."],
+["Неопределённый: ___ amica",["una","un'","un"],1,"Женский род перед гласной → un'."],
+["Неопределённый: ___ studente",["un","uno","una"],1,"s + согласная → uno."],
+["___ stazione",["il","la","l'"],1,"stazione — женский род (все слова на -zione женские)."]]},
+{id:"g2",t:"essere и avere",ex:[["Sono stanco.","Я устал."],["Sei italiano?","Ты итальянец?"],["Lei è di Messina.","Она из Мессины."],["Siamo studenti.","Мы студенты."],["Ho 23 anni.","Мне 23 года (букв. «имею 23 года»)."],["Hai fame?","Ты голоден?"],["Abbiamo lezione alle nove.","У нас лекция в девять."]],
+rule:`<p>Два главных глагола. Местоимение обычно не говорят: «Sono stanco», а не «Io sono stanco».</p>
+<table><tr><td>essere — быть</td><td>sono, sei, è, siamo, siete, sono</td></tr><tr><td>avere — иметь</td><td>ho, hai, ha, abbiamo, avete, hanno</td></tr></table>
+<p>H не читается: ho = «о», hanno = «Анно». <b>è</b> (есть) с чёрточкой, а <b>e</b> без неё — это «и».</p>
+<p>Возраст, голод, жажду и холод итальянцы «имеют»: ho 23 anni, ho fame, ho sete, ho freddo.</p>`,
+q:[["Io ___ studente.",["sono","ho","è"],0,"Я есть студент → sono."],
+["Noi ___ fame.",["siamo","abbiamo","avete"],1,"Голод «имеют»: abbiamo fame."],
+["Lei ___ di Roma.",["ha","è","sei"],1,"Она есть из Рима → è."],
+["Tu ___ 23 anni?",["sei","hai","ha"],1,"Возраст через avere: hai."],
+["Loro ___ a casa.",["sono","hanno","siete"],0,"Они (есть) дома → sono."],
+["Voi ___ freddo?",["siete","avete","hanno"],1,"Холод «имеют»: avete freddo."],
+["Marco ___ una sorella.",["è","ha","hai"],1,"У Марко есть сестра → ha."]]},
+{id:"g3",t:"Глаголы на&nbsp;&#8209;are",ex:[["Parlo russo e inglese.","Я говорю по-русски и по-английски."],["Parli italiano?","Ты говоришь по-итальянски?"],["Lei abita a Messina.","Она живёт в Мессине."],["Studiamo data science.","Мы изучаем data science."],["Dove lavorate?","Где вы работаете?"],["Mangiano la pizza.","Они едят пиццу."]],
+rule:`<p>Убираешь <b>-are</b> и добавляешь окончание. parlare → parl-:</p>
+<table><tr><td>io</td><td>parl<b>o</b></td></tr><tr><td>tu</td><td>parl<b>i</b></td></tr><tr><td>lui / lei</td><td>parl<b>a</b></td></tr><tr><td>noi</td><td>parl<b>iamo</b></td></tr><tr><td>voi</td><td>parl<b>ate</b></td></tr><tr><td>loro</td><td>parl<b>ano</b></td></tr></table>
+<p>Ударение в loro: <b>PAR</b>lano, а не parLAno. Звук сохраняют: pagare → paghi, cercare → cerchi. studiare → studi, studiamo (одна i).</p>`,
+q:[["Io ___ inglese. (parlare)",["parlo","parla","parli"],0,"io → -o."],
+["Tu ___ a Messina? (abitare)",["abiti","abita","abito"],0,"tu → -i."],
+["Noi ___ all'università. (studiare)",["studiate","studiamo","studiano"],1,"noi → -iamo, с одной i: studiamo."],
+["Loro ___ il treno. (aspettare)",["aspettano","aspettate","aspetta"],0,"loro → -ano."],
+["Voi ___ la pizza? (mangiare)",["mangiamo","mangiate","mangi"],1,"voi → -ate."],
+["Lui ___ con la carta. (pagare)",["paghi","paga","pago"],1,"lui → -a: paga."],
+["Tu ___ le chiavi? (cercare)",["cerci","cerchi","cerca"],1,"Чтобы осталось «к», добавляем h: cerchi."]]},
+{id:"g4",t:"Множественное число",ex:[["il libro → i libri","книги"],["la casa → le case","дома"],["lo studente → gli studenti","студенты"],["l'amico → gli amici","друзья"],["la stazione → le stazioni","вокзалы"],["il caffè → i caffè","кофе (мн.)"]],
+rule:`<p>Окончания: <b>-o → -i</b>, <b>-a → -e</b>, <b>-e → -i</b>. Слова с ударением на конце и иностранные не меняются: caffè, città, bar, autobus.</p>
+<table><tr><td>il →</td><td>i (i libri)</td></tr><tr><td>lo, l' (м.) →</td><td>gli (gli studenti, gli amici)</td></tr><tr><td>la, l' (ж.) →</td><td>le (le case, le amiche)</td></tr></table>`,
+q:[["il treno → ___",["i treni","le trene","gli treni"],0,"-o → -i, il → i."],
+["la mela → ___",["le mele","i meli","le mela"],0,"-a → -e, la → le."],
+["lo zaino → ___",["i zaini","gli zaini","le zaine"],1,"lo → gli."],
+["la lezione → ___",["le lezione","le lezioni","i lezioni"],1,"-e → -i, а артикль женский le."],
+["il bar → ___",["i bari","i bar","le bar"],1,"Иностранное слово не меняется."],
+["l'amica → ___",["gli amici","le amiche","le amice"],1,"Женский род: le amiche (h сохраняет звук «к»)."]]},
+{id:"g5",t:"Глаголы на&nbsp;‑ere и&nbsp;‑ire",ex:[["Prendo un caffè.","Я беру кофе."],["Vedi il mare?","Ты видишь море?"],["Dormo poco.","Я мало сплю."],["Parti domani?","Ты уезжаешь завтра?"],["Capisco.","Я понимаю."],["Finiamo alle sei.","Мы заканчиваем в шесть."]],
+rule:`<table><tr><td>prendere</td><td>prendo, prendi, prende, prendiamo, prendete, prendono</td></tr><tr><td>dormire</td><td>dormo, dormi, dorme, dormiamo, dormite, dormono</td></tr><tr><td>capire (-isc-)</td><td>capisco, capisci, capisce, capiamo, capite, capiscono</td></tr></table>
+<p>Часть глаголов на -ire добавляют <b>-isc-</b>: capire, finire, preferire, pulire. Читается: capisco «капИско», capisci «капИши».</p>`,
+q:[["Io ___ l'autobus. (prendere)",["prendo","prende","prendi"],0,"io → -o."],
+["Lei ___ fino alle nove. (dormire)",["dormi","dorme","dorma"],1,"lei → -e."],
+["Non ___ . (io, capire)",["capo","capisco","capisce"],1,"capire с -isc-: capisco."],
+["Voi ___ il treno? (prendere)",["prendete","prendite","prendono"],0,"-ere: voi → -ete."],
+["Loro ___ il caffè. (preferire)",["preferono","preferiscono","preferiamo"],1,"-isc- в loro: preferiscono."],
+["Noi ___ alle sei. (finire)",["finiamo","finiscono","finite"],0,"В noi -isc- нет: finiamo."]]},
+{id:"g6",t:"Отрицание и вопросы",ex:[["Non parlo italiano.","Я не говорю по-итальянски."],["Parli inglese?","Ты говоришь по-английски?"],["Dove abiti?","Где ты живёшь?"],["Quanto costa?","Сколько стоит?"],["Perché? — Perché sono stanco.","Почему? — Потому что я устал."],["Non bevo mai caffè.","Я никогда не пью кофе."]],
+rule:`<p>Отрицание: <b>non</b> перед глаголом. Двойное отрицание нормально: Non bevo mai caffè.</p>
+<p>Вопрос строится как утверждение, меняется только интонация: голос вверх в конце.</p>
+<table><tr><td>chi</td><td>кто</td></tr><tr><td>(che) cosa</td><td>что</td></tr><tr><td>dove</td><td>где, куда</td></tr><tr><td>quando</td><td>когда</td></tr><tr><td>quanto</td><td>сколько</td></tr><tr><td>come</td><td>как</td></tr><tr><td>perché</td><td>почему; потому что</td></tr><tr><td>quale</td><td>какой, который</td></tr></table>`,
+q:[["___ costa il biglietto?",["Quanto","Dove","Chi"],0,"Сколько стоит → Quanto."],
+["___ è la stazione?",["Quando","Dove","Come"],1,"Где → Dove."],
+["___ ti chiami?",["Come","Cosa","Perché"],0,"Как тебя зовут → Come ti chiami."],
+["Io ___ parlo tedesco.",["no","non","mai"],1,"Перед глаголом ставим non."],
+["___ parte il treno? — Alle dieci.",["Dove","Quando","Chi"],1,"Ответ про время → Quando."],
+["Non mangio ___ carne. (никогда)",["mai","niente","no"],0,"никогда → mai."],
+["___ è? — È il professore.",["Chi","Che","Quale"],0,"Про человека → Chi."]]},
+{id:"g7",t:"C'è и ci sono",ex:[["C'è un supermercato qui vicino?","Здесь рядом есть супермаркет?"],["Ci sono due fermate.","Есть две остановки."],["Non c'è latte.","Молока нет."],["C'è posto?","Есть место?"],["Ci sono problemi?","Есть проблемы?"]],
+rule:`<p><b>c'è</b> + единственное число = «есть, имеется». <b>ci sono</b> + множественное.</p>
+<p>Отрицание: non c'è, non ci sono. Не путай с è: «È grande» — «он большой», а «C'è» — «имеется».</p>`,
+q:[["___ una farmacia qui?",["C'è","Ci sono","È"],0,"Одна аптека → c'è."],
+["___ molti studenti.",["C'è","Ci sono","Sono"],1,"Много студентов → ci sono."],
+["Non ___ pane.",["ci sono","c'è","è"],1,"Хлеб — единственное число."],
+["___ due bagni in casa.",["Ci sono","C'è","Ha"],0,"Две ванные → ci sono."],
+["Scusi, ___ un bancomat vicino?",["ci sono","c'è","è"],1,"Один банкомат → c'è."]]},
+{id:"g8",t:"andare, fare, volere, potere",ex:[["Vado all'università.","Я иду в университет."],["Andiamo al mare?","Пойдём на море?"],["Faccio la spesa.","Я делаю покупки."],["Che cosa fai?","Что ты делаешь?"],["Vorrei un caffè.","Я бы хотел кофе (вежливо)."],["Posso pagare con la carta?","Можно картой?"],["Devo andare.","Мне надо идти."]],
+rule:`<p>Самые нужные неправильные глаголы, их просто запоминаешь:</p>
+<table><tr><td>andare</td><td>vado, vai, va, andiamo, andate, vanno</td></tr><tr><td>fare</td><td>faccio, fai, fa, facciamo, fate, fanno</td></tr><tr><td>volere</td><td>voglio, vuoi, vuole, vogliamo, volete, vogliono</td></tr><tr><td>potere</td><td>posso, puoi, può, possiamo, potete, possono</td></tr><tr><td>dovere</td><td>devo, devi, deve, dobbiamo, dovete, devono</td></tr></table>
+<p>После volere, potere, dovere идёт инфинитив: Posso entrare? Devo andare. В кафе и магазине вместо voglio говори вежливое <b>vorrei</b> — «я бы хотел».</p>`,
+q:[["Io ___ a casa. (andare)",["ando","vado","va"],1,"andare неправильный: vado."],
+["Che cosa ___ stasera? (tu, fare)",["fai","fa","faci"],0,"tu → fai."],
+["___ pagare con la carta? (io, potere)",["Poto","Posso","Può"],1,"io → posso."],
+["Noi ___ al mare. (andare)",["andiamo","vanno","andate"],0,"noi → andiamo."],
+["Loro ___ un gelato. (volere)",["vogliono","volono","vuole"],0,"loro → vogliono."],
+["Lei ___ lavorare domani. (dovere)",["deve","dove","devi"],0,"lei → deve. dove — это «где»."],
+["___ un cappuccino, per favore. (вежливо)",["Voglio","Vorrei","Vuole"],1,"Вежливо → vorrei."]]},
+{id:"g9",t:"Mi piace",ex:[["Mi piace il caffè.","Мне нравится кофе."],["Mi piace Messina.","Мне нравится Мессина."],["Mi piacciono gli arancini.","Мне нравятся аранчини."],["Ti piace la pizza?","Тебе нравится пицца?"],["Non mi piace il freddo.","Я не люблю холод."],["Mi piace studiare.","Мне нравится учиться."]],
+rule:`<p>Строится как в русском «мне нравится». Одна вещь или действие → <b>piace</b>, несколько вещей → <b>piacciono</b>.</p>
+<table><tr><td>mi</td><td>мне</td></tr><tr><td>ti</td><td>тебе</td></tr><tr><td>gli / le</td><td>ему / ей (le — и вежливое «Вам»)</td></tr><tr><td>ci</td><td>нам</td></tr><tr><td>vi</td><td>вам</td></tr><tr><td>gli</td><td>им</td></tr></table>
+<p>Артикль нужен: Mi piace <b>il</b> mare.</p>`,
+q:[["Mi ___ la granita.",["piace","piacciono","piaccio"],0,"Одна вещь → piace."],
+["Mi ___ i cannoli.",["piace","piacciono","piaci"],1,"Несколько → piacciono."],
+["___ piace il mare? (тебе)",["Ti","Tu","Mi"],0,"тебе → ti."],
+["Non mi piace ___ freddo.",["il","lo","la"],0,"freddo — м. р., согласная → il."],
+["Ci ___ viaggiare.",["piacciono","piace","piacere"],1,"Действие (инфинитив) → piace."]]},
+{id:"g10",t:"Предлоги a, in, di, da",ex:[["Abito a Messina.","Я живу в Мессине."],["Studio in Italia.","Я учусь в Италии."],["Vado in farmacia.","Я иду в аптеку."],["Sono di Almaty.","Я из Алматы."],["Vengo da Roma.","Я еду из Рима."],["Vado dal medico.","Я иду к врачу."],["Il treno per Palermo.","Поезд на Палермо."],["Esco con gli amici.","Я гуляю с друзьями."]],
+rule:`<table><tr><td>a</td><td>города и «куда»: a Messina, a casa, a lezione</td></tr><tr><td>in</td><td>страны, регионы, многие места: in Italia, in Sicilia, in centro, in banca, in farmacia</td></tr><tr><td>di</td><td>чей и откуда родом: il libro di Marco, sono di Almaty</td></tr><tr><td>da</td><td>откуда: vengo da Roma; к человеку: vado dal medico</td></tr><tr><td>con</td><td>с: con gli amici</td></tr><tr><td>per</td><td>для; направление поезда: per Palermo</td></tr></table>
+<p>«Sono <b>di</b> Almaty» — я родом из Алматы. «Vengo <b>da</b> Almaty» — я еду (прилетел) из Алматы.</p>`,
+q:[["Abito ___ Messina.",["a","in","di"],0,"Город → a."],
+["Studio ___ Italia.",["a","in","da"],1,"Страна → in."],
+["Sono ___ Almaty.",["di","da","a"],0,"Откуда родом → essere di."],
+["Vado ___ farmacia.",["a","in","di"],1,"Аптека, банк, центр → in."],
+["Il treno ___ Catania.",["per","con","di"],0,"Направление поезда → per."],
+["Vengo ___ Roma.",["di","da","in"],1,"Откуда еду → da."],
+["Esco ___ i miei amici.",["con","per","da"],0,"с друзьями → con."]]},
+{id:"g11",t:"Предлоги с артиклями",ex:[["Vado al mare.","Я иду на море. (a + il)"],["Vado all'università.","Я иду в университет. (a + l')"],["Il libro è sul tavolo.","Книга на столе. (su + il)"],["Le chiavi sono nella borsa.","Ключи в сумке. (in + la)"],["Torno dalla stazione.","Я возвращаюсь с вокзала. (da + la)"],["Il nome del professore.","Имя преподавателя. (di + il)"]],
+rule:`<p>Предлоги a, di, da, in, su сливаются с артиклем в одно слово:</p>
+<table><tr><td>a +</td><td>al, allo, alla, all', ai, agli, alle</td></tr><tr><td>di +</td><td>del, dello, della, dell', dei, degli, delle</td></tr><tr><td>da +</td><td>dal, dallo, dalla, dall', dai, dagli, dalle</td></tr><tr><td>in +</td><td>nel, nello, nella, nell', nei, negli, nelle</td></tr><tr><td>su +</td><td>sul, sullo, sulla, sull', sui, sugli, sulle</td></tr></table>
+<p>Порядок в строке всегда тот же: il, lo, la, l', i, gli, le. С con и per не сливаются.</p>`,
+q:[["Vado ___ mare. (a + il)",["al","alla","allo"],0,"a + il = al."],
+["Le chiavi sono ___ borsa. (in + la)",["nel","nella","nello"],1,"in + la = nella."],
+["Il libro è ___ tavolo. (su + il)",["sul","sulla","sullo"],0,"su + il = sul."],
+["Torno ___ stazione. (da + la)",["dal","dalla","dalle"],1,"da + la = dalla."],
+["Il nome ___ professore. (di + il)",["del","dello","della"],0,"di + il = del."],
+["Vado ___ università. (a + l')",["all'","al","alla"],0,"a + l' = all'."],
+["Parlo ___ studenti. (a + gli)",["ai","agli","alle"],1,"a + gli = agli."]]},
+{id:"g12",t:"Мой, твой, наш",ex:[["il mio telefono","мой телефон"],["la mia casa","мой дом"],["i miei amici","мои друзья"],["le mie chiavi","мои ключи"],["mia moglie","моя жена (без артикля)"],["tuo fratello","твой брат"],["il nostro professore","наш преподаватель"],["Com'è la tua città?","Какой у тебя город?"]],
+rule:`<table><tr><td>мой</td><td>mio, mia, miei, mie</td></tr><tr><td>твой</td><td>tuo, tua, tuoi, tue</td></tr><tr><td>его, её, Ваш</td><td>suo, sua, suoi, sue</td></tr><tr><td>наш</td><td>nostro, nostra, nostri, nostre</td></tr><tr><td>ваш</td><td>vostro, vostra, vostri, vostre</td></tr><tr><td>их</td><td>loro (не меняется)</td></tr></table>
+<p>Обычно с артиклем: <b>il</b> mio libro. С родственниками в единственном числе артикль не ставят: mia moglie, mio padre. Но: i miei genitori, il loro figlio.</p>
+<p>Род берётся от предмета, а не от владельца: suo libro — и «его», и «её» книга.</p>`,
+q:[["___ casa è piccola. (моя)",["Il mio","La mia","Mia"],1,"casa — ж. р., с артиклем: la mia casa."],
+["Ecco ___ chiavi. (мои)",["le mie","i miei","la mia"],0,"chiavi — ж. р., мн. ч."],
+["___ moglie è di Almaty. (моя)",["La mia","Mia","Il mio"],1,"Родственник в ед. ч. → без артикля."],
+["Dov'è ___ telefono? (твой)",["il tuo","la tua","tuo"],0,"telefono — м. р."],
+["___ amici sono italiani. (наши)",["I nostri","Le nostre","Nostri"],0,"amici — м. р., мн. ч., с артиклем."],
+["Come si chiama ___ figlio? (их)",["il loro","loro","il suoi"],0,"loro всегда с артиклем, даже с родственниками."]]},
+{id:"g13",t:"Возвратные глаголы",ex:[["Mi chiamo Yera.","Меня зовут Ера."],["Come ti chiami?","Как тебя зовут?"],["Si chiama Giulia.","Её зовут Джулия."],["Mi sveglio alle sette.","Я просыпаюсь в семь."],["Mi alzo presto.","Я встаю рано."],["Ci vediamo domani!","Увидимся завтра!"],["Mi trovo bene a Messina.","Мне хорошо в Мессине."]],
+rule:`<p>Это глаголы с частицей «-ся». Частица стоит перед глаголом:</p>
+<table><tr><td>io</td><td><b>mi</b> chiamo</td></tr><tr><td>tu</td><td><b>ti</b> chiami</td></tr><tr><td>lui / lei</td><td><b>si</b> chiama</td></tr><tr><td>noi</td><td><b>ci</b> chiamiamo</td></tr><tr><td>voi</td><td><b>vi</b> chiamate</td></tr><tr><td>loro</td><td><b>si</b> chiamano</td></tr></table>
+<p>Частые: svegliarsi (просыпаться), alzarsi (вставать), vestirsi (одеваться), sentirsi (чувствовать себя), trovarsi (находиться, «как тебе там»).</p>`,
+q:[["Io ___ chiamo Anna.",["mi","ti","si"],0,"io → mi."],
+["Come ___ chiami?",["ti","si","mi"],0,"tu → ti."],
+["Lei ___ sveglia presto.",["si","mi","ci"],0,"lei → si."],
+["Noi ___ vediamo domani.",["ci","vi","si"],0,"noi → ci."],
+["Voi ___ alzate tardi?",["vi","ci","si"],0,"voi → vi."],
+["Come ti ___ oggi? (sentirsi)",["senti","sente","sento"],0,"tu → senti: Come ti senti?"]]},
+{id:"g14",t:"Прошедшее время с avere",ex:[["Ho mangiato una granita.","Я съел гранита."],["Hai capito?","Ты понял?"],["Abbiamo comprato il pane.","Мы купили хлеб."],["Ieri ho lavorato tanto.","Вчера я много работал."],["Hai fatto la spesa?","Ты сходил за продуктами?"],["Ho preso il treno.","Я сел на поезд."]],
+rule:`<p>Passato prossimo = <b>avere</b> в настоящем + причастие. Это главное прошедшее время в разговоре.</p>
+<table><tr><td>-are → -ato</td><td>mangiare → mangiato</td></tr><tr><td>-ere → -uto</td><td>vendere → venduto</td></tr><tr><td>-ire → -ito</td><td>capire → capito</td></tr></table>
+<p>Неправильные, их нужно запомнить: fare → <b>fatto</b>, prendere → <b>preso</b>, vedere → <b>visto</b>, leggere → <b>letto</b>, scrivere → <b>scritto</b>, bere → <b>bevuto</b>, aprire → <b>aperto</b>, chiudere → <b>chiuso</b>, perdere → <b>perso</b>.</p>`,
+q:[["Ieri ___ mangiato la pizza. (io)",["ho","ha","sono"],0,"io → ho."],
+["Hai ___ la lezione? (capire)",["capato","capito","capiuto"],1,"-ire → -ito."],
+["Noi abbiamo ___ il treno. (prendere)",["prenduto","preso","prendato"],1,"prendere → preso (неправильный)."],
+["Che cosa hai ___ ieri? (fare)",["fatto","fato","fauto"],0,"fare → fatto."],
+["Loro ___ comprato il latte.",["hanno","abbiamo","sono"],0,"loro → hanno."],
+["Ho ___ il portafoglio. (perdere)",["perso","perdito","persato"],0,"perdere → perso."],
+["Avete ___ il film? (vedere)",["visto","vedito","vistato"],0,"vedere → visto."]]},
+{id:"g15",t:"Прошедшее время с essere",ex:[["Sono andato al mare.","Я ходил на море. (м.)"],["Sei arrivata ieri?","Ты приехала вчера?"],["È uscito alle otto.","Он вышел в восемь."],["Siamo tornati a casa.","Мы вернулись домой."],["Lei è nata ad Almaty.","Она родилась в Алматы."],["Mi sono svegliato tardi.","Я проснулся поздно."]],
+rule:`<p>Глаголы движения и состояния идут с <b>essere</b>: andare, venire, arrivare, partire, tornare, uscire, entrare, restare, nascere. С essere идут и все возвратные: mi sono svegliato.</p>
+<p>Причастие согласуется с тем, кто действует, как прилагательное:</p>
+<table><tr><td>он</td><td>andat<b>o</b></td></tr><tr><td>она</td><td>andat<b>a</b></td></tr><tr><td>они (м. или смешанные)</td><td>andat<b>i</b></td></tr><tr><td>они (ж.)</td><td>andat<b>e</b></td></tr></table>
+<p>Неправильные: venire → venuto, nascere → nato, essere → stato, rimanere → rimasto.</p>`,
+q:[["Ieri ___ andato in centro. (я)",["ho","sono","è"],1,"andare → с essere."],
+["Giulia è ___ alle sei. (arrivare)",["arrivato","arrivata","arrivati"],1,"Giulia — женщина → arrivata."],
+["Noi ___ tornati tardi.",["siamo","abbiamo","sono"],0,"tornare с essere, noi → siamo."],
+["Marco ___ uscito.",["ha","è","sei"],1,"uscire → с essere."],
+["Le ragazze sono ___ al mare. (andare)",["andati","andate","andata"],1,"Девушки, мн. ч. ж. р. → andate."],
+["Io ___ mangiato bene.",["sono","ho","è"],1,"mangiare не глагол движения → avere."],
+["Mi ___ svegliato tardi.",["ho","sono","è"],1,"Возвратный → essere: mi sono svegliato."]]},
+{id:"g16",t:"Который час?",ex:[["Che ore sono?","Который час?"],["Sono le tre.","Три часа."],["È l'una.","Час."],["Sono le otto e mezza.","Половина девятого (8:30)."],["Sono le dieci e un quarto.","Четверть одиннадцатого (10:15)."],["Sono le nove meno un quarto.","Без четверти девять (8:45)."],["È mezzogiorno.","Полдень."],["A che ora? — Alle nove.","Во сколько? — В девять."]],
+rule:`<p>Часы — это «le ore», поэтому множественное: <b>Sono le</b> due, sono le tre. Исключения в единственном: <b>è l'una</b>, è mezzogiorno, è mezzanotte.</p>
+<table><tr><td>e mezza</td><td>половина: le otto e mezza = 8:30</td></tr><tr><td>e un quarto</td><td>четверть: 10:15</td></tr><tr><td>meno un quarto</td><td>без четверти: le nove meno un quarto = 8:45</td></tr><tr><td>e venti</td><td>минуты просто прибавляем: 7:20 = le sette e venti</td></tr></table>
+<p>«Во сколько?» — <b>A che ora?</b> Ответ: alle nove, all'una.</p>`,
+q:[["___ le quattro.",["È","Sono","Ci sono"],1,"Часы во множественном → sono le."],
+["È ___ una.",["la","l'","le"],1,"È l'una — единственное исключение."],
+["Sono le sette e ___ . (7:30)",["mezza","metà","quarto"],0,"половина → e mezza."],
+["A che ora parte il treno? — ___ dieci.",["Alle","Le","A"],0,"Во сколько → alle (a + le)."],
+["12:00 — È ___ .",["mezzogiorno","mezzanotte","l'una"],0,"Полдень → mezzogiorno."],
+["8:45 — Sono le nove ___ un quarto.",["meno","e","più"],0,"без четверти → meno un quarto."]]}
+];
+
+/* ================== STATE ================== */
+const KEY="pianopiano.v1";
+const D=864e5;
+const DEF=()=>({v:1,updatedAt:0,cards:{},xp:{},streak:0,lastDay:"",lessons:{},sounds:{},topicsSeen:{},newLog:{},dialogs:{},practice:{},daily:{},ach:{},freezes:0,level:1,best:{},maxCombo:0,flags:{},
+  settings:{rate:0.9,newPerDay:10,autoSpeak:true,goal:20,topics:["base","num","food","city"]}});
+function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function dayStr(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
+function startOfDay(){const d=new Date();d.setHours(4,0,0,0);return d.getTime()}
+function merge(s){const b=DEF();const o=Object.assign(b,s||{});o.settings=Object.assign(DEF().settings,(s&&s.settings)||{});return o}
+let state=DEF();
+let uid=null;
+// общий ключ браузера используется только без аккаунта (например, в Telegram); с аккаунтом у каждого свой ключ
+try{const raw=localStorage.getItem(KEY);if(raw){const o=JSON.parse(raw);if(!o.owner)state=merge(o)}}catch(e){}
+function lsGet(k){try{const r=localStorage.getItem(k);return r?JSON.parse(r):null}catch(e){return null}}
+function lsSet(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+let syncMode="local", remoteRef=null, remoteTimer=null, writing=false, writeAgain=false, syncReady=false;
+function save(){
+  try{checkGame()}catch(e){}
+  state.updatedAt=Date.now();
+  if(uid)lsSet(KEY+":"+uid,state);else lsSet(KEY,state);
+  if(remoteRef&&syncReady){clearTimeout(remoteTimer);remoteTimer=setTimeout(pushRemote,2000)}
+  if(typeof tgSaved==="function")tgSaved();
+}
+async function pushRemote(){
+  if(!remoteRef)return;
+  if(writing){writeAgain=true;return}
+  writing=true;
+  try{await remoteRef.set({state:JSON.stringify(state),updatedAt:state.updatedAt});syncMode="cloud"}
+  catch(e){if(e&&(e.code==="invalid_argument"||e.code==="revoked")){remoteRef=null;syncMode="local"}}
+  writing=false;
+  if(writeAgain){writeAgain=false;pushRemote()}
+}
+function progressSummary(o){const c=Object.values(o.cards||{}).filter(x=>x.reps>0).length;const x=Object.values(o.xp||{}).reduce((a,b)=>a+b,0);return c+" "+plural(c,"слово","слова","слов")+", "+x+" "+plural(x,"очко","очка","очков")}
+function useState(o,id){state=merge(o);state.owner=id;lsSet(KEY+":"+id,state);sess=null;les=null;prac=null;render()}
+async function initSync(){
+  try{
+    if(!(window.claude&&typeof window.claude.use==="function"))return;
+    const db=await window.claude.use("db"); const user=await window.claude.use("user");
+    if(!db||!user)return;
+    const id=await user.id(); if(!id)return;
+    uid=id;
+    const ref=db.doc("data/users/"+id+"/progress");
+    const snap=await ref.get();
+    const mine=lsGet(KEY+":"+id);
+    const generic=lsGet(KEY);
+    let remote=null;
+    if(snap.exists){const d=snap.data();if(d&&d.state){try{remote=JSON.parse(d.state)}catch(e){}}}
+    remoteRef=ref;syncMode="cloud";
+    if(remote||mine){
+      const best=(remote&&(!mine||(remote.updatedAt||0)>=(mine.updatedAt||0)))?remote:mine;
+      useState(best,id);
+      if(generic&&!generic.owner){try{localStorage.removeItem(KEY)}catch(e){}}
+      syncReady=true;
+      if(best!==remote)pushRemote();
+      return;
+    }
+    // у этого аккаунта прогресса ещё нет
+    if(generic&&!generic.owner&&Object.keys(generic.cards||{}).length){
+      $("#sheet").innerHTML=`<h2 style="margin-top:0">Это твой прогресс?</h2><p class="muted">В этом браузере есть прогресс без привязки к аккаунту: ${esc(progressSummary(generic))}. Если им пользовался кто-то другой, начни с нуля, и ваши прогрессы не смешаются.</p>
+      <div class="row mt"><button class="btn ghost grow" id="claimNo">Начать с нуля</button><button class="btn grow" id="claimYes">Да, мой</button></div>`;
+      $("#modal").classList.add("on");
+      window._claimPending=true;
+      window._claim=yes=>{window._claimPending=false;$("#modal").classList.remove("on");useState(yes?generic:DEF(),id);if(yes){try{localStorage.removeItem(KEY)}catch(e){}}syncReady=true;pushRemote()};
+      return;
+    }
+    useState(DEF(),id);syncReady=true;
+  }catch(e){syncMode="local";syncReady=true}
+}
+
+/* ================== XP / STREAK / GAME ================== */
+function dayNum(s){const p=s.split("-").map(Number);return Math.round(new Date(p[0],p[1]-1,p[2]).getTime()/D)}
+function dayRec(){const t=today();if(!state.daily)state.daily={};return state.daily[t]||(state.daily[t]={})}
+function bump(k,n){const d=dayRec();d[k]=(d[k]||0)+(n||1)}
+function addXP(n){
+  const t=today();
+  if(state.lastDay!==t){
+    const gap=state.lastDay?dayNum(t)-dayNum(state.lastDay):0;
+    if(gap===1)state.streak++;
+    else if(gap>1&&gap-1<=(state.freezes||0)){state.freezes-=gap-1;state.streak++;celebrate("❄️","Заморозка спасла серию","Пропущено дней: "+(gap-1)+". Серия продолжается")}
+    else state.streak=1;
+    if(state.streak%7===0&&(state.freezes||0)<2){state.freezes=(state.freezes||0)+1;celebrate("❄️","Новая заморозка серии","Спасёт серию, если пропустишь день")}
+    state.lastDay=t;
+    Object.keys(state.daily||{}).forEach(k=>{if(dayNum(t)-dayNum(k)>10)delete state.daily[k]});
+  }
+  const h=new Date().getHours();if(h<8)state.flags.early=1;if(h>=23)state.flags.owl=1;
+  state.xp[t]=(state.xp[t]||0)+n;
+  save();
+}
+function curStreak(){if(!state.lastDay)return 0;const gap=dayNum(today())-dayNum(state.lastDay);if(gap<=1)return state.streak;return gap-1<=(state.freezes||0)?state.streak:0}
+function comboHit(o,ok){
+  if(ok){o.combo=(o.combo||0)+1;if(o.combo>(state.maxCombo||0))state.maxCombo=o.combo;if(o.combo>=3)addXP(1)}
+  else o.combo=0;
+}
+const comboTag=o=>o&&o.combo>=3?`<span class="combo">🔥 комбо ×${o.combo} · +1</span>`:"";
+
+const LEVEL_T=[["Turista","турист"],["Curioso","любопытный"],["Principiante","новичок"],["Studente","студент"],["Ospite","гость"],["Viaggiatore","путешественник"],["Abitante","житель"],["Chiacchierone","болтун"],["Messinese","мессинец"],["Siciliano","сицилиец"],["Maestro","маэстро"]];
+const LEVEL_XP=[0,40,100,180,280,400,550,750,1000,1300,1700];
+function lvXP(L){return L<=LEVEL_XP.length?LEVEL_XP[L-1]:1700+(L-11)*500}
+function totalXP(){return Object.values(state.xp).reduce((a,b)=>a+b,0)}
+function levelOf(x){let L=1;while(x>=lvXP(L+1))L++;return L}
+function levelTitle(L){return LEVEL_T[Math.min(L,LEVEL_T.length)-1]}
+
+const QPOOL=[
+{id:"cards15",k:"cards",n:15,t:"Повтори 15 карточек"},
+{id:"cards30",k:"cards",n:30,t:"Повтори 30 карточек"},
+{id:"new5",k:"newWords",n:5,t:"Выучи 5 новых слов"},
+{id:"correct10",k:"correct",n:10,t:"Дай 10 верных ответов в уроках или практике"},
+{id:"prac1",k:"practice",n:1,t:"Пройди тренировку в «Практике»"},
+{id:"prac2",k:"practice",n:2,t:"Пройди 2 тренировки в «Практике»"},
+{id:"dlg1",k:"dialog",n:1,t:"Послушай диалог целиком"},
+{id:"les1",k:"lesson",n:1,t:"Пройди урок грамматики"},
+{id:"ph3",k:"phrases",n:3,t:"Добавь 3 фразы в карточки"}
+];
+function hashStr(s){let h=7;for(const c of s)h=(h*31+c.charCodeAt(0))|0;return Math.abs(h)}
+function todayQuests(){
+  let h=hashStr(today()+"q");const pool=QPOOL.slice(),out=[],used={};
+  while(out.length<3&&pool.length){const q=pool.splice(h%pool.length,1)[0];h=Math.floor(h/5)+17;if(used[q.k])continue;used[q.k]=1;out.push(q)}
+  return out;
+}
+
+const ACH=[
+["w1","🌱","Первое слово","Выучи первое слово",()=>learnedCount()>=1],
+["w50","📚","Полсотни","50 слов в изучении",()=>learnedCount()>=50],
+["w150","🏛️","Словарный запас","150 слов в изучении",()=>learnedCount()>=150],
+["w300","🗿","Полиглот","300 слов в изучении",()=>learnedCount()>=300],
+["strong50","💎","Намертво","50 слов знаешь надёжно",()=>strongCount()>=50],
+["s3","🔥","Три дня подряд","Серия 3 дня",()=>state.streak>=3],
+["s7","🌋","Этна","Серия 7 дней",()=>state.streak>=7],
+["s30","☀️","Сицилийское лето","Серия 30 дней",()=>state.streak>=30],
+["l1","✏️","Первый урок","Пройди урок грамматики",()=>Object.keys(state.lessons).length>=1],
+["l8","📐","Полпути","8 уроков грамматики",()=>Object.keys(state.lessons).length>=8],
+["lall","🎓","Laurea","Все уроки грамматики",()=>Object.keys(state.lessons).length>=LESSONS.length],
+["perfect","🎯","Без ошибок","Урок на 100%",()=>Object.values(state.lessons).some(v=>v>=100)],
+["d1","☕","Первый эспрессо","Послушай диалог целиком",()=>Object.values(state.dialogs).some(v=>v>=2)],
+["dall","🎭","Актёр","Все диалоги прослушаны",()=>DIALOGS.every(d=>(state.dialogs[d.id]||0)>=2)],
+["snd","🔊","Чистый звук","Все 12 правил произношения",()=>SOUNDS.every(s=>state.sounds[s.id])],
+["num10","💶","Без сдачи","10 из 10 в числах и ценах",()=>(state.best.numbers||0)>=10],
+["lis10","👂","Острый слух","10 из 10 в аудировании",()=>(state.best.listen||0)>=10],
+["wr10","✍️","Каллиграф","10 из 10 в «Пишу сам»",()=>(state.best.write||0)>=10],
+["combo10","⚡","Комбо ×10","10 верных ответов подряд",()=>(state.maxCombo||0)>=10],
+["day50","🚀","Марафон","50 очков за один день",()=>Object.values(state.xp).some(v=>v>=50)],
+["quests","🎁","Всё по плану","Выполни все задания дня",()=>Object.values(state.daily||{}).some(d=>d.chest)||!!state.flags.chest],
+["early","🌅","Жаворонок","Позанимайся до 8 утра",()=>!!state.flags.early],
+["owl","🦉","Сова","Позанимайся после 23:00",()=>!!state.flags.owl],
+["lv5","🏅","Ospite","Достигни 5 уровня",()=>levelOf(totalXP())>=5],
+["lv10","🍋","Siciliano","Достигни 10 уровня",()=>levelOf(totalXP())>=10]
+];
+
+let gaming=false;
+function checkGame(){
+  if(gaming)return;gaming=true;
+  try{
+    const t=today(),d=dayRec(),qs=todayQuests();
+    for(const q of qs){if(!d["q:"+q.id]&&(d[q.k]||0)>=q.n){d["q:"+q.id]=1;state.xp[t]=(state.xp[t]||0)+10;celebrate("✅","Задание выполнено",q.t+" · +10 очков")}}
+    if(qs.every(q=>d["q:"+q.id])&&!d.chest){d.chest=1;state.flags.chest=1;state.xp[t]=(state.xp[t]||0)+20;celebrate("🎁","Все задания дня!","Бонус +20 очков",true)}
+    for(const a of ACH){if(!state.ach[a[0]]){let ok=false;try{ok=a[4]()}catch(e){}if(ok){state.ach[a[0]]=Date.now();celebrate(a[1],"Награда: "+a[2],a[3],true)}}}
+    const L=levelOf(totalXP());
+    if(L>(state.level||1)){state.level=L;const tt=levelTitle(L);celebrate("⭐","Уровень "+L+"!",tt[0]+" — "+tt[1],true)}
+  }finally{gaming=false}
+}
+let celebQ=[],celebT=null;
+function celebrate(em,title,sub,big){celebQ.push([em,title,sub,big]);if(!celebT)nextCeleb()}
+function nextCeleb(){
+  const el=document.getElementById("celeb");const c=celebQ.shift();
+  if(!c||!el){if(el)el.classList.remove("on");celebT=null;return}
+  el.innerHTML=`<span class="e">${c[0]}</span><div><b>${esc(c[1])}</b><div class="muted small">${esc(c[2])}</div></div>`;
+  el.classList.add("on");if(c[3])confetti();tgHaptic("success");
+  celebT=setTimeout(()=>{el.classList.remove("on");celebT=setTimeout(nextCeleb,350)},2600);
+}
+function confetti(){
+  const cols=["#C4532D","#1F5F8B","#5F7A2E","#E9A0B6","#EAD94C","#6FA8D6"];
+  for(let i=0;i<46;i++){
+    const p=document.createElement("i");p.className="conf";
+    p.style.left=Math.random()*100+"vw";p.style.background=cols[i%cols.length];
+    p.style.animationDuration=(1.4+Math.random()*1.4)+"s";p.style.animationDelay=(Math.random()*.3)+"s";
+    p.style.transform="rotate("+Math.random()*360+"deg)";
+    document.body.appendChild(p);setTimeout(()=>p.remove(),3400);
+  }
+}
+function openAwards(){
+  const got=ACH.filter(a=>state.ach[a[0]]).length;
+  $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Награды · ${got}/${ACH.length}</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
+  <div class="awards mt">${ACH.map(a=>{const u=state.ach[a[0]];return `<div class="aw ${u?"":"lock"}"><span class="e">${a[1]}</span><b>${a[2]}</b><span>${a[3]}</span></div>`}).join("")}</div>
+  <div class="setrow"><b>Уровни</b><div class="muted small">${LEVEL_T.map((t,i)=>`${i+1}. ${t[0]} (${lvXP(i+1)})`).join(" · ")}</div></div>
+  <div class="setrow"><b>Заморозка серии ❄️</b><div class="muted small">Каждые 7 дней подряд дают одну заморозку (максимум две). Если пропустишь день, она сохранит серию. Сейчас: ${state.freezes||0}.</div></div>`;
+  $("#modal").classList.add("on");
+}
+
+/* ================== SPEECH ================== */
+let itVoice=null;
+function pickVoice(){try{const vs=speechSynthesis.getVoices();itVoice=vs.find(v=>v.lang==="it-IT")||vs.find(v=>(v.lang||"").toLowerCase().startsWith("it"))||null}catch(e){}}
+try{pickVoice();speechSynthesis.onvoiceschanged=pickVoice}catch(e){}
+function speak(text,slow){
+  if(typeof dlg!=="undefined"&&dlg&&dlg.playing){stopDialog();render()}
+  try{
+    if(!("speechSynthesis" in window)){toast("Озвучка не поддерживается этим браузером");return}
+    speechSynthesis.cancel();
+    const u=new SpeechSynthesisUtterance(String(text).replace(/\(.*?\)/g,"").replace(/→/g,",").replace(/___/g," "));
+    u.lang="it-IT"; if(itVoice)u.voice=itVoice;
+    u.rate=slow?0.6:state.settings.rate;
+    speechSynthesis.speak(u);
+  }catch(e){toast("Озвучка недоступна")}
+}
+function norm(s){return s.toLowerCase().normalize("NFD").replace(/[̀-ͯ]/g,"").replace(/[^a-z0-9 ]/g," ").replace(/\s+/g," ").trim()}
+function lev(a,b){const m=a.length,n=b.length;if(!m)return n;if(!n)return m;let p=Array.from({length:n+1},(_,i)=>i);for(let i=1;i<=m;i++){let c=[i];for(let j=1;j<=n;j++)c[j]=Math.min(p[j]+1,c[j-1]+1,p[j-1]+(a[i-1]===b[j-1]?0:1));p=c}return p[n]}
+function listen(target,btn){
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){toast("Проверка произношения работает в Chrome и Safari. Здесь можно слушать и повторять вслух.");return}
+  try{
+    const r=new SR(); r.lang="it-IT"; r.maxAlternatives=3; r.interimResults=false;
+    btn.classList.add("on");
+    r.onresult=e=>{
+      const alts=Array.from(e.results[0]).map(a=>a.transcript);
+      const t=norm(target); let best=0,heard=alts[0]||"";
+      alts.forEach(a=>{const n=norm(a);const s=1-lev(n,t)/Math.max(n.length,t.length,1);if(s>best){best=s;heard=a}});
+      if(best>=.8){toast("Bravo! Услышал: «"+heard+"»");addXP(1);tgHaptic("success")}
+      else toast("Услышал: «"+heard+"». Послушай ещё раз и повтори.");
+    };
+    r.onerror=e=>toast(e.error==="not-allowed"||e.error==="service-not-allowed"?"Микрофон здесь закрыт. Открой приложение по прямой ссылке в браузере или в Telegram.":"Не расслышал, попробуй ещё раз");
+    r.onend=()=>btn.classList.remove("on");
+    r.start();
+  }catch(e){btn.classList.remove("on");toast("Микрофон недоступен в этом окне")}
+}
+
+/* ================== TELEGRAM ================== */
+const TG=(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData)?window.Telegram.WebApp:null;
+if(TG){try{TG.ready();TG.expand();document.documentElement.classList.add(TG.colorScheme==="dark"?"dark":"light");
+  const bg=TG.colorScheme==="dark"?"#1B1816":"#FBF6EE";TG.setHeaderColor&&TG.setHeaderColor(bg);TG.setBackgroundColor&&TG.setBackgroundColor(bg);
+  TG.onEvent&&TG.onEvent("themeChanged",()=>{const h=document.documentElement;h.classList.remove("dark","light");h.classList.add(TG.colorScheme==="dark"?"dark":"light")});
+}catch(e){}}
+/* ---- Telegram: хранение прогресса в CloudStorage и статистика для напоминаний ---- */
+const FUNC_URL="https://sffknvpnbrgwmtlcouge.supabase.co/functions/v1/pianopiano-bot";
+const TGS=(TG&&TG.CloudStorage&&TG.isVersionAtLeast&&TG.isVersionAtLeast("6.9"))?TG.CloudStorage:null;
+let tgReady=false,tgTimer=null,tgWriting=false,tgAgain=false,statTimer=null;
+function csGet(keys){return new Promise(r=>{try{TGS.getItems(keys,(e,v)=>r(e?null:v))}catch(e){r(null)}})}
+function csSet(k,v){return new Promise(r=>{try{TGS.setItem(k,v,e=>r(!e))}catch(e){r(false)}})}
+async function tgLoad(){
+  const meta=await csGet(["pp_n"]);if(!meta||!meta.pp_n)return null;
+  const keys=[...Array(+meta.pp_n)].map((_,i)=>"pp_"+i);const parts=await csGet(keys);if(!parts)return null;
+  try{return JSON.parse(keys.map(k=>parts[k]||"").join(""))}catch(e){return null}
+}
+async function tgPush(){
+  if(!TGS)return;if(tgWriting){tgAgain=true;return}tgWriting=true;
+  try{const s=JSON.stringify(state),CH=4000,n=Math.ceil(s.length/CH);let ok=true;
+    for(let i=0;i<n&&ok;i++)ok=await csSet("pp_"+i,s.slice(i*CH,(i+1)*CH));
+    if(ok)await csSet("pp_n",String(n));}catch(e){}
+  tgWriting=false;if(tgAgain){tgAgain=false;tgPush()}
+}
+function statsPayload(){
+  const sched={},now=Date.now();
+  Object.entries(state.cards).forEach(([id,c])=>{if(!cardById(id))return;const k=c.due<=now?today():dayStr(c.due);sched[k]=(sched[k]||0)+1});
+  const keep={};Object.keys(sched).sort().slice(0,30).forEach(k=>keep[k]=sched[k]);
+  let tz="Europe/Rome";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz}catch(e){}
+  return{dueSched:keep,newLeft:Math.min(newLeft(),freshIds(99).length),newPerDay:state.settings.newPerDay,newAvail:freshIds(999).length,streak:state.streak,lastDay:state.lastDay,xpToday:state.xp[today()]||0,goal:state.settings.goal,tz};
+}
+function pushStats(){try{fetch(FUNC_URL+"?a=sync",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({initData:TG.initData,stats:statsPayload()}),keepalive:true}).catch(()=>{})}catch(e){}}
+function tgSaved(){if(!tgReady)return;clearTimeout(tgTimer);tgTimer=setTimeout(tgPush,1500);clearTimeout(statTimer);statTimer=setTimeout(pushStats,4000)}
+async function initTG(){
+  const u=TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user;if(!u)return;
+  uid="tg"+u.id;syncMode="tg";
+  const mine=lsGet(KEY+":"+uid);const remote=TGS?await tgLoad():null;
+  const best=(remote&&(!mine||(remote.updatedAt||0)>=(mine.updatedAt||0)))?remote:mine;
+  useState(best||DEF(),uid);tgReady=true;syncReady=true;
+  if(best!==remote)tgPush();
+  pushStats();
+  document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){clearTimeout(tgTimer);tgPush();clearTimeout(statTimer);pushStats()}});
+}
+function tgHaptic(kind){try{if(TG&&TG.HapticFeedback){kind==="success"||kind==="error"?TG.HapticFeedback.notificationOccurred(kind):TG.HapticFeedback.impactOccurred("light")}}catch(e){}}
+
+/* ================== HELPERS ================== */
+const $=s=>document.querySelector(s);
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let toastT;function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clearTimeout(toastT);toastT=setTimeout(()=>t.classList.remove("on"),2800)}
+const ICON={
+ play:'<svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>',
+ mic:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+ back:'<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>',
+ plus:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>',
+ check:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5 9-10"/></svg>'
+};
+function playBtns(text,opts={}){
+  const t=esc(text);
+  return `<button class="play" data-say="${t}" aria-label="Слушать">${ICON.play}</button>`+
+    (opts.slow?`<button class="play slow" data-say="${t}" data-slow="1" aria-label="Медленно">0.6×</button>`:"")+
+    (opts.mic?`<button class="play mic" data-listen="${t}" aria-label="Проверить произношение">${ICON.mic}</button>`:"");
+}
+
+/* ================== CARDS / SRS ================== */
+const PH_INDEX={};PHRASES.forEach(tp=>tp.p.forEach(p=>PH_INDEX["p:"+p[0]]={it:p[0],ru:p[1],tr:p[2],topic:tp.t}));
+const W_INDEX={};WORDS.forEach(w=>W_INDEX["w:"+w[0]]={it:w[0],ru:w[1],tr:w[2],topic:TOPICS[w[3]]});
+function cardById(id){return W_INDEX[id]||PH_INDEX[id]||null}
+function dueCount(){const now=Date.now();return Object.entries(state.cards).filter(([id,c])=>c.due<=now&&cardById(id)).length}
+function newLeft(){return Math.max(0,state.settings.newPerDay-(state.newLog[today()]||0))}
+function freshIds(n){return WORDS.filter(w=>state.settings.topics.includes(w[3])&&!state.cards["w:"+w[0]]).slice(0,n).map(w=>"w:"+w[0])}
+function learnedCount(){return Object.values(state.cards).filter(c=>c.reps>0).length}
+function strongCount(){return Object.values(state.cards).filter(c=>c.iv>=14).length}
+let sess=null;
+function startSession(custom){
+  if(Array.isArray(custom)){sess={queue:custom.slice(),total:custom.length,done:0,flipped:false,dir:"it",cur:null};nextCard();return}
+  const now=Date.now();
+  const due=Object.entries(state.cards).filter(([id,c])=>c.due<=now&&cardById(id)).sort((a,b)=>a[1].due-b[1].due).map(([id])=>id);
+  const fr=freshIds(newLeft());
+  const q=[];let i=0,j=0;
+  while(i<due.length||j<fr.length){if(i<due.length)q.push(due[i++]);if(i<due.length)q.push(due[i++]);if(j<fr.length)q.push(fr[j++])}
+  sess={queue:q,total:q.length,done:0,flipped:false,dir:"it",cur:null};
+  nextCard();
+}
+function nextCard(){
+  if(!sess)return;
+  sess.cur=sess.queue.shift()||null; sess.flipped=false;
+  if(sess.cur){const c=state.cards[sess.cur];sess.dir=(!c||c.reps<2||Math.random()<.5)?"it":"ru"}
+  render();
+  if(sess.cur&&sess.dir==="it"&&state.settings.autoSpeak){const id=sess.cur;setTimeout(()=>{const c=cardById(id);if(c&&sess&&sess.cur===id)speak(c.it)},250)}
+}
+function grade(g){
+  const id=sess.cur; let c=state.cards[id]; const isNew=!c;
+  if(!c)c={ease:2.5,iv:0,reps:0,due:0,lapses:0};
+  if(g===0){c.reps=0;c.lapses++;c.ease=Math.max(1.3,c.ease-.2);c.iv=0;c.due=Date.now()+60e3;sess.queue.splice(Math.min(3,sess.queue.length),0,id)}
+  else{
+    if(g===1){c.iv=c.reps===0?1:Math.max(1,Math.round(c.iv*1.2));c.ease=Math.max(1.3,c.ease-.15)}
+    else if(g===2){c.iv=c.reps===0?1:c.reps===1?3:Math.round(c.iv*c.ease)}
+    else{c.iv=c.reps===0?3:Math.round(Math.max(c.iv,1)*c.ease*1.3);c.ease+=.15}
+    c.reps++;c.due=startOfDay()+c.iv*D;sess.done++;
+  }
+  state.cards[id]=c;
+  if(isNew&&id.startsWith("w:")){const t=today();state.newLog[t]=(state.newLog[t]||0)+1;bump("newWords")}
+  bump("cards");
+  tgHaptic(g===0?"error":"light");
+  addXP(1);
+  nextCard();
+}
+function addPhraseCard(it){
+  const id="p:"+it;
+  if(state.cards[id]){toast("Эта фраза уже в карточках");return}
+  state.cards[id]={ease:2.5,iv:0,reps:0,due:Date.now(),lapses:0};bump("phrases");save();toast("Добавлено в карточки");render();
+}
+
+/* ================== ROUTER ================== */
+const TABS=[["today","Сегодня",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>'],
+["words","Слова",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>'],
+["phrases","Фразы",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'],
+["grammar","Грамматика",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/></svg>'],
+["practice","Практика",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg>']];
+let view="today", sub=null, les=null, hideIt=false, wordsMode="home", search="", phMode="phrases", phSearch="", dlg=null, prac=null;
+function go(v){
+  stopDialog();
+  view=v;sub=null;les=null;dlg=null;prac=null;if(v!=="words"||!sess)wordsMode="home";
+  try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}
+  render();window.scrollTo(0,0);
+}
+function fromHash(){
+  const h=(location.hash||"").slice(1);
+  if(h==="sounds"){view="practice";prac={mode:"sounds"};return}
+  if(h==="dialogs"){view="phrases";phMode="dialogs";return}
+  if(TABS.some(t=>t[0]===h))view=h;
+}
+
+/* ================== VIEWS ================== */
+function vToday(){
+  const xp=state.xp[today()]||0, goal=state.settings.goal, pct=Math.min(1,xp/goal);
+  const C=2*Math.PI*36;
+  const due=dueCount(), nl=Math.min(newLeft(),freshIds(99).length);
+  const h=new Date().getHours(); const hello=h<5?"Buonanotte":h<17?"Buongiorno":"Buonasera";
+  const allP=PHRASES.flatMap(t=>t.p); const di=Math.floor(Date.now()/D)%allP.length; const pd=allP[di];
+  const P=state.practice;
+  const toWords=()=>{go("words");startSession();wordsMode="session";render()};
+  const toLesson=id=>()=>{go("grammar");openLesson(id)};
+  const steps=[
+    ["Послушай звуки итальянского","Практика → Звуки: 6 правил",Object.keys(state.sounds).length>=6,()=>{go("practice");prac={mode:"sounds"};render()}],
+    ["Урок 1 · Артикли и род","Грамматика",!!state.lessons.g1,toLesson("g1")],
+    ["Первые 10 слов","Карточки",learnedCount()>=10,toWords],
+    ["Фразы: знакомство","Как представиться",!!state.topicsSeen.meet,()=>{go("phrases");phMode="phrases";sub="meet";render()}],
+    ["Урок 2 · essere и avere","Грамматика",!!state.lessons.g2,toLesson("g2")],
+    ["Диалог: утро в баре","Послушай целиком",(state.dialogs["d-bar"]||0)>=2,()=>{go("phrases");openDialog("d-bar")}],
+    ["Числа и цены","Практика: 1 тренировка",!!P.numbers,()=>{go("practice");prac={mode:"numbers",level:null};render()}],
+    ["Урок 3 · Глаголы на&nbsp;&#8209;are","Грамматика",!!state.lessons.g3,toLesson("g3")],
+    ["50 слов в карточках","Карточки",learnedCount()>=50,toWords],
+    ["Аудирование","Практика: 1 тренировка",!!P.listen,()=>{go("practice");startPractice("listen")}],
+    ["Урок 10 · Предлоги","Грамматика",!!state.lessons.g10,toLesson("g10")],
+    ["Урок 14 · Прошедшее время","Грамматика",!!state.lessons.g14,toLesson("g14")],
+    ["150 слов в карточках","Карточки",learnedCount()>=150,toWords]
+  ];
+  window._steps=steps;
+  const nextIdx=steps.findIndex(s=>!s[2]);
+  const doneN=steps.filter(s=>s[2]).length;
+  const WD=["вс","пн","вт","ср","чт","пт","сб"];
+  const days=[...Array(7)].map((_,i)=>{const t=Date.now()-(6-i)*D;return{k:dayStr(t),d:new Date(t)}});
+  const mx=Math.max(goal,...days.map(x=>state.xp[x.k]||0));
+  const weekSum=days.reduce((a,x)=>a+(state.xp[x.k]||0),0);
+  return `
+  <section class="card hero">
+    <div class="ring"><svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="var(--line)" stroke-width="8" fill="none"/>
+      ${xp>0?`<circle cx="42" cy="42" r="36" stroke="var(--terra)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/>`:""}</svg>
+      <div class="lbl">${xp}/${goal}<small>очков</small></div></div>
+    <div class="grow">
+      <h1>${hello}!</h1>
+      <div class="muted small" style="margin-top:4px">${xp>=goal?"Цель на сегодня выполнена. Bravo!":"Цель дня: "+goal+" очков. Карточка = 1, верный ответ = 2."}</div>
+      <div class="row mt" style="gap:6px;flex-wrap:wrap"><span class="pill terra">🔥 ${curStreak()} ${plural(curStreak(),"день","дня","дней")}</span>${state.freezes?`<span class="pill sea">❄️ ×${state.freezes}</span>`:""}</div>
+    </div>
+  </section>
+  ${!("speechSynthesis" in window)?`<div class="card mt small" style="background:var(--terra-soft);border-color:transparent">В этом окне нет озвучки. Слушать произношение можно, если открыть приложение в браузере телефона.${TG&&TG.openLink?` <button class="link" id="openExt">Открыть в браузере</button>`:""}</div>`:""}
+  <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
+  ${(()=>{const tx=totalXP(),L=levelOf(tx),lt=levelTitle(L),a0=lvXP(L),b0=lvXP(L+1);return `<div class="card mt"><div class="row between"><div><div class="muted small">Уровень ${L}</div><h3>${lt[0]} <span class="muted small" style="font-family:Manrope;font-weight:600">· ${lt[1]}</span></h3></div><span class="pill">${tx} очков</span></div><div class="bar mt"><i style="width:${Math.round(100*(tx-a0)/(b0-a0))}%"></i></div><div class="muted small" style="margin-top:6px">До уровня ${L+1} (${levelTitle(L+1)[0]}): ${b0-tx} очков</div></div>`})()}
+  <h2>Задания дня</h2>
+  ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
+  <h2>Фраза дня</h2>
+  <div class="card row"><div class="grow"><div class="it">${esc(pd[0])}</div><div class="tr">${esc(pd[2])}</div><div class="ru">${esc(pd[1])}</div></div>${playBtns(pd[0],{slow:1})}</div>
+  <h2>Путь новичка <span class="muted small" style="font-family:Manrope">${doneN}/${steps.length}</span></h2>
+  <div class="card"><ul class="path">${steps.map((s,i)=>`<li><div class="chk ${s[2]?"done":i===nextIdx?"next":""}">${s[2]?ICON.check:i+1}</div><div class="grow"><b>${s[0]}</b><div class="muted small">${s[1]}</div></div>${!s[2]?`<button class="link" data-step="${i}">${i===nextIdx?"Начать":"Открыть"}</button>`:""}</li>`).join("")}</ul></div>
+  <h2>Неделя</h2>
+  <div class="card"><div class="week">${days.map((x,i)=>{const v=state.xp[x.k]||0;return `<div class="wcol ${i===6?"today":""}"><div class="wbar"><i class="${v>=goal?"full":""}" style="height:${Math.round(100*v/mx)}%"></i></div><span>${WD[x.d.getDay()]}</span></div>`}).join("")}</div>
+  <div class="muted small">За 7 дней: ${weekSum} ${plural(weekSum,"очко","очка","очков")}. Яркий столбик — цель дня выполнена.</div></div>
+  ${(()=>{const got=ACH.filter(a=>state.ach[a[0]]).sort((x,y)=>state.ach[y[0]]-state.ach[x[0]]);return `<h2>Награды <span class="muted small" style="font-family:Manrope">${got.length}/${ACH.length}</span></h2><button class="card row" id="openAwards" style="width:100%;text-align:left"><span class="grow" style="font-size:26px;letter-spacing:4px">${got.length?got.slice(0,7).map(a=>a[1]).join(""):'<span class="muted small" style="letter-spacing:0">Пока нет наград. Первая — за первое выученное слово</span>'}</span><span class="link">Все</span></button>`})()}
+  <h2>Прогресс</h2>
+  <div class="stats"><div class="stat"><b>${learnedCount()}</b><span>в изучении</span></div><div class="stat"><b>${strongCount()}</b><span>знаю надёжно</span></div><div class="stat"><b>${Object.keys(state.lessons).length}/${LESSONS.length}</b><span>уроков</span></div></div>`;
+}
+function plural(n,a,b,c){n=Math.abs(n)%100;const m=n%10;if(n>10&&n<20)return c;if(m>1&&m<5)return b;if(m===1)return a;return c}
+
+function vWords(){
+  if(wordsMode==="session"&&sess)return vSession();
+  if(wordsMode==="dict")return vDict();
+  const due=dueCount(), nl=Math.min(newLeft(),freshIds(99).length);
+  return `<h1>Слова</h1>
+  <p class="muted">Интервальное повторение: слово возвращается в тот момент, когда ты начинаешь его забывать. Оценивай честно.</p>
+  <div class="card stack">
+    <div class="row between"><div><b>${due}</b> <span class="muted">на повтор</span></div><div><b>${nl}</b> <span class="muted">новых сегодня</span></div></div>
+    <button class="btn block" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"На сегодня всё. Возвращайся завтра":"Начать"}</button>
+  </div>
+  <h2>Темы для новых слов</h2>
+  <div class="chips">${Object.entries(TOPICS).map(([k,v])=>{const tot=WORDS.filter(w=>w[3]===k).length,lr=WORDS.filter(w=>w[3]===k&&state.cards["w:"+w[0]]).length;return `<button class="chip ${state.settings.topics.includes(k)?"on":""}" data-topic="${k}">${v} · ${lr}/${tot}</button>`}).join("")}</div>
+  <p class="muted small">Новые слова берутся из включённых тем. Фразы из раздела «Фразы» тоже можно добавить в карточки кнопкой «+».</p>
+  <button class="btn ghost block mt" id="openDict">Словарь: все ${WORDS.length} слов</button>`;
+}
+function vSession(){
+  if(!sess.cur){
+    return `<div class="card center stack" style="padding:32px 16px"><div class="done-big">🎉</div><h1>Готово!</h1><p class="muted">Повторено карточек: ${sess.done}. Сегодня ${state.xp[today()]||0} очков.</p>
+    <button class="btn block" id="endSess">Отлично</button></div>`;
+  }
+  const c=cardById(sess.cur), st=state.cards[sess.cur], isNew=!st;
+  const pct=sess.total?Math.round(100*sess.done/Math.max(sess.total,sess.done+sess.queue.length+1)):0;
+  const front=sess.dir==="it"
+    ?`<div class="big">${esc(c.it)}</div>${!sess.flipped?`<div class="hint">Вспомни перевод и нажми на карточку</div>`:""}`
+    :`<div class="big" style="font-size:26px">${esc(c.ru)}</div>${!sess.flipped?`<div class="hint">Скажи по-итальянски и нажми на карточку</div>`:""}`;
+  const backSide=sess.flipped?(sess.dir==="it"
+    ?`<div class="tr" style="font-size:16px">${esc(c.tr)}</div><div style="font-size:19px;font-weight:600">${esc(c.ru)}</div>`
+    :`<div class="it" style="font-size:24px">${esc(c.it)}</div><div class="tr" style="font-size:16px">${esc(c.tr)}</div>`):"";
+  return `<button class="back" id="quitSess">${ICON.back} Выйти</button>
+  <div class="row" style="margin-bottom:10px"><div class="bar grow"><i style="width:${pct}%"></i></div><span class="muted small">${sess.queue.length+1} осталось</span></div>
+  <div class="card flash" id="flip">
+    <div class="row" style="gap:6px"><span class="pill ${isNew?"terra":"sea"}">${isNew?"новое":"повтор"}</span><span class="pill">${esc(c.topic)}</span></div>
+    ${front}${backSide}
+    <div class="row" style="margin-top:6px">${playBtns(c.it,{slow:1})}</div>
+  </div>
+  ${sess.flipped?`<div class="grades">
+    <button class="g0" data-g="0">Не помню<small>сейчас ещё</small></button>
+    <button class="g1" data-g="1">Трудно<small>${ivLabel(1,st)}</small></button>
+    <button class="g2" data-g="2">Помню<small>${ivLabel(2,st)}</small></button>
+    <button class="g3" data-g="3">Легко<small>${ivLabel(3,st)}</small></button></div>`
+  :`<button class="btn block mt sea" id="showAns">Показать ответ</button>`}`;
+}
+function ivLabel(g,st){const c=st||{ease:2.5,iv:0,reps:0};let iv;if(g===1)iv=c.reps===0?1:Math.max(1,Math.round(c.iv*1.2));else if(g===2)iv=c.reps===0?1:c.reps===1?3:Math.round(c.iv*c.ease);else iv=c.reps===0?3:Math.round(Math.max(c.iv,1)*c.ease*1.3);return iv+" "+plural(iv,"день","дня","дней")}
+function vDict(){
+  const s=norm(search);
+  const list=WORDS.filter(w=>!s||norm(w[0]).includes(s)||w[1].toLowerCase().includes(search.toLowerCase().trim()));
+  return `<button class="back" id="dictBack">${ICON.back} Слова</button><h1>Словарь</h1>
+  <input type="search" id="search" placeholder="Поиск по-итальянски или по-русски" value="${esc(search)}" class="mt">
+  <div class="card list mt" id="dictList">${list.map(w=>{const st=state.cards["w:"+w[0]];return `<div class="item"><div class="grow"><div class="it">${esc(w[0])}</div><div class="tr">${esc(w[2])}</div><div class="ru">${esc(w[1])}</div></div>${st&&st.reps>0?`<span class="pill ok">${st.iv>=14?"знаю":"учу"}</span>`:""}${playBtns(w[0])}</div>`}).join("")||'<p class="muted">Ничего не найдено</p>'}</div>`;
+}
+
+function segHTML(){return `<div class="seg"><button class="${phMode==="phrases"?"on":""}" data-seg="phrases">Фразы</button><button class="${phMode==="dialogs"?"on":""}" data-seg="dialogs">Диалоги</button></div>`}
+function phraseRow(p){return `<div class="item" data-reveal>
+  <div class="grow"><div class="it">${esc(p[0])}</div><div class="tr">${esc(p[2])}</div><div class="ru">${esc(p[1])}</div></div>
+  <div class="row" style="gap:6px;flex-direction:column">${playBtns(p[0])}<button class="play slow" data-addph="${esc(p[0])}" aria-label="В карточки">${state.cards["p:"+p[0]]?ICON.check:ICON.plus}</button></div></div>`}
+function vPhrases(){
+  if(dlg)return vDialog();
+  if(sub){
+    const tp=PHRASES.find(t=>t.id===sub);
+    if(!state.topicsSeen[sub]){state.topicsSeen[sub]=1;save()}
+    return `<button class="back" id="phBack">${ICON.back} Все темы</button>
+    <h1>${tp.em} ${tp.t}</h1>
+    <div class="row between mt"><span class="muted small">Режим проверки: скрыть итальянский</span><button class="switch ${hideIt?"on":""}" id="hideIt" aria-label="Скрыть итальянский"></button></div>
+    <div class="card list mt ${hideIt?"hidden-it":""}">${tp.p.map(phraseRow).join("")}</div>
+    <p class="muted small">${hideIt?"Прочитай перевод, скажи фразу вслух и нажми на строку, чтобы проверить себя.":"«+» добавляет фразу в карточки для повторения."}</p>`;
+  }
+  if(phMode==="dialogs"){
+    return `<h1>Говорим</h1>${segHTML()}
+    <p class="muted">Короткие сценки из жизни в Мессине. Сначала слушай целиком, потом включи ролевую игру: твои реплики скроются, и ты говоришь их сам.</p>
+    <div class="grid2 mt">${DIALOGS.map(d=>`<button class="tile" data-dlg="${d.id}"><span class="em">${d.em}</span><b>${d.t}</b><span class="muted small">${d.l.length} реплик${(state.dialogs[d.id]||0)>=2?" · ✓":""}</span></button>`).join("")}</div>`;
+  }
+  const s=phSearch.trim().toLowerCase(), sn=norm(phSearch);
+  const found=s?PHRASES.flatMap(t=>t.p).filter(p=>norm(p[0]).includes(sn)||p[1].toLowerCase().includes(s)):[];
+  return `<h1>Говорим</h1>${segHTML()}
+  <input type="search" id="phSearch" placeholder="Найти фразу: «счёт», «biglietto»…" value="${esc(phSearch)}">
+  ${s?`<div class="card list mt">${found.map(phraseRow).join("")||'<p class="muted">Ничего не найдено</p>'}</div>`
+  :`<p class="muted small">Готовые фразы для Мессины. В транскрипции заглавная буква показывает ударение.</p>
+  <div class="grid2 mt">${PHRASES.map(t=>`<button class="tile" data-ph="${t.id}"><span class="em">${t.em}</span><b>${t.t}</b><span class="muted small">${t.p.length} фраз${state.topicsSeen[t.id]?" · ✓":""}</span></button>`).join("")}</div>`}`;
+}
+
+/* ---- dialogs ---- */
+let seqTimer=null;
+function openDialog(id){
+  dlg={id,role:false,shown:{},playing:false,cur:null};
+  if(!state.dialogs[id]){state.dialogs[id]=1;save()}
+  render();window.scrollTo(0,0);
+}
+function vDialog(){
+  const d=DIALOGS.find(x=>x.id===dlg.id);
+  return `<button class="back" id="dlgBack">${ICON.back} Диалоги</button>
+  <h1>${d.em} ${d.t}</h1>
+  <div class="row mt" style="gap:8px"><button class="btn sea grow" id="${dlg.playing?"stopAll":"playAll"}">${dlg.playing?"■ Остановить":"▶ Слушать весь диалог"}</button></div>
+  <div class="row between mt"><div><b class="small">Ролевая игра</b><div class="muted small">Твои реплики скрыты, говори их вслух</div></div><button class="switch ${dlg.role?"on":""}" id="roleMode" aria-label="Ролевая игра"></button></div>
+  <div class="mt">${d.l.map((l,i)=>{const me=l[0]===1;const hid=me&&dlg.role&&!dlg.shown[i];
+    return `<div class="bub ${me?"me":"them"} ${dlg.cur===i?"now":""} ${hid?"hid":""}" ${hid?`data-line="${i}"`:""}><div class="grow"><div class="who">${me?"Ты":esc(d.who)}</div>
+    ${hid?`<div class="ru">${esc(l[2])}</div><div class="small" style="color:var(--terra);font-weight:600;margin-top:2px">Скажи по-итальянски, потом нажми</div>`
+    :`<div class="it" style="font-size:16px">${esc(l[1])}</div><div class="ru">${esc(l[2])}</div>`}</div>${hid?"":`<button class="play" data-say="${esc(l[1])}" aria-label="Слушать">${ICON.play}</button>`}</div>`}).join("")}</div>
+  ${dlg.role?`<p class="muted small">При прослушивании на твоей реплике будет пауза 4 секунды, чтобы ты успел сказать её сам.</p>`:""}`;
+}
+function speakU(text,opt){
+  opt=opt||{};
+  try{
+    const u=new SpeechSynthesisUtterance(String(text));
+    u.lang="it-IT";if(itVoice)u.voice=itVoice;u.rate=state.settings.rate;u.pitch=opt.pitch||1;
+    if(opt.onend){u.onend=opt.onend;u.onerror=opt.onend}
+    speechSynthesis.speak(u);
+  }catch(e){if(opt.onend)setTimeout(opt.onend,1500)}
+}
+function playDialog(i){
+  if(!dlg||!dlg.playing)return;
+  const d=DIALOGS.find(x=>x.id===dlg.id);
+  if(i>=d.l.length){
+    dlg.playing=false;dlg.cur=null;
+    bump("dialog");if((state.dialogs[dlg.id]||0)<2){state.dialogs[dlg.id]=2;addXP(3)}else save();
+    render();return;
+  }
+  dlg.cur=i;render();
+  const l=d.l[i];
+  if(dlg.role&&l[0]===1&&!dlg.shown[i]){
+    seqTimer=setTimeout(()=>{if(!dlg||!dlg.playing)return;dlg.shown[i]=true;render();speakU(l[1],{onend:()=>{seqTimer=setTimeout(()=>playDialog(i+1),350)}})},4000);
+    return;
+  }
+  speakU(l[1],{pitch:l[0]===1?1.05:0.9,onend:()=>{seqTimer=setTimeout(()=>playDialog(i+1),350)}});
+}
+function stopDialog(){
+  clearTimeout(seqTimer);
+  if(dlg&&dlg.playing){dlg.playing=false;dlg.cur=null;try{speechSynthesis.cancel()}catch(e){}}
+}
+
+function openLesson(id){les={id,step:"learn",qi:0,correct:0,answered:null,order:null};render();window.scrollTo(0,0)}
+function vGrammar(){
+  if(les)return vLesson();
+  return `<h1>Грамматика</h1><p class="muted">Сначала примеры, потом правило, потом упражнения. Урок засчитывается от 70% верных ответов.</p>
+  <div class="card list mt">${LESSONS.map((l,i)=>{const r=state.lessons[l.id];return `<button class="item" style="width:100%;text-align:left" data-lesson="${l.id}"><div class="chk ${r?"done":""}">${r?ICON.check:i+1}</div><div class="grow"><b>${l.t}</b><div class="muted small">${l.q.length} упражнений${r?" · лучший результат "+r+"%":""}</div></div></button>`}).join("")}</div>`;
+}
+function vLesson(){
+  const L=LESSONS.find(l=>l.id===les.id);
+  if(les.step==="learn"){
+    return `<button class="back" id="lesBack">${ICON.back} Уроки</button><h1>${L.t}</h1>
+    <h2>Посмотри на примеры</h2>
+    <div class="card list">${L.ex.map(e=>`<div class="item"><div class="grow"><div class="it">${esc(e[0])}</div><div class="ru">${esc(e[1])}</div></div>${playBtns(e[0])}</div>`).join("")}</div>
+    <p class="muted small">Заметил закономерность? Теперь правило.</p>
+    <h2>Правило</h2><div class="card rule">${L.rule}</div>
+    <button class="btn block mt" id="startQuiz">Упражнения · ${L.q.length}</button>`;
+  }
+  if(les.step==="quiz"){
+    const q=L.q[les.qi];
+    if(!les.order)les.order=shuffle(q[1].map((_,i)=>i));
+    return `<button class="back" id="lesBack">${ICON.back} Уроки</button>
+    <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*les.qi/L.q.length)}%"></i></div><span class="muted small">${les.qi+1}/${L.q.length}</span></div>
+    <div class="card"><div class="muted small">Выбери правильный вариант</div><div class="q mt">${esc(q[0])}</div>
+    <div class="opts">${les.order.map(i=>{let cls="";if(les.answered!==null){if(i===q[2])cls="right";else if(i===les.answered)cls="wrong"}return `<button class="opt ${cls}" data-opt="${i}" ${les.answered!==null?"disabled":""}>${esc(q[1][i])}</button>`}).join("")}</div>
+    ${les.answered!==null?`<div class="explain">${les.answered===q[2]?"<b>Giusto!</b> ":"<b>Не совсем.</b> "}${esc(q[3])}${comboTag(les)}</div>
+    <div class="row mt">${playBtns(q[0].replace(/___/,q[1][q[2]]).replace(/\(.*?\)/g,""))}<button class="btn grow" id="nextQ">${les.qi+1<L.q.length?"Дальше":"Результат"}</button></div>`:""}</div>`;
+  }
+  const pct=Math.round(100*les.correct/L.q.length), pass=pct>=70;
+  return `<div class="card center stack" style="padding:28px 16px"><div class="done-big">${pass?"🎉":"💪"}</div><h1>${les.correct} из ${L.q.length}</h1>
+  <p class="muted">${pass?"Урок пройден. Ottimo!":"Почти. Пересмотри примеры и попробуй ещё раз, нужно от 70%."}</p>
+  <button class="btn block" id="retryQuiz">${pass?"Пройти ещё раз":"Попробовать снова"}</button>
+  <button class="btn ghost block" id="lesBack">К урокам</button></div>`;
+}
+function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+
+function vSounds(){
+  const mic=!!(window.SpeechRecognition||window.webkitSpeechRecognition);
+  return `<h1>Звуки</h1><p class="muted">Итальянский читается почти как пишется. Выучи эти 12 правил, и сможешь прочитать любое слово.${mic?" Кнопка микрофона проверяет твоё произношение.":""}</p>
+  ${!itVoice?`<div class="card small" style="background:var(--terra-soft);border-color:transparent">Итальянский голос не найден, озвучка может звучать с акцентом. На телефоне добавь итальянский голос в настройках синтеза речи.</div>`:""}
+  ${SOUNDS.map(s=>`<div class="card mt"><div class="row between"><h3>${s.t}</h3>${state.sounds[s.id]?`<span class="pill ok">${ICON.check} прослушано</span>`:""}</div>
+  <p class="small" style="margin:6px 0 8px">${s.d}</p>
+  <div>${s.ex.map(e=>`<span class="ex"><b>${esc(e[0])}</b><span>${esc(e[1])}</span><button class="play" data-say="${esc(e[0])}" data-sound="${s.id}" aria-label="Слушать">${ICON.play}</button>${mic?`<button class="play mic" data-listen="${esc(e[0])}" aria-label="Проверить">${ICON.mic}</button>`:""}</span>`).join("")}</div></div>`).join("")}`;
+}
+
+/* ================== PRACTICE ================== */
+const NU=["zero","uno","due","tre","quattro","cinque","sei","sette","otto","nove","dieci","undici","dodici","tredici","quattordici","quindici","sedici","diciassette","diciotto","diciannove"];
+const NT=["","","venti","trenta","quaranta","cinquanta","sessanta","settanta","ottanta","novanta"];
+function n100(n){if(n<20)return NU[n];const t=Math.floor(n/10),u=n%10;let s=NT[t];if(!u)return s;if(u===1||u===8)s=s.slice(0,-1);return s+NU[u]}
+function n1000(n){if(n<100)return n100(n);const h=Math.floor(n/100),r=n%100;let s=h===1?"cento":NU[h]+"cento";if(!r)return s;if(Math.floor(r/10)===8)s=s.slice(0,-1);return s+n100(r)}
+function numIt(n){let s;if(n<1000)s=n1000(n);else{const k=Math.floor(n/1000),r=n%1000;s=(k===1?"mille":n1000(k)+"mila")+(r?n1000(r):"")}return s.length>3&&s.endsWith("tre")?s.slice(0,-3)+"tré":s}
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+const pick=a=>a[Math.floor(Math.random()*a.length)];
+const pad2=n=>String(n).padStart(2,"0");
+function timeIt(h,m){
+  let hh=h,suffix="";
+  if(m===15)suffix=" e un quarto";else if(m===30)suffix=" e mezza";else if(m===45){hh=h%12+1;suffix=" meno un quarto"}else if(m)suffix=" e "+numIt(m);
+  if(hh===1)return "È l'una"+suffix;
+  if(hh===12&&!m)return "È mezzogiorno";
+  return "Sono le "+numIt(hh)+suffix;
+}
+const LEVELS=[["n20","0–20","числа до двадцати"],["n100","21–100","десятки и составные"],["n1000","100–999","сотни"],["price","Цены в €","«tre euro e cinquanta»"],["time","Время","«sono le otto e mezza»"]];
+function genNum(level){
+  if(level==="price"){const e=rnd(1,25),c=pick([0,0,10,20,30,40,50,50,60,70,80,90,99]);return{val:e+c/100,ans:e+(c?","+pad2(c):"")+" €",say:(e===1?"un euro":numIt(e)+" euro")+(c?" e "+numIt(c):"")}}
+  if(level==="time"){const h=rnd(1,12),m=pick([0,0,5,10,15,20,30,30,40,45,50]);return{h,m,ans:h+":"+pad2(m),say:timeIt(h,m)}}
+  const [a,b]=level==="n20"?[0,20]:level==="n100"?[21,100]:[100,999];
+  const n=rnd(a,b);return{val:n,ans:String(n),say:numIt(n)};
+}
+function checkNum(level,inp,it){
+  if(level==="price"){const v=parseFloat(inp.replace(",",".").replace(/[^\d.]/g,""));return !isNaN(v)&&Math.abs(v-it.val)<0.001}
+  if(level==="time"){const m=inp.match(/(\d{1,2})\D*(\d{2})?/);if(!m)return false;return (+m[1])%12===it.h%12&&(+(m[2]||0))===it.m}
+  const v=parseInt(inp.replace(/\D/g,""),10);return v===it.val;
+}
+function practicePool(){
+  let p=WORDS.filter(w=>{const c=state.cards["w:"+w[0]];return c&&c.reps>0});
+  if(p.length<12){const ex=shuffle(WORDS.filter(w=>["base","num","food","city"].includes(w[3])&&!p.includes(w)));p=p.concat(ex.slice(0,30-p.length))}
+  return p;
+}
+function stripArt(s){return s.trim().replace(/^(l'|un')\s*/i,"").replace(/^(il|lo|la|i|gli|le|un|uno|una)\s+/i,"")}
+function hardIds(){return Object.entries(state.cards).filter(([id,c])=>c.lapses>=1&&cardById(id)).sort((a,b)=>b[1].lapses-a[1].lapses).slice(0,20).map(([id])=>id)}
+function startPractice(mode,level){
+  let items;
+  if(mode==="listen"){const pool=practicePool();items=shuffle(pool.slice()).slice(0,10).map(w=>{const others=shuffle(WORDS.filter(x=>x[1]!==w[1])).slice(0,3).map(x=>x[1]);return{w,opts:shuffle([w[1]].concat(others))}})}
+  else if(mode==="write"){items=shuffle(practicePool().slice()).slice(0,10).map(w=>({w}))}
+  else items=[...Array(10)].map(()=>genNum(level));
+  prac={mode,level:level||null,items,i:0,correct:0,answered:null,input:""};
+  render();window.scrollTo(0,0);sayCurrent();
+}
+function sayCurrent(){
+  if(!prac||!prac.items||prac.i>=prac.items.length)return;
+  const it=prac.items[prac.i];
+  if(prac.mode==="listen")setTimeout(()=>speak(it.w[0]),250);
+  if(prac.mode==="numbers")setTimeout(()=>speak(it.say),250);
+}
+function answerPractice(val){
+  const it=prac.items[prac.i];let ok=false,near=false;
+  if(prac.mode==="listen")ok=val===it.w[1];
+  else if(prac.mode==="write"){
+    const a=norm(val),b=norm(it.w[0]),a2=norm(stripArt(val)),b2=norm(stripArt(it.w[0]));
+    ok=a===b||a2===b2;
+    if(!ok&&b2.length>4&&lev(a2,b2)===1){ok=true;near=true}
+  }else ok=checkNum(prac.level,val,it);
+  prac.answered={val,ok,near};comboHit(prac,ok);
+  if(ok){prac.correct++;bump("correct");addXP(2);tgHaptic("success")}else{tgHaptic("error");save()}
+  if(prac.mode==="write"||prac.mode==="listen")speak(it.w[0]);
+  render();
+}
+function vPractice(){
+  if(!prac){
+    const hard=hardIds().length;
+    const P=state.practice;
+    const tile=(id,em,t,d,dis)=>`<button class="tile" data-prac="${id}" ${dis?"disabled":""}><span class="em">${em}</span><b>${t}</b><span class="muted small">${d}</span></button>`;
+    return `<h1>Практика</h1><p class="muted">Короткие тренировки по 10 заданий. Слова берутся из тех, что ты уже учишь в карточках.</p>
+    <div class="grid2 mt">
+      ${tile("listen","👂","Аудирование","Слушай и выбирай перевод"+(P.listen?" · "+P.listen+"×":""))}
+      ${tile("write","✍️","Пишу сам","С русского на итальянский"+(P.write?" · "+P.write+"×":""))}
+      ${tile("numbers","🔢","Числа и цены","Сколько с меня? На слух"+(P.numbers?" · "+P.numbers+"×":""))}
+      ${tile("sounds","🔊","Звуки","12 правил чтения")}
+      ${tile("hard","🧩","Трудные слова",hard?hard+" "+plural(hard,"слово","слова","слов")+" с ошибками":"Пока ошибок нет",!hard)}
+    </div>`;
+  }
+  const back=`<button class="back" id="pracBack">${ICON.back} Практика</button>`;
+  if(prac.mode==="sounds")return back+vSounds();
+  if(prac.mode==="numbers"&&!prac.items){
+    return back+`<h1>Числа и цены</h1><p class="muted">Услышишь число, цену или время по-итальянски. Введи его цифрами.</p>
+    <div class="card list mt">${LEVELS.map(l=>`<button class="item" style="width:100%;text-align:left" data-level="${l[0]}"><div class="grow"><b>${l[1]}</b><div class="muted small">${l[2]}</div></div><span class="link">Начать</span></button>`).join("")}</div>`;
+  }
+  const N=prac.items.length;
+  if(prac.i>=N){
+    const pct=Math.round(100*prac.correct/N);
+    return `<div class="card center stack" style="padding:28px 16px"><div class="done-big">${pct>=80?"🎉":pct>=50?"👍":"💪"}</div><h1>${prac.correct} из ${N}</h1>
+    <p class="muted">${pct>=80?"Ottimo! Отличный результат.":pct>=50?"Неплохо. Ещё пара тренировок, и будет легко.":"Это нормально для начала. Повтори карточки и попробуй снова."}</p>
+    <button class="btn block" id="pracAgain">Ещё раз</button><button class="btn ghost block" id="pracBack">К практике</button></div>`;
+  }
+  const it=prac.items[prac.i], a=prac.answered;
+  const bar=`<div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*prac.i/N)}%"></i></div><span class="muted small">${prac.i+1}/${N}</span></div>`;
+  const next=a?`<button class="btn block mt" id="pnext">${prac.i+1<N?"Дальше":"Результат"}</button>`:"";
+  if(prac.mode==="listen"){
+    return back+bar+`<div class="card center"><div class="muted small">Что ты услышал?</div>
+    <button class="bigplay" data-say="${esc(it.w[0])}" aria-label="Слушать">${ICON.play}</button>
+    <button class="link small" data-say="${esc(it.w[0])}" data-slow="1">Медленнее</button>
+    ${a?`<div class="it mt" style="font-size:22px">${esc(it.w[0])}</div><div class="tr">${esc(it.w[2])}</div>${comboTag(prac)}`:""}
+    <div class="opts">${it.opts.map(o=>{let c="";if(a){if(o===it.w[1])c="right";else if(o===a.val)c="wrong"}return `<button class="opt ${c}" data-popt="${esc(o)}" ${a?"disabled":""}>${esc(o)}</button>`}).join("")}</div>${next}</div>`;
+  }
+  if(prac.mode==="write"){
+    return back+bar+`<div class="card"><div class="muted small">Напиши по-итальянски</div><div class="q mt">${esc(it.w[1])}</div>
+    <input type="text" id="pin" class="answer-in mt ${a?(a.ok?"right":"wrong"):""}" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="по-итальянски" value="${esc(a?a.val:prac.input)}" ${a?"readonly":""}>
+    ${a?`<div class="explain">${a.ok?(a.near?"<b>Почти!</b> Опечатка, но засчитано. ":"<b>Giusto!</b> "):"<b>Правильно так:</b> "}<span class="it">${esc(it.w[0])}</span> <span class="tr">${esc(it.w[2])}</span>${comboTag(prac)}</div><div class="row mt">${playBtns(it.w[0])}<button class="btn grow" id="pnext">${prac.i+1<N?"Дальше":"Результат"}</button></div>`
+    :`<p class="muted small">Артикль можно не писать, знаки ударения тоже.</p><div class="row mt"><button class="btn ghost" id="pskip">Не знаю</button><button class="btn grow" id="pcheck">Проверить</button></div>`}</div>`;
+  }
+  return back+bar+`<div class="card center"><div class="muted small">Введи цифрами то, что услышал</div>
+  <button class="bigplay" data-say="${esc(it.say)}" aria-label="Слушать">${ICON.play}</button>
+  <button class="link small" data-say="${esc(it.say)}" data-slow="1">Медленнее</button>
+  <input type="text" id="pin" inputmode="${prac.level==="time"?"text":"decimal"}" class="answer-in mt ${a?(a.ok?"right":"wrong"):""}" autocomplete="off" placeholder="${prac.level==="price"?"например 4,50":prac.level==="time"?"например 8:30":"число"}" value="${esc(a?a.val:prac.input)}" ${a?"readonly":""}>
+  ${a?`<div class="explain" style="text-align:left">${a.ok?"<b>Giusto!</b> ":"<b>Было:</b> "}${esc(it.ans)} — <i>${esc(it.say)}</i>${comboTag(prac)}</div><button class="btn block mt" id="pnext">${prac.i+1<N?"Дальше":"Результат"}</button>`
+  :`<div class="row mt"><button class="btn ghost" id="pskip">Не знаю</button><button class="btn grow" id="pcheck">Проверить</button></div>`}</div>`;
+}
+
+/* ================== SETTINGS ================== */
+function encodeState(){return "PP1:"+btoa(unescape(encodeURIComponent(JSON.stringify(state))))}
+function decodeState(code){code=code.trim();const raw=code.startsWith("PP1:")?decodeURIComponent(escape(atob(code.slice(4)))):code;const o=JSON.parse(raw);if(!o||typeof o!=="object"||typeof o.cards!=="object")throw new Error("bad");return o}
+function openSettings(){
+  const s=state.settings;
+  $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Настройки</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
+  <div class="setrow"><div class="row between"><b>Скорость озвучки</b><span class="muted" id="rateV">${s.rate.toFixed(1)}×</span></div><input type="range" min="0.5" max="1.2" step="0.1" value="${s.rate}" id="rate"><button class="link small" data-say="Ciao, come stai? Mi chiamo Yera.">Проверить голос</button></div>
+  <div class="setrow"><div class="row between"><b>Новых слов в день</b><span class="muted" id="npdV">${s.newPerDay}</span></div><input type="range" min="3" max="30" step="1" value="${s.newPerDay}" id="npd"></div>
+  <div class="setrow"><div class="row between"><b>Цель дня (очков)</b><span class="muted" id="goalV">${s.goal}</span></div><input type="range" min="10" max="100" step="5" value="${s.goal}" id="goal"></div>
+  <div class="setrow row between"><div><b>Автоозвучка карточек</b><div class="muted small">Произносить слово при показе</div></div><button class="switch ${s.autoSpeak?"on":""}" id="auto"></button></div>
+  <div class="setrow"><b>Сохранение прогресса</b><div class="muted small">${syncMode==="tg"?"Хранится в твоём Telegram-аккаунте: одинаковый прогресс на телефоне и компьютере.":syncMode==="cloud"?"Синхронизируется с твоим аккаунтом Claude: одинаковый прогресс на телефоне и компьютере.":"Хранится в этом браузере. Если очистить данные браузера, прогресс пропадёт."}</div>
+  <div class="muted small" style="margin-top:4px">Голос: ${itVoice?esc(itVoice.name):"итальянский голос не найден"}</div></div>
+  ${TG?`<div class="setrow"><b>Напоминания</b><div class="muted small">Настраиваются в чате с ботом: /time 9 — час напоминания, /remind — включить или выключить.</div></div>`:""}
+  <div class="setrow"><b>Перенос прогресса</b><div class="muted small">Код со всем прогрессом. Пригодится, чтобы перенести его в Telegram-версию или другой браузер.</div>
+  <div class="row mt" style="gap:8px"><button class="btn ghost grow" id="exportBtn">Скопировать код</button><button class="btn ghost grow" id="importBtn">Вставить код</button></div><div id="xfer"></div></div>
+  <div class="setrow"><button class="btn ghost block" id="reset" style="color:var(--red)">Сбросить весь прогресс</button></div>`;
+  $("#modal").classList.add("on");
+}
+function confirmReset(){
+  $("#sheet").innerHTML=`<h2 style="margin-top:0">Сбросить прогресс?</h2><p class="muted">Карточки, уроки, очки и серия удалятся. Отменить будет нельзя.</p>
+  <div class="row mt"><button class="btn ghost grow" id="closeM">Отмена</button><button class="btn grow" id="doReset" style="background:var(--red)">Сбросить</button></div>`;
+}
+
+/* ================== RENDER & EVENTS ================== */
+function render(){
+  const app=$("#app");
+  app.innerHTML=view==="today"?vToday():view==="words"?vWords():view==="phrases"?vPhrases():view==="grammar"?vGrammar():vPractice();
+  {const L=levelOf(totalXP());$("#lvchip").textContent="⭐ Ур. "+L;}
+  $("#tabs").innerHTML=TABS.map(t=>`<button class="${view===t[0]?"on":""}" data-tab="${t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("");
+  if(view==="practice"&&prac&&prac.items&&!prac.answered&&(prac.mode==="write"||prac.mode==="numbers")){const p=$("#pin");if(p&&document.activeElement!==p)try{p.focus({preventScroll:true})}catch(e){}}
+}
+function refocus(id,val){const pos=val.length;render();const n=$("#"+id);if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("button,[data-reveal],[data-line]"); if(!t)return;
+  const d=t.dataset;
+  if(d.say!==undefined){speak(d.say,!!d.slow);if(d.sound&&!state.sounds[d.sound]){state.sounds[d.sound]=1;addXP(1);setTimeout(render,50)}e.stopPropagation();return}
+  if(d.listen!==undefined){listen(d.listen,t);e.stopPropagation();return}
+  if(d.tab){go(d.tab);return}
+  if(d.step!==undefined){window._steps[+d.step][3]();return}
+  if(d.topic){const k=d.topic,a=state.settings.topics;const i=a.indexOf(k);if(i>=0){if(a.length>1)a.splice(i,1);else toast("Нужна хотя бы одна тема")}else a.push(k);save();render();return}
+  if(d.seg){phMode=d.seg;sub=null;render();return}
+  if(d.ph){sub=d.ph;hideIt=false;render();window.scrollTo(0,0);return}
+  if(d.dlg){openDialog(d.dlg);return}
+  if(d.line!==undefined&&dlg){dlg.shown[+d.line]=true;render();return}
+  if(d.addph!==undefined){addPhraseCard(d.addph);e.stopPropagation();return}
+  if(d.reveal!==undefined&&hideIt){t.classList.toggle("show");return}
+  if(d.lesson){openLesson(d.lesson);return}
+  if(d.opt!==undefined&&les&&les.answered===null){const L=LESSONS.find(l=>l.id===les.id);const q=L.q[les.qi];les.answered=+d.opt;const ok=+d.opt===q[2];comboHit(les,ok);if(ok){les.correct++;bump("correct");addXP(2);tgHaptic("success")}else{tgHaptic("error");save()}render();return}
+  if(d.g!==undefined){grade(+d.g);return}
+  if(d.prac){
+    if(d.prac==="sounds"){prac={mode:"sounds"};render();window.scrollTo(0,0)}
+    else if(d.prac==="numbers"){prac={mode:"numbers",level:null};render()}
+    else if(d.prac==="hard"){const ids=hardIds();if(ids.length){go("words");startSession(ids);wordsMode="session";render()}}
+    else startPractice(d.prac);
+    return;
+  }
+  if(d.level){startPractice("numbers",d.level);return}
+  if(d.popt!==undefined&&prac&&!prac.answered){answerPractice(d.popt);return}
+  switch(t.id){
+    case "startCards":go("words");startSession();wordsMode="session";render();break;
+    case "showAns":sess.flipped=true;render();if(sess.dir==="ru"&&state.settings.autoSpeak)speak(cardById(sess.cur).it);break;
+    case "quitSess":case "endSess":sess=null;wordsMode="home";render();break;
+    case "openDict":wordsMode="dict";render();break;
+    case "dictBack":wordsMode="home";search="";render();break;
+    case "phBack":sub=null;render();break;
+    case "hideIt":hideIt=!hideIt;render();break;
+    case "dlgBack":stopDialog();dlg=null;render();break;
+    case "roleMode":dlg.role=!dlg.role;dlg.shown={};render();break;
+    case "playAll":speechSynthesis&&speechSynthesis.cancel();dlg.playing=true;if(dlg.role)dlg.shown={};playDialog(0);break;
+    case "stopAll":stopDialog();render();break;
+    case "lesBack":les=null;render();window.scrollTo(0,0);break;
+    case "startQuiz":les.step="quiz";les.qi=0;les.correct=0;les.answered=null;les.order=null;render();window.scrollTo(0,0);break;
+    case "nextQ":{const L=LESSONS.find(l=>l.id===les.id);les.answered=null;les.order=null;
+      if(les.qi+1<L.q.length)les.qi++;else{les.step="done";const pct=Math.round(100*les.correct/L.q.length);if(pct>=70){bump("lesson");if(!state.lessons[les.id])addXP(5);state.lessons[les.id]=Math.max(state.lessons[les.id]||0,pct);save()}}
+      render();break}
+    case "retryQuiz":les.step="quiz";les.qi=0;les.correct=0;les.answered=null;les.order=null;render();break;
+    case "pracBack":prac=null;render();window.scrollTo(0,0);break;
+    case "pcheck":{const v=($("#pin")||{}).value||"";if(!v.trim()){toast("Сначала введи ответ");break}answerPractice(v);break}
+    case "pskip":answerPractice("");break;
+    case "pnext":prac.i++;prac.answered=null;prac.input="";
+      if(prac.i>=prac.items.length){const k=prac.mode;state.practice[k]=(state.practice[k]||0)+1;state.best[k]=Math.max(state.best[k]||0,prac.correct);bump("practice");save()}
+      render();sayCurrent();break;
+    case "pracAgain":startPractice(prac.mode,prac.level);break;
+    case "claimYes":window._claim&&window._claim(true);break;
+    case "claimNo":window._claim&&window._claim(false);break;
+    case "openExt":try{TG.openLink(location.href)}catch(e){}break;
+    case "gear":openSettings();break;
+    case "lvchip":case "openAwards":openAwards();break;
+    case "closeM":$("#modal").classList.remove("on");render();break;
+    case "auto":state.settings.autoSpeak=!state.settings.autoSpeak;t.classList.toggle("on");save();break;
+    case "exportBtn":{const code=encodeState();
+      $("#xfer").innerHTML=`<textarea readonly id="xcode" class="mt">${esc(code)}</textarea><div class="muted small">Если код не скопировался сам, выдели его и скопируй вручную.</div>`;
+      try{navigator.clipboard.writeText(code).then(()=>toast("Код скопирован"),()=>{})}catch(err){}
+      break}
+    case "importBtn":$("#xfer").innerHTML=`<textarea id="xin" class="mt" placeholder="Вставь код, начинающийся с PP1:"></textarea><button class="btn block mt" id="importDo">Загрузить прогресс</button><div class="muted small">Текущий прогресс заменится прогрессом из кода.</div>`;break;
+    case "importDo":{try{const o=decodeState($("#xin").value);const s0=state.settings;state=merge(o);if(!o.settings)state.settings=s0;if(uid)state.owner=uid;save();sess=null;les=null;prac=null;$("#modal").classList.remove("on");render();toast("Прогресс загружен")}catch(err){toast("Код не подошёл. Проверь, что скопирован целиком.")}break}
+    case "reset":confirmReset();break;
+    case "doReset":{const s=state.settings;state=DEF();state.settings=s;save();$("#modal").classList.remove("on");sess=null;les=null;prac=null;render();toast("Прогресс сброшен");break}
+  }
+});
+document.addEventListener("click",e=>{const f=e.target.closest("#flip");if(f&&!e.target.closest("button")&&sess&&!sess.flipped){sess.flipped=true;render();if(sess.dir==="ru"&&state.settings.autoSpeak)speak(cardById(sess.cur).it)}});
+document.addEventListener("focusin",e=>{if(e.target.id==="xcode")e.target.select()});
+document.addEventListener("input",e=>{
+  const t=e.target;
+  if(t.id==="search"){search=t.value;refocus("search",t.value)}
+  if(t.id==="phSearch"){phSearch=t.value;refocus("phSearch",t.value)}
+  if(t.id==="pin"&&prac)prac.input=t.value;
+  if(t.id==="rate"){state.settings.rate=+t.value;$("#rateV").textContent=(+t.value).toFixed(1)+"×"}
+  if(t.id==="npd"){state.settings.newPerDay=+t.value;$("#npdV").textContent=t.value}
+  if(t.id==="goal"){state.settings.goal=+t.value;$("#goalV").textContent=t.value}
+});
+document.addEventListener("change",e=>{if(["rate","npd","goal"].includes(e.target.id))save()});
+$("#modal").addEventListener("click",e=>{if(e.target.id==="modal"&&!window._claimPending){$("#modal").classList.remove("on");render()}});
+document.addEventListener("keydown",e=>{
+  if(e.target.id==="pin"&&e.key==="Enter"&&prac){e.preventDefault();if(!prac.answered){const v=e.target.value;if(v.trim())answerPractice(v)}else $("#pnext")&&$("#pnext").click();return}
+  if(view==="practice"&&prac&&prac.answered&&e.key==="Enter"){const n=$("#pnext");if(n){e.preventDefault();n.click()}return}
+  if(view!=="words"||!sess||!sess.cur||e.target.tagName==="INPUT")return;
+  if(!sess.flipped&&(e.key===" "||e.key==="Enter")){e.preventDefault();sess.flipped=true;render()}
+  else if(sess.flipped&&["1","2","3","4"].includes(e.key))grade(+e.key-1);
+});
+window.addEventListener("hashchange",()=>{stopDialog();sub=null;les=null;dlg=null;prac=null;fromHash();render()});
+
+fromHash();render();
+setTimeout(()=>{pickVoice();if(view==="practice")render()},800);
+if(TG)initTG();else initSync();
+</script>
+</body>
+</html>
