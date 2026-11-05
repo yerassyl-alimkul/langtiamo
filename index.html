@@ -106,7 +106,10 @@ h3{font-size:17px}
 .rule p{margin:8px 0}
 .rule table{border-collapse:collapse;width:100%;margin:8px 0;font-size:14.5px}
 .rule td{padding:6px 8px;border-bottom:1px solid var(--line)}
-.rule td:first-child{color:var(--muted);width:42%}
+.rule td:first-child{color:var(--ink);font-weight:700;width:1%;white-space:nowrap;padding-right:14px}
+.rule table.t3 td{width:auto;font-weight:400;white-space:normal}
+.rule table.t3 td:first-child{color:var(--muted);font-weight:600}
+.rule h3{margin-bottom:6px}
 .rule b{color:var(--terra)}
 .opts{display:grid;gap:8px;margin-top:12px}
 .opt{padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);text-align:left;font-weight:600;font-size:16px}
@@ -706,10 +709,337 @@ q:[["___ le quattro.",["È","Sono","Ci sono"],1,"Часы во множеств�
 ["8:45 — Sono le nove ___ un quarto.",["meno","e","più"],0,"без четверти → meno un quarto."]]}
 ];
 
+// Теория уроков по шагам: h — заголовок, pre — вступление, ex — примеры с озвучкой, post — объяснение, c — мини-вопрос [вопрос, варианты, верный, пояснение]
+const LESSON_STEPS={
+g1:[
+{h:"Род: мужской и женский",
+pre:`<p>Как и в русском, у каждого итальянского существительного есть род. Но родов только <b>два</b>: мужской и женский. Среднего нет.</p>`,
+ex:[["libro","книга"],["treno","поезд"],["casa","дом"],["pizza","пицца"],["pane","хлеб"],["notte","ночь"]],
+post:`<p>Род почти всегда видно по последней букве:</p>
+<table><tr><td>-o</td><td>почти всегда мужской: libr<b>o</b>, tren<b>o</b></td></tr><tr><td>-a</td><td>почти всегда женский: cas<b>a</b>, pizz<b>a</b></td></tr><tr><td>-e</td><td>бывает и тот и другой: pane (м.), notte (ж.). Такие слова запоминаешь</td></tr></table>
+<p>Род не всегда совпадает с русским. «Дом» у нас мужского рода, а <b>casa</b> женского. «Море» у нас среднего, а <b>mare</b> мужского.</p>`,
+c:["Какого рода слово «mela» (яблоко)?",["мужского","женского"],1,"Окончание -a → женский род."]},
+{h:"Что такое артикль",
+pre:`<p>В русском артиклей нет, поэтому эта тема самая непривычная. <b>Артикль</b> — короткое слово перед существительным. Оно показывает род и число. В английском это <i>the</i> и <i>a</i>.</p>`,
+ex:[["il caffè","кофе (тот самый, о котором говорим)"],["un caffè","один кофе, какой-то"],["la stazione","вокзал (известный, конкретный)"],["una stazione","какой-то вокзал"]],
+post:`<p>Артиклей два вида:</p>
+<table><tr><td>определённый<br>il, la…</td><td>предмет понятен, известен, единственный. Или речь обо всём виде в целом: Mi piace <b>il</b> caffè — я люблю кофе (вообще)</td></tr><tr><td>неопределённый<br>un, una…</td><td>«один, какой-то», говорим о предмете впервые: Prendo <b>un</b> caffè — возьму (одну чашку) кофе</td></tr></table>
+<p>Главное: существительное почти никогда не стоит без артикля. Сказать просто «caffè è buono» нельзя, нужно «<b>il</b> caffè è buono».</p>`,
+c:["Ты заказываешь в баре одну чашку: «___ caffè, per favore». Какой артикль по смыслу?",["определённый (il)","неопределённый (un)"],1,"Одна чашка, какая-то из многих → un caffè."]},
+{h:"Определённые: il и la",
+pre:`<p>Начнём с двух самых частых артиклей.</p>`,
+ex:[["il libro","книга"],["il treno","поезд"],["il pane","хлеб"],["la casa","дом"],["la pizza","пицца"],["la notte","ночь"]],
+post:`<table><tr><td>il</td><td>мужской род, слово начинается с обычной согласной</td></tr><tr><td>la</td><td>женский род, слово начинается с согласной</td></tr></table>
+<p>Посмотри на <b>pane</b> и <b>notte</b>: оба на -e, но il pane мужского рода, а la notte женского. Артикль подсказывает род, поэтому учи слова сразу с артиклем, как одно целое: «иль пАне», «ла нОтте».</p>`,
+c:["___ treno (поезд, мужской род)",["il","la"],0,"Мужской род, начинается с согласной t → il."]},
+{h:"Особые формы: lo и l'",
+pre:`<p>Попробуй сказать «il studente»: язык спотыкается. Чтобы было удобно произносить, есть две особые формы.</p>`,
+ex:[["lo studente","студент"],["lo zaino","рюкзак"],["lo zucchero","сахар"],["l'amico","друг"],["l'acqua","вода"],["l'ospedale","больница"]],
+post:`<table><tr><td>lo</td><td>мужской род, слово начинается на <b>s + согласная</b> (studente, sport), на <b>z</b> (zaino, zucchero), а также на gn, ps</td></tr><tr><td>l'</td><td>перед <b>гласной</b> (a, e, i, o, u), и для мужского, и для женского рода</td></tr></table>
+<p>В <b>l'</b> гласная артикля выпала, на её месте апостроф, и всё читается слитно: l'amico = «ламИко».</p>
+<p>Как узнать род слова с l'? По окончанию: amic<b>o</b> → мужской, acqu<b>a</b> → женский.</p>`,
+c:["___ sport",["il","lo","l'"],1,"s + согласная (p) → lo sport."]},
+{h:"Неопределённые: un, uno, una, un'",
+pre:`<p>Логика та же, что у определённых, только слова другие.</p>`,
+ex:[["un libro","(одна) книга"],["un amico","(один) друг"],["uno studente","(один) студент"],["uno zaino","(один) рюкзак"],["una casa","(один) дом"],["un'amica","(одна) подруга"]],
+post:`<table><tr><td>un</td><td>мужской род: перед согласной <b>и перед гласной</b> (un amico, без апострофа)</td></tr><tr><td>uno</td><td>мужской род там же, где lo: s + согласная, z</td></tr><tr><td>una</td><td>женский род перед согласной</td></tr><tr><td>un'</td><td>женский род перед гласной: un'amica, un'ora</td></tr></table>
+<p>Ловушка: апостроф ставится только у женского рода. <b>un amico</b> (друг), но <b>un'amica</b> (подруга).</p>`,
+c:["Неопределённый: ___ amica (подруга)",["un","un'","una"],1,"Женский род + гласная → un'."]},
+{h:"Шпаргалка: как выбрать артикль",
+pre:`<p>Задай себе три вопроса:</p><p>1. Какого рода слово? (-o мужской, -a женский, -e смотри в словаре)<br>2. С какой буквы оно начинается? (гласная; s + согласная или z; обычная согласная)<br>3. Предмет конкретный или «какой-то один»?</p>`,
+ex:[],
+post:`<table class="t3"><tr><td></td><td><b>определённый</b></td><td><b>неопределённый</b></td></tr>
+<tr><td>м., согласная</td><td>il treno</td><td>un treno</td></tr>
+<tr><td>м., s+согл. или z</td><td>lo zaino</td><td>uno zaino</td></tr>
+<tr><td>м., гласная</td><td>l'amico</td><td>un amico</td></tr>
+<tr><td>ж., согласная</td><td>la casa</td><td>una casa</td></tr>
+<tr><td>ж., гласная</td><td>l'amica</td><td>un'amica</td></tr></table>
+<p>Эту таблицу можно открыть в любой момент: зайди в урок ещё раз.</p>`,
+c:["Определённый: ___ ospedale (больница)",["il","lo","l'"],2,"Начинается с гласной o → l'."]}
+],
+g2:[
+{h:"Два главных глагола",
+pre:`<p>По-русски мы говорим «я студент», без глагола. Итальянец обязательно скажет глагол: «(я) <b>есть</b> студент». Два глагола встречаются почти в каждой фразе: <b>essere</b> — быть и <b>avere</b> — иметь.</p>`,
+ex:[["Sono studente.","Я студент. (букв. «есть студент»)"],["Sono stanco.","Я устал."],["Ho un fratello.","У меня есть брат. (букв. «имею брата»)"]],
+post:`<p>Слово «io» (я) обычно не говорят: по форме глагола и так ясно, кто действует. <b>Sono stanco</b> звучит естественнее, чем «Io sono stanco». Местоимение добавляют, только чтобы подчеркнуть: «<b>Io</b> sono stanco, tu no».</p>`,
+c:["Как сказать «Я устал»?",["Io stanco","Sono stanco","Ho stanco"],1,"Нужен глагол «быть»: sono stanco."]},
+{h:"essere — быть",
+pre:`<p>Послушай все шесть форм:</p>`,
+ex:[["Sono di Almaty.","Я из Алматы."],["Sei italiano?","Ты итальянец?"],["Lei è studentessa.","Она студентка."],["Siamo a casa.","Мы дома."],["Siete pronti?","Вы готовы?"],["Sono a Messina.","Они в Мессине."]],
+post:`<table><tr><td>io</td><td>sono</td></tr><tr><td>tu</td><td>sei</td></tr><tr><td>lui / lei</td><td>è</td></tr><tr><td>noi</td><td>siamo</td></tr><tr><td>voi</td><td>siete</td></tr><tr><td>loro</td><td>sono</td></tr></table>
+<p><b>sono</b> значит и «я есть», и «они есть», понятно по смыслу. <b>è</b> с чёрточкой — «он/она есть», а <b>e</b> без чёрточки — союз «и».</p>`,
+c:["Tu ___ italiano?",["sei","è","sono"],0,"tu → sei."]},
+{h:"avere — иметь",
+pre:`<p>Теперь второй глагол:</p>`,
+ex:[["Ho una domanda.","У меня вопрос."],["Hai tempo?","У тебя есть время?"],["Ha una macchina.","У него есть машина."],["Abbiamo lezione.","У нас пара."],["Avete il biglietto?","У вас есть билет?"],["Hanno due figli.","У них двое детей."]],
+post:`<table><tr><td>io</td><td>ho</td></tr><tr><td>tu</td><td>hai</td></tr><tr><td>lui / lei</td><td>ha</td></tr><tr><td>noi</td><td>abbiamo</td></tr><tr><td>voi</td><td>avete</td></tr><tr><td>loro</td><td>hanno</td></tr></table>
+<p>Буква <b>h</b> не читается: ho = «о», hai = «ай», hanno = «Анно». Она нужна только на письме, чтобы не путать: <b>ho</b> (имею) и o (или), <b>ha</b> (имеет) и a (в).</p>`,
+c:["Noi ___ lezione alle nove.",["siamo","abbiamo","hanno"],1,"noi → abbiamo."]},
+{h:"Где итальянцы «имеют»",
+pre:`<p>Некоторые состояния итальянец не «испытывает», а «имеет»:</p>`,
+ex:[["Ho 23 anni.","Мне 23 года."],["Ho fame.","Я голоден."],["Ho sete.","Хочу пить."],["Ho freddo.","Мне холодно."],["Ho sonno.","Хочу спать."],["Ho ragione.","Я прав."]],
+post:`<p>Возраст, голод, жажду, холод, жару (ho caldo) и сонливость итальянец «имеет». Частая ошибка: «Sono 23 anni». Правильно: <b>Ho 23 anni</b>.</p>`,
+c:["«Мне холодно»",["Sono freddo","Ho freddo","È freddo"],1,"Холод «имеют»: ho freddo."]}
+],
+g3:[
+{h:"Как устроен глагол",
+pre:`<p>Посмотри, как меняется глагол <b>parlare</b> (говорить):</p>`,
+ex:[["Parlo russo.","Я говорю по-русски."],["Parli italiano?","Ты говоришь по-итальянски?"],["Lei parla inglese.","Она говорит по-английски."],["Parliamo piano.","Мы говорим медленно."],["Parlate troppo!","Вы слишком много говорите!"],["Parlano spagnolo.","Они говорят по-испански."]],
+post:`<p>Начальная форма глагола (как русское «-ть») оканчивается на <b>-are</b>, <b>-ere</b> или <b>-ire</b>. Чтобы сказать «я говорю», отрезаешь -are и добавляешь окончание: parl|are → parl|<b>o</b>.</p><p>Глаголов на -are больше всего, и почти все они правильные: выучил схему один раз и пользуешься для сотен глаголов.</p>`,
+c:["Основа глагола parlare — это…",["parla","parl","parlar"],1,"Отрезаем -are: parl-."]},
+{h:"Окончания -are",
+pre:`<p>Та же схема на глаголе <b>abitare</b> (жить, проживать):</p>`,
+ex:[["abito","я живу"],["abiti","ты живёшь"],["abita","он/она живёт"],["abitiamo","мы живём"],["abitate","вы живёте"],["abitano","они живут"]],
+post:`<table><tr><td>io</td><td>-o</td></tr><tr><td>tu</td><td>-i</td></tr><tr><td>lui / lei</td><td>-a</td></tr><tr><td>noi</td><td>-iamo</td></tr><tr><td>voi</td><td>-ate</td></tr><tr><td>loro</td><td>-ano</td></tr></table>
+<p>Ударение: в io, tu, lui и loro оно на основе — <b>A</b>bito, <b>PAR</b>lano (не parLAno!). В noi и voi — на окончании: abit<b>IA</b>mo, abit<b>A</b>te.</p>`,
+c:["Loro ___ a Roma. (abitare)",["abitano","abitate","abitiamo"],0,"loro → -ano."]},
+{h:"Особые случаи",
+pre:`<p>Пара мелочей в написании:</p>`,
+ex:[["studio, studi, studiamo","учу, учишь, учим"],["mangio, mangi, mangiamo","ем, ешь, едим"],["pago, paghi, paghiamo","плачу, платишь, платим"],["cerco, cerchi, cerchiamo","ищу, ищешь, ищем"]],
+post:`<p>Глаголы на <b>-iare</b> не удваивают i: studi (а не studii), studiamo.</p><p>Глаголы на <b>-care</b> и <b>-gare</b> добавляют h перед i, чтобы сохранить звук: paghi = «пАги», cerchi = «чЕрки». Без h было бы «пАджи» и «чЕрчи» (помнишь правило C и G из «Звуков»).</p>`,
+c:["Tu ___ il conto? (pagare)",["pagi","paghi","paga"],1,"h сохраняет звук «г»: paghi."]}
+],
+g4:[
+{h:"Окончания множественного числа",
+pre:`<p>Посмотри, что происходит с окончанием:</p>`,
+ex:[["libro → libri","книги"],["treno → treni","поезда"],["casa → case","дома"],["pizza → pizze","пиццы"],["studente → studenti","студенты"],["notte → notti","ночи"]],
+post:`<table><tr><td>-o →</td><td>-i (libri)</td></tr><tr><td>-a →</td><td>-e (case)</td></tr><tr><td>-e →</td><td>-i (studenti, notti), и для мужского, и для женского</td></tr></table>`,
+c:["notte → ___",["notte","notti","notta"],1,"-e → -i."]},
+{h:"Артикли во множественном",
+pre:`<p>Артикль тоже меняется:</p>`,
+ex:[["il libro → i libri","книги"],["lo studente → gli studenti","студенты"],["l'amico → gli amici","друзья"],["la casa → le case","дома"],["l'amica → le amiche","подруги"]],
+post:`<table><tr><td>il →</td><td>i</td></tr><tr><td>lo, l' (м.) →</td><td>gli (читается «льи»)</td></tr><tr><td>la, l' (ж.) →</td><td>le</td></tr></table>`,
+c:["lo zaino → ___ zaini",["i","gli","le"],1,"lo → gli."]},
+{h:"Слова, которые не меняются",
+pre:`<p>Здесь меняется только артикль:</p>`,
+ex:[["il caffè → i caffè","кофе"],["la città → le città","города"],["il bar → i bar","бары"],["l'autobus → gli autobus","автобусы"],["la foto → le foto","фото"]],
+post:`<p>Не меняются: слова с ударением на последнем слоге (caffè, città, università), иностранные (bar, sport, film, autobus) и сокращённые (la foto, la bici).</p>`,
+c:["l'università → le ___",["università","universite","universitè"],0,"Ударение на конце — слово не меняется."]},
+{h:"Чтобы звук не менялся",
+pre:`<p>Иногда добавляется h:</p>`,
+ex:[["l'amica → le amiche","подруги"],["la banca → le banche","банки"],["l'amico → gli amici","друзья"],["il tedesco → i tedeschi","немцы"]],
+post:`<p><b>-ca, -ga → -che, -ghe</b>: h сохраняет звук «к» и «г».</p><p>У мужских на -co бывает по-разному: amico → amici («амИчи»), но tedesco → tedeschi. Такие слова запоминаются со временем.</p>`,
+c:["la banca → le ___",["banche","banci","bance"],0,"-ca → -che."]}
+],
+g5:[
+{h:"Глаголы на -ere",
+pre:`<p>Глагол <b>prendere</b> (брать) и другие на -ere:</p>`,
+ex:[["Prendo un caffè.","Я беру кофе."],["Vedi il mare?","Ты видишь море?"],["Scrive una mail.","Он пишет письмо."],["Leggiamo un libro.","Мы читаем книгу."],["Prendete il treno?","Вы едете на поезде?"],["Vivono a Messina.","Они живут в Мессине."]],
+post:`<table><tr><td>io</td><td>-o (prendo)</td></tr><tr><td>tu</td><td>-i (prendi)</td></tr><tr><td>lui / lei</td><td>-e (prende)</td></tr><tr><td>noi</td><td>-iamo (prendiamo)</td></tr><tr><td>voi</td><td>-ete (prendete)</td></tr><tr><td>loro</td><td>-ono (prendono)</td></tr></table>
+<p>От -are отличаются только три формы: lui (<b>-e</b> вместо -a), voi (<b>-ete</b>) и loro (<b>-ono</b>).</p>`,
+c:["Lei ___ una mail. (scrivere)",["scriva","scrive","scrivi"],1,"lui/lei → -e."]},
+{h:"Глаголы на -ire",
+pre:`<p>Глагол <b>dormire</b> (спать) и похожие:</p>`,
+ex:[["Dormo poco.","Я мало сплю."],["Parti domani?","Ты уезжаешь завтра?"],["Sente la musica.","Он слышит музыку."],["Apriamo la finestra.","Мы открываем окно."],["Aprite la porta?","Вы откроете дверь?"],["Partono alle otto.","Они уезжают в восемь."]],
+post:`<p>Почти как -ere, отличие одно: voi → <b>-ite</b> (dormite, partite).</p>
+<table><tr><td>io / tu / lui</td><td>dormo, dormi, dorme</td></tr><tr><td>noi / voi / loro</td><td>dormiamo, dormite, dormono</td></tr></table>`,
+c:["Voi ___ domani? (partire)",["partete","partite","partono"],1,"-ire: voi → -ite."]},
+{h:"Вставка -isc-",
+pre:`<p>Многие глаголы на -ire добавляют кусочек <b>-isc-</b>:</p>`,
+ex:[["capisco","я понимаю"],["capisci","ты понимаешь"],["capisce","он понимает"],["capiamo","мы понимаем"],["capite","вы понимаете"],["capiscono","они понимают"]],
+post:`<p>-isc- появляется в io, tu, lui и loro, а в noi и voi его нет. Так спрягаются capire, finire (заканчивать), preferire (предпочитать), pulire (убирать).</p><p>Чтение: sc + o = «ско», sc + i/e = «ши/ше»: capisco = «капИско», capisci = «капИши».</p>`,
+c:["Non ___ . (io, capire)",["capo","capisco","capiscio"],1,"Вставка -isc-: capisco."]}
+],
+g6:[
+{h:"Отрицание: non",
+pre:`<p>Самое простое правило урока:</p>`,
+ex:[["Non parlo italiano.","Я не говорю по-итальянски."],["Non ho capito.","Я не понял."],["Non è vero.","Это неправда."],["Non mi piace.","Мне не нравится."]],
+post:`<p>Ставь <b>non</b> перед глаголом. Если перед глаголом есть частица (mi, ti, ci…), non ставится ещё раньше: <b>Non mi</b> piace.</p>`,
+c:["«Я не понимаю»",["Capisco non","Non capisco","No capisco"],1,"non перед глаголом."]},
+{h:"Два отрицания — это нормально",
+pre:`<p>Как в русском «я <u>никогда не</u> пью»:</p>`,
+ex:[["Non bevo mai caffè.","Я никогда не пью кофе."],["Non c'è niente.","Ничего нет."],["Non vedo nessuno.","Я никого не вижу."]],
+post:`<table><tr><td>mai</td><td>никогда</td></tr><tr><td>niente</td><td>ничего</td></tr><tr><td>nessuno</td><td>никто</td></tr></table><p>Схема: <b>non</b> + глагол + mai / niente / nessuno.</p>`,
+c:["«Я ничего не понимаю» — Non capisco ___.",["mai","niente","nessuno"],1,"ничего → niente."]},
+{h:"Вопрос без перестановки слов",
+pre:`<p>Сравни утверждение и вопрос:</p>`,
+ex:[["Parli inglese.","Ты говоришь по-английски."],["Parli inglese?","Ты говоришь по-английски?"],["È aperto?","Открыто?"],["Hai fame?","Ты голоден?"]],
+post:`<p>Порядок слов не меняется, вопрос делает только интонация: голос поднимается в конце. Как в русском «Ты говоришь по-английски?».</p>`,
+c:["Как спросить «Это открыто?»",["È aperto?","Aperto è?","Est aperto?"],0,"Порядок тот же, меняется интонация."]},
+{h:"Вопросительные слова",
+pre:`<p>Самые нужные слова для вопросов:</p>`,
+ex:[["Chi è?","Кто это?"],["Cosa fai?","Что ты делаешь?"],["Dove abiti?","Где ты живёшь?"],["Quando parte?","Когда отправляется?"],["Quanto costa?","Сколько стоит?"],["Come stai?","Как дела?"],["Perché?","Почему?"]],
+post:`<table><tr><td>chi</td><td>кто</td></tr><tr><td>(che) cosa</td><td>что</td></tr><tr><td>dove</td><td>где, куда</td></tr><tr><td>quando</td><td>когда</td></tr><tr><td>quanto</td><td>сколько</td></tr><tr><td>come</td><td>как</td></tr><tr><td>perché</td><td>почему; и «потому что»</td></tr><tr><td>quale</td><td>какой, который</td></tr></table>`,
+c:["«Где ты живёшь?» — ___ abiti?",["Dove","Come","Quando"],0,"где → dove."]}
+],
+g7:[
+{h:"c'è и ci sono",
+pre:`<p>Так говорят, что что-то <b>есть, имеется</b>:</p>`,
+ex:[["C'è un bar qui?","Здесь есть бар?"],["C'è il sole.","Солнечно (букв. «есть солнце»)."],["Ci sono due bagni.","Есть две ванные."],["Ci sono molti studenti.","Много студентов."]],
+post:`<p><b>c'è</b> = ci + è, для одного предмета. <b>ci sono</b> — для нескольких. Это как английское there is / there are.</p>`,
+c:["___ due farmacie qui vicino.",["C'è","Ci sono","Sono"],1,"Две аптеки, множественное → ci sono."]},
+{h:"c'è или è?",
+pre:`<p>Сравни пары:</p>`,
+ex:[["C'è un problema.","Есть проблема."],["È un problema.","Это проблема."],["C'è Marco?","Марко здесь?"],["È Marco.","Это Марко."]],
+post:`<p><b>c'è</b> — что-то есть, присутствует, имеется. <b>è</b> — что-то является чем-то, описание.</p><p>Отрицание: <b>non c'è</b>, <b>non ci sono</b>.</p>`,
+c:["«Здесь нет Wi-Fi» — Non ___ il Wi-Fi.",["è","c'è","ci sono"],1,"Нет, не имеется → non c'è."]}
+],
+g8:[
+{h:"andare — идти, ехать",
+pre:`<p>Этот глагол неправильный, его просто запоминаешь:</p>`,
+ex:[["Vado all'università.","Я иду в университет."],["Vai a casa?","Ты идёшь домой?"],["Va al mare.","Он едет на море."],["Andiamo!","Пошли!"],["Andate in centro?","Вы идёте в центр?"],["Vanno a Roma.","Они едут в Рим."]],
+post:`<table><tr><td>andare</td><td>vado, vai, va, andiamo, andate, vanno</td></tr></table><p>Одно слово для «идти» и «ехать»: Vado a Roma — и пешком, и на поезде.</p>`,
+c:["Io ___ a casa.",["ando","vado","va"],1,"io → vado."]},
+{h:"fare — делать",
+pre:`<p>Один из самых частых глаголов:</p>`,
+ex:[["Che cosa fai?","Что ты делаешь?"],["Faccio la spesa.","Я хожу за продуктами."],["Fa caldo.","Жарко."],["Facciamo una pausa.","Давайте сделаем перерыв."],["Faccio colazione.","Я завтракаю."]],
+post:`<table><tr><td>fare</td><td>faccio, fai, fa, facciamo, fate, fanno</td></tr></table><p>fare значит не только «делать». Через него говорят о погоде (fa caldo, fa freddo) и в устойчивых выражениях: fare la spesa (покупать продукты), fare colazione (завтракать), fare una domanda (задать вопрос).</p>`,
+c:["«Холодно» — ___ freddo.",["È","Fa","Ha"],1,"Погода через fare: fa freddo."]},
+{h:"Хочу, могу, должен",
+pre:`<p>После этих глаголов сразу идёт начальная форма, как в русском «хочу спать»:</p>`,
+ex:[["Voglio dormire.","Я хочу спать."],["Vorrei un caffè.","Я бы хотел кофе."],["Posso entrare?","Можно войти?"],["Puoi ripetere?","Можешь повторить?"],["Devo studiare.","Мне надо учиться."]],
+post:`<table><tr><td>volere</td><td>voglio, vuoi, vuole, vogliamo, volete, vogliono</td></tr><tr><td>potere</td><td>posso, puoi, può, possiamo, potete, possono</td></tr><tr><td>dovere</td><td>devo, devi, deve, dobbiamo, dovete, devono</td></tr></table>
+<p><b>Vorrei</b> — «я бы хотел», вежливая форма. «Voglio un caffè» в баре звучит грубовато, «Vorrei un caffè» — вежливо.</p>`,
+c:["___ pagare con la carta? (io, potere)",["Poto","Posso","Può"],1,"io → posso."]}
+],
+g9:[
+{h:"Как устроено «нравится»",
+pre:`<p>Посмотри внимательно:</p>`,
+ex:[["Mi piace il caffè.","Мне нравится кофе."],["Mi piace Messina.","Мне нравится Мессина."],["Mi piace studiare.","Мне нравится учиться."],["Ti piace?","Тебе нравится?"]],
+post:`<p>Как в русском «мне нравится»: тот, кто любит, стоит в форме «мне» (mi), а то, что нравится, — главное слово. Поэтому глагол зависит от предмета, а не от человека.</p>`,
+c:["«Мне нравится море» — Mi ___ il mare.",["piace","piaccio","piaci"],0,"Одна вещь → piace."]},
+{h:"piace или piacciono",
+pre:`<p>Сравни:</p>`,
+ex:[["Mi piace la pizza.","Мне нравится пицца."],["Mi piacciono gli arancini.","Мне нравятся аранчини."],["Mi piacciono i cannoli.","Мне нравятся канноли."],["Mi piace cucinare.","Мне нравится готовить."]],
+post:`<p>Одна вещь или действие (начальная форма глагола) → <b>piace</b>. Несколько вещей → <b>piacciono</b>. Артикль перед вещью нужен: mi piace <b>il</b> mare.</p>`,
+c:["Mi ___ le scarpe rosse.",["piace","piacciono","piacere"],1,"Несколько вещей → piacciono."]},
+{h:"Кому нравится",
+pre:`<p>Меняется только первое слово:</p>`,
+ex:[["Ti piace il mare?","Тебе нравится море?"],["Gli piace il calcio.","Ему нравится футбол."],["Le piace la musica?","Ей (или Вам) нравится музыка?"],["Ci piace Messina.","Нам нравится Мессина."],["Non mi piace il freddo.","Мне не нравится холод."]],
+post:`<table><tr><td>mi</td><td>мне</td></tr><tr><td>ti</td><td>тебе</td></tr><tr><td>gli / le</td><td>ему / ей (le — и вежливое «Вам»)</td></tr><tr><td>ci</td><td>нам</td></tr><tr><td>vi</td><td>вам</td></tr><tr><td>gli</td><td>им</td></tr></table>`,
+c:["«Нам нравится» — ___ piace.",["Ci","Noi","Vi"],0,"нам → ci."]}
+],
+g10:[
+{h:"a и in: где и куда",
+pre:`<p>Посмотри, где a, а где in:</p>`,
+ex:[["Abito a Messina.","Я живу в Мессине."],["Vado a Roma.","Я еду в Рим."],["Vivo in Italia.","Я живу в Италии."],["Vado in Sicilia.","Я еду на Сицилию."],["Sono in centro.","Я в центре."],["Vado in farmacia.","Я иду в аптеку."]],
+post:`<table><tr><td>a</td><td>города: a Messina; а также a casa (дома/домой), a lezione, a scuola</td></tr><tr><td>in</td><td>страны и регионы: in Italia, in Sicilia; многие места: in centro, in banca, in farmacia, in biblioteca, in ufficio</td></tr></table>
+<p>«Где» и «куда» не различаются: sono a Roma (я в Риме) и vado a Roma (еду в Рим).</p>`,
+c:["Studio ___ Italia.",["a","in","da"],1,"Страна → in."]},
+{h:"di и da",
+pre:`<p>Два похожих предлога с разным смыслом:</p>`,
+ex:[["Sono di Almaty.","Я из Алматы (родом)."],["Il libro di Marco.","Книга Марко."],["Vengo da Roma.","Я еду из Рима."],["Vado dal medico.","Я иду к врачу."],["Sono da Giulia.","Я у Джулии."]],
+post:`<table><tr><td>di</td><td>чей: il libro di Marco; откуда родом: sono di Almaty</td></tr><tr><td>da</td><td>откуда едешь: vengo da Roma; к кому / у кого: vado dal medico, sono da Giulia</td></tr></table>`,
+c:["Vengo ___ Roma. (приехал из Рима)",["di","da","in"],1,"Откуда едешь → da."]},
+{h:"con, per, su, tra",
+pre:`<p>Ещё четыре коротких предлога:</p>`,
+ex:[["Esco con gli amici.","Я гуляю с друзьями."],["Un regalo per te.","Подарок для тебя."],["Il treno per Palermo.","Поезд на Палермо."],["Il libro è sul tavolo.","Книга на столе."],["Tra due giorni.","Через два дня."]],
+post:`<table><tr><td>con</td><td>с</td></tr><tr><td>per</td><td>для; направление поезда или самолёта</td></tr><tr><td>su</td><td>на (поверхности)</td></tr><tr><td>tra / fra</td><td>через (о времени), между</td></tr></table>`,
+c:["Il treno ___ Catania.",["per","con","di"],0,"Направление поезда → per."]}
+],
+g11:[
+{h:"Предлог + артикль = одно слово",
+pre:`<p>Смотри, что происходит:</p>`,
+ex:[["Vado al mare.","Я иду на море. (a + il)"],["Vado all'università.","Я иду в университет. (a + l')"],["Vado alla stazione.","Я иду на вокзал. (a + la)"],["Parlo agli studenti.","Я говорю студентам. (a + gli)"]],
+post:`<p>Предлоги <b>a, di, da, in, su</b> сливаются с артиклем. Это обязательно: «a il mare» сказать нельзя, только <b>al mare</b>.</p>
+<table><tr><td>a + il, lo, la, l'</td><td>al, allo, alla, all'</td></tr><tr><td>a + i, gli, le</td><td>ai, agli, alle</td></tr></table>`,
+c:["Vado ___ mare. (a + il)",["al","alla","allo"],0,"a + il = al."]},
+{h:"Вся таблица",
+pre:`<p>Запомни одну строку a, остальные строятся так же:</p>`,
+ex:[["Il nome del professore.","Имя преподавателя. (di + il)"],["Torno dalla stazione.","Возвращаюсь с вокзала. (da + la)"],["Le chiavi sono nella borsa.","Ключи в сумке. (in + la)"],["Il libro è sul tavolo.","Книга на столе. (su + il)"]],
+post:`<table><tr><td>a</td><td>al, allo, alla, all', ai, agli, alle</td></tr><tr><td>di → de-</td><td>del, dello, della, dell', dei, degli, delle</td></tr><tr><td>da</td><td>dal, dallo, dalla, dall', dai, dagli, dalle</td></tr><tr><td>in → ne-</td><td>nel, nello, nella, nell', nei, negli, nelle</td></tr><tr><td>su</td><td>sul, sullo, sulla, sull', sui, sugli, sulle</td></tr></table>`,
+c:["Le chiavi sono ___ borsa. (in + la)",["nel","nella","nello"],1,"in + la = nella."]},
+{h:"Когда сливать не нужно",
+pre:`<p>Сравни:</p>`,
+ex:[["Vado in banca.","Я иду в банк."],["Vado nella banca di Marco.","Я иду в банк Марко."],["Sono a casa.","Я дома."],["Vado al mare.","Я иду на море."]],
+post:`<p>Слияние нужно, только когда перед словом стоит артикль. Если место говорится без артикля (in banca, a casa, a Messina, in Italia), то и сливать нечего. Как только появляется артикль (la banca di Marco), появляется и слияние: nella banca.</p>`,
+c:["Vado ___ biblioteca. (просто «в библиотеку»)",["in","nella","alla"],0,"Место из списка «in» без артикля → in biblioteca."]}
+],
+g12:[
+{h:"Мой, моя, мои",
+pre:`<p>Обрати внимание на артикль:</p>`,
+ex:[["il mio telefono","мой телефон"],["la mia casa","мой дом"],["i miei amici","мои друзья"],["le mie chiavi","мои ключи"]],
+post:`<p>Притяжательное слово меняется по роду и числу <b>предмета</b> и обычно стоит с артиклем: <b>il</b> mio telefono. По-русски «мой телефон», по-итальянски «тот мой телефон».</p>`,
+c:["___ casa è piccola. (моя)",["Il mio","La mia","Mia"],1,"casa — женский род, с артиклем: la mia."]},
+{h:"Все формы",
+pre:`<p>Таблица на весь урок:</p>`,
+ex:[["il tuo libro","твоя книга"],["la sua borsa","его / её сумка"],["il nostro professore","наш преподаватель"],["la vostra città","ваш город"],["la loro casa","их дом"]],
+post:`<table><tr><td>мой</td><td>mio, mia, miei, mie</td></tr><tr><td>твой</td><td>tuo, tua, tuoi, tue</td></tr><tr><td>его, её, Ваш</td><td>suo, sua, suoi, sue</td></tr><tr><td>наш</td><td>nostro, nostra, nostri, nostre</td></tr><tr><td>ваш</td><td>vostro, vostra, vostri, vostre</td></tr><tr><td>их</td><td>loro (не меняется)</td></tr></table>
+<p><b>suo</b> значит и «его», и «её»: il suo libro — его или её книга, понятно из контекста. Форма зависит от предмета: libro мужского рода → suo.</p>`,
+c:["Marco e ___ sorella. (его сестра)",["suo","sua","la sua"],1,"Сестра — родственник в ед. ч., без артикля; sorella ж. р. → sua."]},
+{h:"Родственники без артикля",
+pre:`<p>Вот исключение:</p>`,
+ex:[["mia moglie","моя жена"],["mio padre","мой отец"],["tuo fratello","твой брат"],["i miei genitori","мои родители"],["il loro figlio","их сын"]],
+post:`<p>С одним родственником артикль не ставят: <b>mia</b> moglie, <b>mio</b> padre. Но ставят: во множественном (<b>i</b> miei fratelli), с loro (<b>il</b> loro figlio) и с ласковыми словами (<b>la</b> mia mamma).</p>`,
+c:["___ moglie è di Almaty. (моя)",["La mia","Mia","Il mio"],1,"Родственник в ед. ч. → без артикля."]}
+],
+g13:[
+{h:"Глаголы на «-ся»",
+pre:`<p>Посмотри на глагол chiamarsi (зваться):</p>`,
+ex:[["Mi chiamo Yera.","Меня зовут Ера."],["Come ti chiami?","Как тебя зовут?"],["Si chiama Giulia.","Её зовут Джулия."],["Ci chiamiamo…","Нас зовут…"]],
+post:`<p>Окончание <b>-si</b> у начальной формы — это русское «-ся». При спряжении si превращается в маленькое слово перед глаголом:</p>
+<table><tr><td>io</td><td>mi chiamo</td></tr><tr><td>tu</td><td>ti chiami</td></tr><tr><td>lui / lei</td><td>si chiama</td></tr><tr><td>noi</td><td>ci chiamiamo</td></tr><tr><td>voi</td><td>vi chiamate</td></tr><tr><td>loro</td><td>si chiamano</td></tr></table>`,
+c:["Io ___ chiamo Anna.",["mi","ti","si"],0,"io → mi."]},
+{h:"Распорядок дня",
+pre:`<p>Многие такие глаголы описывают день:</p>`,
+ex:[["Mi sveglio alle sette.","Я просыпаюсь в семь."],["Mi alzo presto.","Я встаю рано."],["Mi vesto.","Я одеваюсь."],["Mi sento bene.","Я хорошо себя чувствую."],["Come ti trovi a Messina?","Как тебе в Мессине?"],["Ci vediamo!","Увидимся!"]],
+post:`<p>svegliarsi (просыпаться), alzarsi (вставать), vestirsi (одеваться), sentirsi (чувствовать себя), trovarsi (находиться; «как тебе там»), vedersi (видеться).</p>`,
+c:["Lei ___ sveglia presto.",["si","mi","ci"],0,"lei → si."]},
+{h:"С «хочу» и «должен»",
+pre:`<p>Два правильных варианта:</p>`,
+ex:[["Devo alzarmi presto.","Мне надо рано вставать."],["Mi devo alzare presto.","То же самое."],["Voglio riposarmi.","Хочу отдохнуть."]],
+post:`<p>После devo / voglio / posso частицу можно прицепить к концу начальной формы (alzar<b>mi</b>) или поставить перед глаголом (<b>mi</b> devo alzare). Оба варианта правильные.</p>`,
+c:["Domani devo ___ presto. (svegliarsi, я)",["svegliarmi","svegliarsi","mi svegliare"],0,"Частица к концу и под «я»: svegliarmi."]}
+],
+g14:[
+{h:"Как сказать о прошлом",
+pre:`<p>Посмотри на конструкцию:</p>`,
+ex:[["Ho mangiato.","Я поел."],["Hai parlato con Marco?","Ты говорил с Марко?"],["Abbiamo comprato il pane.","Мы купили хлеб."],["Ieri ho lavorato tanto.","Вчера я много работал."]],
+post:`<p>Главное прошедшее время в разговоре (passato prossimo) состоит из двух частей: <b>avere</b> в настоящем (ho, hai, ha…) + <b>причастие</b> (mangiato). Как английское I have eaten, только им говорят и про «вчера».</p>`,
+c:["«Я купил» — ___ comprato.",["Ho","Sono","Ha"],0,"io → ho + comprato."]},
+{h:"Как образуется причастие",
+pre:`<p>Окончание зависит от группы глагола:</p>`,
+ex:[["mangiare → mangiato","съел"],["vendere → venduto","продал"],["capire → capito","понял"],["dormire → dormito","спал"]],
+post:`<table><tr><td>-are →</td><td>-ato</td></tr><tr><td>-ere →</td><td>-uto</td></tr><tr><td>-ire →</td><td>-ito</td></tr></table>`,
+c:["Hai ___ la lezione? (capire)",["capato","capito","capiuto"],1,"-ire → -ito."]},
+{h:"Неправильные причастия",
+pre:`<p>Самые частые, их нужно выучить:</p>`,
+ex:[["Ho fatto la spesa.","Я сходил за продуктами. (fare)"],["Ho preso il treno.","Я сел на поезд. (prendere)"],["Ho visto il mare.","Я видел море. (vedere)"],["Ho letto il libro.","Я прочитал книгу. (leggere)"],["Ho scritto una mail.","Я написал письмо. (scrivere)"],["Ho detto di no.","Я сказал нет. (dire)"]],
+post:`<table><tr><td>fare</td><td>fatto</td></tr><tr><td>prendere</td><td>preso</td></tr><tr><td>vedere</td><td>visto</td></tr><tr><td>leggere</td><td>letto</td></tr><tr><td>scrivere</td><td>scritto</td></tr><tr><td>dire</td><td>detto</td></tr><tr><td>bere</td><td>bevuto</td></tr><tr><td>aprire / chiudere</td><td>aperto / chiuso</td></tr><tr><td>perdere</td><td>perso</td></tr></table>`,
+c:["Che cosa hai ___ ieri? (fare)",["fatto","fato","fauto"],0,"fare → fatto."]}
+],
+g15:[
+{h:"Какие глаголы идут с essere",
+pre:`<p>Здесь вместо avere — essere:</p>`,
+ex:[["Sono andato al mare.","Я ходил на море."],["Sono arrivato ieri.","Я приехал вчера."],["Sono uscito alle otto.","Я вышел в восемь."],["Sono stato a Roma.","Я был в Риме."]],
+post:`<p>С <b>essere</b> идут глаголы движения и изменения состояния: andare, venire, arrivare, partire, tornare, uscire, entrare, restare, nascere (родиться), essere (быть → stato).</p><p>Подсказка: если к глаголу нельзя задать вопрос «что?» (нельзя «andare qualcosa»), это скорее всего essere.</p>`,
+c:["Ieri ___ andato in centro. (я)",["ho","sono","è"],1,"andare → с essere."]},
+{h:"Причастие согласуется",
+pre:`<p>Посмотри на окончания:</p>`,
+ex:[["Marco è andato.","Марко ушёл."],["Giulia è andata.","Джулия ушла."],["Marco e Luca sono andati.","Марко и Лука ушли."],["Giulia e Anna sono andate.","Джулия и Анна ушли."]],
+post:`<p>С essere причастие меняется, как прилагательное, по тому, кто действует:</p>
+<table><tr><td>он</td><td>-o (andato)</td></tr><tr><td>она</td><td>-a (andata)</td></tr><tr><td>они (м. или смешанные)</td><td>-i (andati)</td></tr><tr><td>они (только ж.)</td><td>-e (andate)</td></tr></table>
+<p>Как в русском: «ушёл / ушла / ушли».</p>`,
+c:["Giulia è ___ alle sei. (arrivare)",["arrivato","arrivata","arrivati"],1,"Джулия — она → arrivata."]},
+{h:"Глаголы на «-ся» в прошлом",
+pre:`<p>Все возвратные глаголы тоже с essere:</p>`,
+ex:[["Mi sono svegliato tardi.","Я проснулся поздно."],["Si è alzata presto.","Она встала рано."],["Ci siamo divertiti.","Мы повеселились."]],
+post:`<p>Частица + essere + причастие с согласованием: <b>mi sono</b> svegliat<b>o</b> (он), <b>mi sono</b> svegliat<b>a</b> (она).</p>`,
+c:["Mi ___ svegliato tardi.",["ho","sono","è"],1,"Возвратный → essere: mi sono."]}
+],
+g16:[
+{h:"Который час",
+pre:`<p>Обрати внимание на sono и è:</p>`,
+ex:[["Che ore sono?","Который час?"],["Sono le tre.","Три часа."],["Sono le otto.","Восемь часов."],["È l'una.","Час."],["È mezzogiorno.","Полдень."],["È mezzanotte.","Полночь."]],
+post:`<p>Часы — это «le ore», поэтому <b>sono le</b> + число: sono le due, sono le dieci. Исключения в единственном числе: <b>è l'una</b>, è mezzogiorno, è mezzanotte.</p>`,
+c:["___ le quattro.",["È","Sono","Ci sono"],1,"Часы во множественном → sono le."]},
+{h:"Минуты",
+pre:`<p>Минуты просто прибавляем или отнимаем:</p>`,
+ex:[["Sono le sette e dieci.","7:10"],["Sono le dieci e un quarto.","10:15"],["Sono le otto e mezza.","8:30"],["Sono le nove meno dieci.","8:50"],["Sono le nove meno un quarto.","8:45"]],
+post:`<table><tr><td>e + минуты</td><td>после: e dieci, e venti</td></tr><tr><td>e un quarto</td><td>четверть (:15)</td></tr><tr><td>e mezza</td><td>половина (:30)</td></tr><tr><td>meno + минуты</td><td>без: le nove meno dieci = 8:50</td></tr></table>`,
+c:["8:30 — Sono le otto e ___ .",["mezza","metà","quarto"],0,"половина → e mezza."]},
+{h:"Во сколько?",
+pre:`<p>Для времени события нужен предлог:</p>`,
+ex:[["A che ora parte il treno?","Во сколько отходит поезд?"],["Alle nove.","В девять."],["All'una.","В час."],["A mezzogiorno.","В полдень."],["Dalle nove alle cinque.","С девяти до пяти."]],
+post:`<p><b>A che ora?</b> — во сколько? Ответ: <b>alle</b> + число (a + le): alle nove. Но <b>all'una</b>, <b>a</b> mezzogiorno. «С… до…» — dalle… alle…</p>`,
+c:["A che ora parte il treno? — ___ dieci.",["Alle","Le","A"],0,"Во сколько → alle."]}
+]
+};
+
 /* ================== STATE ================== */
 const KEY="pianopiano.v1";
 const D=864e5;
-const DEF=()=>({v:1,updatedAt:0,cards:{},xp:{},streak:0,lastDay:"",lessons:{},sounds:{},topicsSeen:{},newLog:{},dialogs:{},practice:{},daily:{},ach:{},freezes:0,level:1,best:{},maxCombo:0,flags:{},
+const DEF=()=>({v:1,updatedAt:0,cards:{},xp:{},streak:0,lastDay:"",lessons:{},mist:{},sounds:{},topicsSeen:{},newLog:{},dialogs:{},practice:{},daily:{},ach:{},freezes:0,level:1,best:{},maxCombo:0,flags:{},
   settings:{rate:0.9,newPerDay:10,autoSpeak:true,goal:20,topics:["base","num","food","city"]}});
 function today(){const d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
 function dayStr(t){const d=new Date(t);return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")}
@@ -1266,37 +1596,101 @@ function stopDialog(){
   if(dlg&&dlg.playing){dlg.playing=false;dlg.cur=null;try{speechSynthesis.cancel()}catch(e){}}
 }
 
-function openLesson(id){les={id,step:"learn",qi:0,correct:0,answered:null,order:null};render();window.scrollTo(0,0)}
+const LMAP={};LESSONS.forEach(l=>{LMAP[l.id]=l;l.steps=(typeof LESSON_STEPS!=="undefined"&&LESSON_STEPS[l.id])||[{h:"Правило",pre:"",ex:l.ex,post:l.rule,c:null}]});
+const qKey=(lid,qi)=>lid+":"+qi;
+function mistKeys(){return Object.keys(state.mist||{}).filter(k=>{const p=k.split(":");return LMAP[p[0]]&&LMAP[p[0]].q[+p[1]]})}
+function fillQ(q){return q[0].replace("___",q[1][q[2]]).replace(/\s*\(.*?\)\s*$/,"")}
+function openLesson(id){les={id,mode:"steps",si:0,ca:null};render();window.scrollTo(0,0)}
+function startQuiz(items,review){
+  Object.assign(les,{mode:"quiz",queue:items.slice(),total:items.length,fixed:0,correct:0,answered:null,order:null,wrong:[],review:!!review,combo:0});
+  render();window.scrollTo(0,0);
+}
+function startMistakes(){les={id:"mist",mode:"steps"};startQuiz(shuffle(mistKeys().map(k=>{const p=k.split(":");return[p[0],+p[1]]})).slice(0,15),true)}
 function vGrammar(){
   if(les)return vLesson();
-  return `<h1>Грамматика</h1><p class="muted">Сначала примеры, потом правило, потом упражнения. Урок засчитывается от 70% верных ответов.</p>
-  <div class="card list mt">${LESSONS.map((l,i)=>{const r=state.lessons[l.id];return `<button class="item" style="width:100%;text-align:left" data-lesson="${l.id}"><div class="chk ${r?"done":""}">${r?ICON.check:i+1}</div><div class="grow"><b>${l.t}</b><div class="muted small">${l.q.length} упражнений${r?" · лучший результат "+r+"%":""}</div></div></button>`}).join("")}</div>`;
+  const mk=mistKeys().length;
+  return `<h1>Грамматика</h1><p class="muted">Каждый урок идёт по шагам: примеры, простое объяснение и мини-вопрос. В конце упражнения, урок засчитывается от 70%.</p>
+  ${mk?`<button class="card row mt" id="mistAll" style="width:100%;text-align:left;border-color:var(--terra)"><span style="font-size:26px">🔁</span><div class="grow"><b>Работа над ошибками</b><div class="muted small">${mk} ${plural(mk,"вопрос","вопроса","вопросов")} из уроков, где ты ошибся</div></div><span class="link">Начать</span></button>`:""}
+  <div class="card list mt">${LESSONS.map((l,i)=>{const r=state.lessons[l.id];return `<button class="item" style="width:100%;text-align:left" data-lesson="${l.id}"><div class="chk ${r?"done":""}">${r?ICON.check:i+1}</div><div class="grow"><b>${l.t}</b><div class="muted small">${l.steps.length} ${plural(l.steps.length,"шаг","шага","шагов")} · ${l.q.length} упражнений${r?" · лучший результат "+r+"%":""}</div></div></button>`}).join("")}</div>`;
 }
 function vLesson(){
-  const L=LESSONS.find(l=>l.id===les.id);
-  if(les.step==="learn"){
-    return `<button class="back" id="lesBack">${ICON.back} Уроки</button><h1>${L.t}</h1>
-    <h2>Посмотри на примеры</h2>
-    <div class="card list">${L.ex.map(e=>`<div class="item"><div class="grow"><div class="it">${esc(e[0])}</div><div class="ru">${esc(e[1])}</div></div>${playBtns(e[0])}</div>`).join("")}</div>
-    <p class="muted small">Заметил закономерность? Теперь правило.</p>
-    <h2>Правило</h2><div class="card rule">${L.rule}</div>
-    <button class="btn block mt" id="startQuiz">Упражнения · ${L.q.length}</button>`;
+  if(les.mode==="steps")return vSteps();
+  if(les.mode==="quiz")return les.queue.length?vQuizQ():vQuizDone();
+  return "";
+}
+function vSteps(){
+  const L=LMAP[les.id],S=L.steps,st=S[les.si],last=les.si===S.length-1;
+  const c=st.c;
+  return `<button class="back" id="lesBack">${ICON.back} Уроки</button>
+  <div class="row between"><h1 style="font-size:24px">${L.t}</h1></div>
+  <div class="row" style="gap:6px;margin:10px 0 4px">${S.map((_,i)=>`<i style="flex:1;height:5px;border-radius:9px;background:${i<=les.si?"var(--terra)":"var(--line)"}"></i>`).join("")}</div>
+  <div class="row between"><span class="muted small">Шаг ${les.si+1} из ${S.length}</span>${state.lessons[L.id]?`<button class="link small" id="toQuiz">Сразу к упражнениям</button>`:""}</div>
+  <div class="card rule mt"><h3>${st.h}</h3>${st.pre||""}
+    ${st.ex&&st.ex.length?`<div class="list" style="margin:6px 0">${st.ex.map(e=>`<div class="item"><div class="grow"><div class="it" style="font-size:16px">${esc(e[0])}</div><div class="ru">${esc(e[1])}</div></div>${playBtns(e[0])}</div>`).join("")}</div>`:""}
+    ${st.post||""}</div>
+  ${c?`<div class="card mt"><div class="muted small">Проверь себя</div><div class="q" style="font-size:19px;margin-top:4px">${esc(c[0])}</div>
+    <div class="opts">${c[1].map((o,i)=>{let cls="";if(les.ca!==null){if(i===c[2])cls="right";else if(i===les.ca)cls="wrong"}return `<button class="opt ${cls}" data-copt="${i}" ${les.ca!==null?"disabled":""}>${esc(o)}</button>`}).join("")}</div>
+    ${les.ca!==null?`<div class="explain">${les.ca===c[2]?"<b>Верно!</b> ":"<b>Не совсем.</b> "}${esc(c[3])}</div>`:""}</div>`:""}
+  <div class="row mt" style="gap:8px">${les.si>0?`<button class="btn ghost" id="stepPrev">Назад</button>`:""}
+  <button class="btn grow" id="${last?"toQuiz":"stepNext"}" ${c&&les.ca===null?"disabled":""}>${c&&les.ca===null?"Сначала ответь на вопрос":last?"К упражнениям · "+L.q.length:"Дальше"}</button></div>`;
+}
+function vQuizQ(){
+  const [lid,qi]=les.queue[0],L=LMAP[lid],q=L.q[qi];
+  if(!les.order)les.order=shuffle(q[1].map((_,i)=>i));
+  const done=les.review?les.fixed:les.total-les.queue.length;
+  const a=les.answered;
+  return `<button class="back" id="lesBack">${ICON.back} ${les.id==="mist"?"Грамматика":"Уроки"}</button>
+  ${les.review?`<div class="pill terra" style="margin-bottom:10px">🔁 Работа над ошибками · осталось ${les.queue.length}</div>`:""}
+  <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*done/les.total)}%"></i></div><span class="muted small">${done}/${les.total}</span></div>
+  <div class="card"><div class="muted small">${les.id==="mist"?esc(L.t)+" · ":""}Выбери правильный вариант</div><div class="q mt">${esc(q[0])}</div>
+  <div class="opts">${les.order.map(i=>{let cls="";if(a!==null){if(i===q[2])cls="right";else if(i===a)cls="wrong"}return `<button class="opt ${cls}" data-opt="${i}" ${a!==null?"disabled":""}>${esc(q[1][i])}</button>`}).join("")}</div>
+  ${a!==null?`<div class="explain">${a===q[2]?"<b>Giusto!</b> ":"<b>Не совсем.</b> Правильно: <b>"+esc(q[1][q[2]])+"</b>. "}${esc(q[3])}${a!==q[2]&&les.review?"<br><span class='muted small'>Этот вопрос вернётся в конце.</span>":""}${comboTag(les)}</div>
+  <div class="row mt">${playBtns(fillQ(q))}<button class="btn grow" id="nextQ">Дальше</button></div>`:""}</div>`;
+}
+function answerQuiz(i){
+  const [lid,qi]=les.queue[0],q=LMAP[lid].q[qi],ok=i===q[2],k=qKey(lid,qi);
+  les.answered=i;comboHit(les,ok);
+  if(!state.mist)state.mist={};
+  if(ok){
+    les.correct++;bump("correct");
+    if(les.review){delete state.mist[k];les.fixed++}
+    addXP(2);tgHaptic("success");
+  }else{
+    state.mist[k]=(state.mist[k]||0)+1;
+    if(!les.wrong.some(w=>w.k===k))les.wrong.push({k,lid,qi,given:q[1][i]});
+    tgHaptic("error");save();
   }
-  if(les.step==="quiz"){
-    const q=L.q[les.qi];
-    if(!les.order)les.order=shuffle(q[1].map((_,i)=>i));
-    return `<button class="back" id="lesBack">${ICON.back} Уроки</button>
-    <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*les.qi/L.q.length)}%"></i></div><span class="muted small">${les.qi+1}/${L.q.length}</span></div>
-    <div class="card"><div class="muted small">Выбери правильный вариант</div><div class="q mt">${esc(q[0])}</div>
-    <div class="opts">${les.order.map(i=>{let cls="";if(les.answered!==null){if(i===q[2])cls="right";else if(i===les.answered)cls="wrong"}return `<button class="opt ${cls}" data-opt="${i}" ${les.answered!==null?"disabled":""}>${esc(q[1][i])}</button>`}).join("")}</div>
-    ${les.answered!==null?`<div class="explain">${les.answered===q[2]?"<b>Giusto!</b> ":"<b>Не совсем.</b> "}${esc(q[3])}${comboTag(les)}</div>
-    <div class="row mt">${playBtns(q[0].replace(/___/,q[1][q[2]]).replace(/\(.*?\)/g,""))}<button class="btn grow" id="nextQ">${les.qi+1<L.q.length?"Дальше":"Результат"}</button></div>`:""}</div>`;
+  render();
+}
+function nextQuiz(){
+  const it=les.queue.shift(),[lid,qi]=it,q=LMAP[lid].q[qi];
+  if(les.review&&les.answered!==q[2])les.queue.push(it);
+  les.answered=null;les.order=null;
+  if(!les.queue.length&&!les.review&&LMAP[les.id]){
+    const pct=Math.round(100*les.correct/les.total);
+    if(pct>=70){bump("lesson");if(!state.lessons[les.id])addXP(5);state.lessons[les.id]=Math.max(state.lessons[les.id]||0,pct);save()}
   }
-  const pct=Math.round(100*les.correct/L.q.length), pass=pct>=70;
-  return `<div class="card center stack" style="padding:28px 16px"><div class="done-big">${pass?"🎉":"💪"}</div><h1>${les.correct} из ${L.q.length}</h1>
-  <p class="muted">${pass?"Урок пройден. Ottimo!":"Почти. Пересмотри примеры и попробуй ещё раз, нужно от 70%."}</p>
-  <button class="btn block" id="retryQuiz">${pass?"Пройти ещё раз":"Попробовать снова"}</button>
-  <button class="btn ghost block" id="lesBack">К урокам</button></div>`;
+  if(!les.queue.length&&les.review){addXP(3)}
+  render();window.scrollTo(0,0);
+}
+function vQuizDone(){
+  if(les.review){
+    return `<div class="card center stack" style="padding:28px 16px"><div class="done-big">✨</div><h1>Ошибки исправлены</h1>
+    <p class="muted">Все вопросы теперь отвечены правильно. +3 очка за работу над ошибками.${mistKeys().length?" В общем списке ещё "+mistKeys().length+" "+plural(mistKeys().length,"вопрос","вопроса","вопросов")+".":""}</p>
+    ${mistKeys().length?`<button class="btn block" id="mistAll">Продолжить работу над ошибками</button>`:""}
+    <button class="btn ghost block" id="lesBack">К урокам</button></div>`;
+  }
+  const L=LMAP[les.id],pct=Math.round(100*les.correct/les.total),pass=pct>=70,w=les.wrong;
+  return `<div class="card center stack" style="padding:24px 16px"><div class="done-big">${pass?"🎉":"💪"}</div><h1>${les.correct} из ${les.total}</h1>
+  <p class="muted">${pass?(w.length?"Урок пройден! Разбери ошибки ниже, чтобы закрепить.":"Урок пройден без ошибок. Ottimo!"):"Пока меньше 70%. Посмотри ошибки, повтори теорию и попробуй снова."}</p></div>
+  ${w.length?`<h2>Разбор ошибок</h2><div class="card list">${w.map(x=>{const q=LMAP[x.lid].q[x.qi];return `<div class="item" style="display:block">
+    <div class="q" style="font-size:17px">${esc(q[0])}</div>
+    <div class="small" style="margin-top:4px"><span style="color:var(--red)">Твой ответ: ${esc(x.given)}</span> · <span style="color:var(--olive);font-weight:700">Верно: ${esc(q[1][q[2]])}</span></div>
+    <div class="muted small" style="margin-top:2px">${esc(q[3])}</div></div>`}).join("")}</div>
+  <button class="btn block mt" id="reviewWrong">🔁 Работа над ошибками · ${w.length}</button>`:""}
+  <button class="btn ghost block mt" id="retryTheory">Повторить теорию</button>
+  <button class="btn ghost block mt" id="retryQuiz">Пройти упражнения заново</button>
+  <button class="btn ghost block mt" id="lesBack">К урокам</button>`;
 }
 function shuffle(a){for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
 
@@ -1349,7 +1743,7 @@ function startPractice(mode,level){
   if(mode==="listen"){const pool=practicePool();items=shuffle(pool.slice()).slice(0,10).map(w=>{const others=shuffle(WORDS.filter(x=>x[1]!==w[1])).slice(0,3).map(x=>x[1]);return{w,opts:shuffle([w[1]].concat(others))}})}
   else if(mode==="write"){items=shuffle(practicePool().slice()).slice(0,10).map(w=>({w}))}
   else items=[...Array(10)].map(()=>genNum(level));
-  prac={mode,level:level||null,items,i:0,correct:0,answered:null,input:""};
+  prac={mode,level:level||null,items,i:0,correct:0,answered:null,input:"",wrong:[]};
   render();window.scrollTo(0,0);sayCurrent();
 }
 function sayCurrent(){
@@ -1367,7 +1761,15 @@ function answerPractice(val){
     if(!ok&&b2.length>4&&lev(a2,b2)===1){ok=true;near=true}
   }else ok=checkNum(prac.level,val,it);
   prac.answered={val,ok,near};comboHit(prac,ok);
-  if(ok){prac.correct++;bump("correct");addXP(2);tgHaptic("success")}else{tgHaptic("error");save()}
+  if(!prac.wrong)prac.wrong=[];
+  if(ok){prac.correct++;bump("correct");addXP(2);tgHaptic("success")}
+  else{
+    prac.wrong.push({i:prac.i,val});
+    if(it.w){const id="w:"+it.w[0],c=state.cards[id];
+      if(c){c.lapses=(c.lapses||0)+1;c.due=Math.min(c.due,Date.now())}
+      else state.cards[id]={ease:2.5,iv:0,reps:0,due:Date.now(),lapses:1};}
+    tgHaptic("error");save();
+  }
   if(prac.mode==="write"||prac.mode==="listen")speak(it.w[0]);
   render();
 }
@@ -1393,10 +1795,15 @@ function vPractice(){
   }
   const N=prac.items.length;
   if(prac.i>=N){
-    const pct=Math.round(100*prac.correct/N);
-    return `<div class="card center stack" style="padding:28px 16px"><div class="done-big">${pct>=80?"🎉":pct>=50?"👍":"💪"}</div><h1>${prac.correct} из ${N}</h1>
-    <p class="muted">${pct>=80?"Ottimo! Отличный результат.":pct>=50?"Неплохо. Ещё пара тренировок, и будет легко.":"Это нормально для начала. Повтори карточки и попробуй снова."}</p>
-    <button class="btn block" id="pracAgain">Ещё раз</button><button class="btn ghost block" id="pracBack">К практике</button></div>`;
+    const pct=Math.round(100*prac.correct/N),W=prac.wrong||[];
+    const rows=W.map(x=>{const it=prac.items[x.i];
+      if(it.w)return `<div class="item"><div class="grow"><div class="it">${esc(it.w[0])}</div><div class="tr">${esc(it.w[2])}</div><div class="ru">${esc(it.w[1])}</div>${x.val?`<div class="small" style="color:var(--red)">Твой ответ: ${esc(x.val)}</div>`:""}</div>${playBtns(it.w[0])}</div>`;
+      return `<div class="item"><div class="grow"><div class="it">${esc(it.ans)}</div><div class="ru"><i>${esc(it.say)}</i></div>${x.val?`<div class="small" style="color:var(--red)">Твой ответ: ${esc(x.val)}</div>`:""}</div>${playBtns(it.say)}</div>`}).join("");
+    return `<div class="card center stack" style="padding:24px 16px"><div class="done-big">${pct>=80?"🎉":pct>=50?"👍":"💪"}</div><h1>${prac.correct} из ${N}</h1>
+    <p class="muted">${pct>=80?"Ottimo! Отличный результат.":pct>=50?"Неплохо. Ещё пара тренировок, и будет легко.":"Это нормально для начала. Разбери ошибки и попробуй снова."}</p></div>
+    ${W.length?`<h2>Разбор ошибок</h2><div class="card list">${rows}</div>
+    ${prac.mode!=="numbers"?`<p class="muted small">Эти слова добавлены в повторение и в «Трудные слова», карточки покажут их снова уже сегодня.</p><button class="btn block mt" id="pracHard">🔁 Повторить эти слова в карточках</button>`:`<button class="btn block mt" id="pracRetryWrong">🔁 Ещё раз только ошибки</button>`}`:""}
+    <button class="btn ghost block mt" id="pracAgain">Новая тренировка</button><button class="btn ghost block mt" id="pracBack">К практике</button>`;
   }
   const it=prac.items[prac.i], a=prac.answered;
   const bar=`<div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*prac.i/N)}%"></i></div><span class="muted small">${prac.i+1}/${N}</span></div>`;
@@ -1469,7 +1876,8 @@ document.addEventListener("click",e=>{
   if(d.addph!==undefined){addPhraseCard(d.addph);e.stopPropagation();return}
   if(d.reveal!==undefined&&hideIt){t.classList.toggle("show");return}
   if(d.lesson){openLesson(d.lesson);return}
-  if(d.opt!==undefined&&les&&les.answered===null){const L=LESSONS.find(l=>l.id===les.id);const q=L.q[les.qi];les.answered=+d.opt;const ok=+d.opt===q[2];comboHit(les,ok);if(ok){les.correct++;bump("correct");addXP(2);tgHaptic("success")}else{tgHaptic("error");save()}render();return}
+  if(d.opt!==undefined&&les&&les.mode==="quiz"&&les.answered===null){answerQuiz(+d.opt);return}
+  if(d.copt!==undefined&&les&&les.mode==="steps"&&les.ca===null){const c=LMAP[les.id].steps[les.si].c;les.ca=+d.copt;if(+d.copt===c[2]){addXP(1);tgHaptic("success")}else tgHaptic("error");render();return}
   if(d.g!==undefined){grade(+d.g);return}
   if(d.prac){
     if(d.prac==="sounds"){prac={mode:"sounds"};render();window.scrollTo(0,0)}
@@ -1493,17 +1901,22 @@ document.addEventListener("click",e=>{
     case "playAll":speechSynthesis&&speechSynthesis.cancel();dlg.playing=true;if(dlg.role)dlg.shown={};playDialog(0);break;
     case "stopAll":stopDialog();render();break;
     case "lesBack":les=null;render();window.scrollTo(0,0);break;
-    case "startQuiz":les.step="quiz";les.qi=0;les.correct=0;les.answered=null;les.order=null;render();window.scrollTo(0,0);break;
-    case "nextQ":{const L=LESSONS.find(l=>l.id===les.id);les.answered=null;les.order=null;
-      if(les.qi+1<L.q.length)les.qi++;else{les.step="done";const pct=Math.round(100*les.correct/L.q.length);if(pct>=70){bump("lesson");if(!state.lessons[les.id])addXP(5);state.lessons[les.id]=Math.max(state.lessons[les.id]||0,pct);save()}}
-      render();break}
-    case "retryQuiz":les.step="quiz";les.qi=0;les.correct=0;les.answered=null;les.order=null;render();break;
+    case "stepNext":les.si++;les.ca=null;render();window.scrollTo(0,0);break;
+    case "stepPrev":les.si--;les.ca=null;render();window.scrollTo(0,0);break;
+    case "toQuiz":{const L=LMAP[les.id];startQuiz(L.q.map((_,i)=>[L.id,i]));break}
+    case "nextQ":nextQuiz();break;
+    case "reviewWrong":{const w=les.wrong.map(x=>[x.lid,x.qi]);startQuiz(w,true);break}
+    case "retryTheory":openLesson(les.id);break;
+    case "retryQuiz":{const L=LMAP[les.id];startQuiz(L.q.map((_,i)=>[L.id,i]));break}
+    case "mistAll":startMistakes();break;
     case "pracBack":prac=null;render();window.scrollTo(0,0);break;
     case "pcheck":{const v=($("#pin")||{}).value||"";if(!v.trim()){toast("Сначала введи ответ");break}answerPractice(v);break}
     case "pskip":answerPractice("");break;
     case "pnext":prac.i++;prac.answered=null;prac.input="";
       if(prac.i>=prac.items.length){const k=prac.mode;state.practice[k]=(state.practice[k]||0)+1;state.best[k]=Math.max(state.best[k]||0,prac.correct);bump("practice");save()}
       render();sayCurrent();break;
+    case "pracHard":{const ids=(prac.wrong||[]).map(x=>"w:"+prac.items[x.i].w[0]);go("words");startSession(ids);wordsMode="session";render();break}
+    case "pracRetryWrong":{const items=(prac.wrong||[]).map(x=>prac.items[x.i]);prac={mode:"numbers",level:prac.level,items,i:0,correct:0,answered:null,input:"",wrong:[]};render();sayCurrent();break}
     case "pracAgain":startPractice(prac.mode,prac.level);break;
     case "claimYes":window._claim&&window._claim(true);break;
     case "claimNo":window._claim&&window._claim(false);break;
