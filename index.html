@@ -1074,6 +1074,25 @@ async function pushRemote(){
 }
 function progressSummary(o){const c=Object.values(o.cards||{}).filter(x=>x.reps>0).length;const x=Object.values(o.xp||{}).reduce((a,b)=>a+b,0);return c+" "+plural(c,"слово","слова","слов")+", "+x+" "+plural(x,"очко","очка","очков")}
 function useState(o,id){state=merge(o);state.owner=id;lsSet(KEY+":"+id,state);sess=null;les=null;prac=null;render()}
+// применить данные с другого устройства, не выкидывая из текущего урока или тренировки
+function applyState(o){state=merge(o);if(uid){state.owner=uid;lsSet(KEY+":"+uid,state)}render()}
+// объединение прогресса с двух устройств: ничего пройденного не теряется
+function mergeStates(a,b){
+  if(!a)return b;if(!b)return a;
+  const n=(a.updatedAt||0)>=(b.updatedAt||0)?a:b,o=n===a?b:a;
+  const out=JSON.parse(JSON.stringify(n));
+  const maxMap=k=>{const r=Object.assign({},o[k]||{});for(const[x,v]of Object.entries(n[k]||{}))r[x]=Math.max(Number(v)||0,Number(r[x])||0);out[k]=r};
+  ["lessons","sounds","topicsSeen","dialogs","flags","best","practice","newLog","xp"].forEach(maxMap);
+  out.ach=Object.assign({},o.ach||{});for(const[x,v]of Object.entries(n.ach||{}))out.ach[x]=out.ach[x]?Math.min(out.ach[x],v):v;
+  out.cards=Object.assign({},o.cards||{},n.cards||{});
+  out.mist=Object.assign({},n.mist||{});
+  out.daily=Object.assign({},o.daily||{});for(const[d,v]of Object.entries(n.daily||{})){const r=Object.assign({},out.daily[d]||{});for(const[x,y]of Object.entries(v||{}))r[x]=Math.max(Number(y)||0,Number(r[x])||0);out.daily[d]=r}
+  out.maxCombo=Math.max(n.maxCombo||0,o.maxCombo||0);out.level=Math.max(n.level||1,o.level||1);
+  if((o.lastDay||"")>(n.lastDay||"")){out.lastDay=o.lastDay;out.streak=o.streak;out.freezes=o.freezes}
+  out.updatedAt=Math.max(a.updatedAt||0,b.updatedAt||0);
+  return out;
+}
+const sameProgress=(x,y)=>{const pick=s=>JSON.stringify([s.lessons,Object.keys(s.cards||{}).length,s.xp,s.ach,s.dialogs,s.sounds]);return pick(merge(x))===pick(merge(y))};
 async function initSync(){
   try{
     if(!(window.claude&&typeof window.claude.use==="function"))return;
@@ -1317,20 +1336,25 @@ function tgSaved(){
 }
 /* ---- общий аккаунт: прогресс на сервере, один для бота и сайта ---- */
 const ACC_KEY="pianopiano.session",BOT_NAME="langtiamo_bot";
-let acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null;
+let srvBase=0,acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null;
 try{acct=JSON.parse(localStorage.getItem(ACC_KEY)||"null")}catch(e){}
 async function api(a,body){const r=await fetch(FUNC_URL+"?a="+a,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{}),keepalive:a==="save"});return r.json()}
 async function srvPush(){
   const a=authBody();if(!srvReady||!a)return;
   if(srvWriting){srvAgain=true;return}srvWriting=true;
-  try{const r=await api("save",{...a,state,updatedAt:state.updatedAt||Date.now()});if(r&&r.stale)await srvPull()}
+  try{const at=Math.max(state.updatedAt||0,srvBase+1);const r=await api("save",{...a,state,updatedAt:at,base:srvBase});
+    if(r&&r.ok)srvBase=at;else if(r&&r.stale){srvWriting=false;await srvPull(true);return}}
   catch(e){}
   srvWriting=false;if(srvAgain){srvAgain=false;srvPush()}
 }
 async function srvPull(){
   const a=authBody();if(!a)return null;
   try{const r=await api("load",a);
-    if(r&&r.ok&&r.state&&(r.updatedAt||0)>(state.updatedAt||0)){useState(r.state,uid);try{localStorage.setItem(KEY+":"+uid,JSON.stringify(state))}catch(e){}}
+    if(r&&r.ok&&r.state&&(Number(r.updatedAt)||0)!==srvBase){
+      srvBase=Number(r.updatedAt)||0;
+      const m=mergeStates(r.state,state);
+      if(!sameProgress(m,r.state)){m.updatedAt=Math.max(srvBase+1,Date.now());applyState(m);srvPush()}else{m.updatedAt=Math.max(m.updatedAt||0,srvBase);applyState(m)}
+    }else if(r&&r.ok&&!r.state&&srvBase===0)srvPush();
     return r}catch(e){return null}
 }
 // первая загрузка: если на сервере уже есть прогресс, берём его; если нет, отправляем то, что есть на устройстве
@@ -1338,14 +1362,15 @@ async function srvInit(local){
   const a=authBody();if(!a)return false;
   let r=null;try{r=await api("load",a)}catch(e){}
   if(!r||!r.ok){if(r&&!r.ok&&!TG){logout(true)}return false}
-  const hasLocal=local&&Object.keys(local.cards||{}).length;
-  if(r.state&&(!hasLocal||(r.updatedAt||0)>=(local.updatedAt||0)||!TG))useState(r.state,uid);
-  else useState(local||DEF(),uid);
+  const m=r.state?mergeStates(r.state,local||null):(local||DEF());
+  srvBase=Number(r.updatedAt)||0;
+  applyState(m);
   srvReady=true;
-  if(!r.state||state.updatedAt>(r.updatedAt||0))srvPush();
+  if(!r.state||!sameProgress(m,r.state)||state.updatedAt>(r.updatedAt||0)){if(r.state&&!sameProgress(m,r.state))state.updatedAt=Math.max(Date.now(),r.updatedAt||0);srvPush()}
   pushStats();
   return true;
 }
+window.addEventListener("pagehide",()=>{if(srvReady){clearTimeout(srvTimer);srvPush()}if(tgReady){clearTimeout(tgTimer);tgPush()}});
 document.addEventListener("visibilitychange",()=>{
   if(!srvReady)return;
   if(document.visibilityState==="hidden"){clearTimeout(srvTimer);srvPush();clearTimeout(statTimer);pushStats()}
@@ -1394,9 +1419,9 @@ async function initTG(){
   const u=TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user;if(!u)return;
   uid="tg"+u.id;syncMode="tg";
   const mine=lsGet(KEY+":"+uid);const remote=TGS?await tgLoad():null;
-  const best=(remote&&(!mine||(remote.updatedAt||0)>=(mine.updatedAt||0)))?remote:mine;
+  const best=mergeStates(mine,remote);
   useState(best||DEF(),uid);tgReady=true;syncReady=true;
-  if(best!==remote)tgPush();
+  if(!remote||!sameProgress(best,remote))tgPush();
   await srvInit(best);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){clearTimeout(tgTimer);tgPush();clearTimeout(statTimer);pushStats()}});
 }
@@ -1685,7 +1710,18 @@ const LMAP={};LESSONS.forEach(l=>{LMAP[l.id]=l;l.steps=(typeof LESSON_STEPS!=="u
 const qKey=(lid,qi)=>lid+":"+qi;
 function mistKeys(){return Object.keys(state.mist||{}).filter(k=>{const p=k.split(":");return LMAP[p[0]]&&LMAP[p[0]].q[+p[1]]})}
 function fillQ(q){return q[0].replace("___",q[1][q[2]]).replace(/\s*\(.*?\)\s*$/,"")}
-function openLesson(id){les={id,mode:"steps",si:0,ca:null};render();window.scrollTo(0,0)}
+function openLesson(id,fresh){
+  const r=state.resume&&state.resume.id===id&&!fresh?state.resume.si:0,n=LMAP[id]?LMAP[id].steps.length:1;
+  les={id,mode:"steps",si:Math.min(r,n-1),ca:null};render();window.scrollTo(0,0);
+  if(les.si>0)toast("Продолжаем с шага "+(les.si+1)+" из "+n);
+}
+function setResume(){if(les&&LMAP[les.id]){state.resume={id:les.id,si:les.si};save()}}
+function finalizeLesson(){
+  if(les.final||les.review||!LMAP[les.id])return;les.final=true;
+  const pct=Math.round(100*les.correct/les.total);
+  if(pct>=70){bump("lesson");if(!state.lessons[les.id])addXP(5);state.lessons[les.id]=Math.max(state.lessons[les.id]||0,pct);if(state.resume&&state.resume.id===les.id)delete state.resume}
+  save();if(srvReady){clearTimeout(srvTimer);srvPush()}if(tgReady){clearTimeout(tgTimer);tgPush()}
+}
 function startQuiz(items,review){
   Object.assign(les,{mode:"quiz",queue:items.slice(),total:items.length,fixed:0,correct:0,answered:null,order:null,wrong:[],review:!!review,combo:0});
   render();window.scrollTo(0,0);
@@ -1696,7 +1732,7 @@ function vGrammar(){
   const mk=mistKeys().length;
   return `<h1>Грамматика</h1><p class="muted">Каждый урок идёт по шагам: примеры, простое объяснение и мини-вопрос. В конце упражнения, урок засчитывается от 70%.</p>
   ${mk?`<button class="card row mt" id="mistAll" style="width:100%;text-align:left;border-color:var(--terra)"><span style="font-size:26px">🔁</span><div class="grow"><b>Работа над ошибками</b><div class="muted small">${mk} ${plural(mk,"вопрос","вопроса","вопросов")} из уроков, где ты ошибся</div></div><span class="link">Начать</span></button>`:""}
-  <div class="card list mt">${LESSONS.map((l,i)=>{const r=state.lessons[l.id];return `<button class="item" style="width:100%;text-align:left" data-lesson="${l.id}"><div class="chk ${r?"done":""}">${r?ICON.check:i+1}</div><div class="grow"><b>${l.t}</b><div class="muted small">${l.steps.length} ${plural(l.steps.length,"шаг","шага","шагов")} · ${l.q.length} упражнений${r?" · лучший результат "+r+"%":""}</div></div></button>`}).join("")}</div>`;
+  <div class="card list mt">${LESSONS.map((l,i)=>{const r=state.lessons[l.id];return `<button class="item" style="width:100%;text-align:left" data-lesson="${l.id}"><div class="chk ${r?"done":""}">${r?ICON.check:i+1}</div><div class="grow"><b>${l.t}</b><div class="muted small">${state.resume&&state.resume.id===l.id&&!r?`<span style="color:var(--terra);font-weight:700">Продолжить: шаг ${state.resume.si+1} из ${l.steps.length}</span>`:`${l.steps.length} ${plural(l.steps.length,"шаг","шага","шагов")} · ${l.q.length} упражнений`}${r?" · <span style='color:var(--olive);font-weight:700'>пройден, "+r+"%</span>":""}</div></div></button>`}).join("")}</div>`;
 }
 function vLesson(){
   if(les.mode==="steps")return vSteps();
@@ -1709,7 +1745,7 @@ function vSteps(){
   return `<button class="back" id="lesBack">${ICON.back} Уроки</button>
   <div class="row between"><h1 style="font-size:24px">${L.t}</h1></div>
   <div class="row" style="gap:6px;margin:10px 0 4px">${S.map((_,i)=>`<i style="flex:1;height:5px;border-radius:9px;background:${i<=les.si?"var(--terra)":"var(--line)"}"></i>`).join("")}</div>
-  <div class="row between"><span class="muted small">Шаг ${les.si+1} из ${S.length}</span>${state.lessons[L.id]?`<button class="link small" id="toQuiz">Сразу к упражнениям</button>`:""}</div>
+  <div class="row between"><span class="muted small">Шаг ${les.si+1} из ${S.length}${les.si>0?` · <button class="link small" id="stepRestart">с начала</button>`:""}</span>${state.lessons[L.id]?`<button class="link small" id="toQuiz">Сразу к упражнениям</button>`:""}</div>
   <div class="card rule mt"><h3>${st.h}</h3>${st.pre||""}
     ${st.ex&&st.ex.length?`<div class="list" style="margin:6px 0">${st.ex.map(e=>`<div class="item"><div class="grow"><div class="it" style="font-size:16px">${esc(e[0])}</div><div class="ru">${esc(e[1])}</div></div>${playBtns(e[0])}</div>`).join("")}</div>`:""}
     ${st.post||""}</div>
@@ -1745,16 +1781,14 @@ function answerQuiz(i){
     if(!les.wrong.some(w=>w.k===k))les.wrong.push({k,lid,qi,given:q[1][i]});
     tgHaptic("error");save();
   }
+  if(!les.review&&les.queue.length===1)finalizeLesson();
   render();
 }
 function nextQuiz(){
   const it=les.queue.shift(),[lid,qi]=it,q=LMAP[lid].q[qi];
   if(les.review&&les.answered!==q[2])les.queue.push(it);
   les.answered=null;les.order=null;
-  if(!les.queue.length&&!les.review&&LMAP[les.id]){
-    const pct=Math.round(100*les.correct/les.total);
-    if(pct>=70){bump("lesson");if(!state.lessons[les.id])addXP(5);state.lessons[les.id]=Math.max(state.lessons[les.id]||0,pct);save()}
-  }
+  if(!les.queue.length&&!les.review)finalizeLesson();
   if(!les.queue.length&&les.review){addXP(3)}
   render();window.scrollTo(0,0);
 }
@@ -1987,12 +2021,13 @@ document.addEventListener("click",e=>{
     case "playAll":speechSynthesis&&speechSynthesis.cancel();dlg.playing=true;if(dlg.role)dlg.shown={};playDialog(0);break;
     case "stopAll":stopDialog();render();break;
     case "lesBack":les=null;render();window.scrollTo(0,0);break;
-    case "stepNext":les.si++;les.ca=null;render();window.scrollTo(0,0);break;
-    case "stepPrev":les.si--;les.ca=null;render();window.scrollTo(0,0);break;
+    case "stepNext":les.si++;les.ca=null;setResume();render();window.scrollTo(0,0);break;
+    case "stepPrev":les.si--;les.ca=null;setResume();render();window.scrollTo(0,0);break;
+    case "stepRestart":openLesson(les.id,true);break;
     case "toQuiz":{const L=LMAP[les.id];startQuiz(L.q.map((_,i)=>[L.id,i]));break}
     case "nextQ":nextQuiz();break;
     case "reviewWrong":{const w=les.wrong.map(x=>[x.lid,x.qi]);startQuiz(w,true);break}
-    case "retryTheory":openLesson(les.id);break;
+    case "retryTheory":openLesson(les.id,true);break;
     case "retryQuiz":{const L=LMAP[les.id];startQuiz(L.q.map((_,i)=>[L.id,i]));break}
     case "mistAll":startMistakes();break;
     case "pracBack":prac=null;render();window.scrollTo(0,0);break;

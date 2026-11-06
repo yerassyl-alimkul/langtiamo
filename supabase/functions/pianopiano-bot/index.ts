@@ -154,7 +154,9 @@ async function onSave(body: any) {
   const st = body?.state, at = Number(body?.updatedAt) || 0;
   if (!st || typeof st !== "object" || JSON.stringify(st).length > 900_000) return json({ ok: false }, 400);
   const { data } = await sb.from("pp_progress").select("updated_at").eq("tg_id", u.id).maybeSingle();
-  if (data && Number(data.updated_at) > at && !body.force) return json({ ok: false, stale: true, updatedAt: data.updated_at });
+  // оптимистичная блокировка: клиент присылает версию, от которой он отталкивался (base)
+  const conflict = data && !body.force && (body.base !== undefined ? Number(data.updated_at) !== Number(body.base) : Number(data.updated_at) > at);
+  if (conflict) return json({ ok: false, stale: true, updatedAt: data.updated_at });
   await sb.from("pp_progress").upsert({ tg_id: u.id, state: st, updated_at: at, saved_at: new Date().toISOString() }, { onConflict: "tg_id" });
   return json({ ok: true });
 }
