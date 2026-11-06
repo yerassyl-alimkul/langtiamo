@@ -4,6 +4,8 @@
 //   POST ?a=sync          — Mini App присылает статистику (проверка initData подписью бота)
 //   POST ?a=cron          — почасовой запуск напоминаний из pg_cron (проверка секрета из pp_config)
 //   GET/POST ?a=setup     — регистрирует вебхук, команды и кнопку меню (идемпотентно)
+//   POST ?a=login_start / ?a=login_poll — вход на сайт через бота (одноразовый код + подтверждение в Telegram)
+//   POST ?a=load / ?a=save — общий прогресс для Mini App и сайта (initData или токен сессии)
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const TOKEN = Deno.env.get("PP_BOT_TOKEN") ?? "";
@@ -94,8 +96,85 @@ const clampInt = (v: unknown, lo: number, hi: number) => {
   return Number.isFinite(n) ? Math.max(lo, Math.min(hi, n)) : lo;
 };
 
+/* ---------- сессии сайта ---------- */
+let SESSION_SECRET = "";
+async function sessionSecret() {
+  if (!SESSION_SECRET) {
+    const { data } = await sb.from("pp_config").select("value").eq("key", "session_secret").maybeSingle();
+    SESSION_SECRET = data?.value || "";
+  }
+  return SESSION_SECRET;
+}
+const b64u = (s: string) => btoa(unescape(encodeURIComponent(s))).replace(/\+/g, "-").replace(/\//g, "_").replace(/=+$/, "");
+const unb64u = (s: string) => decodeURIComponent(escape(atob(s.replace(/-/g, "+").replace(/_/g, "/"))));
+async function makeToken(id: number, name: string) {
+  const payload = b64u(JSON.stringify({ id, name, exp: Date.now() + 1000 * 86400 * 180 }));
+  return payload + "." + hex(await hmac(enc.encode(await sessionSecret()), payload));
+}
+async function readToken(t: string) {
+  const [payload, sig] = String(t || "").split(".");
+  if (!payload || !sig) return null;
+  if (hex(await hmac(enc.encode(await sessionSecret()), payload)) !== sig) return null;
+  try { const o = JSON.parse(unb64u(payload)); return o.exp > Date.now() ? o : null; } catch { return null; }
+}
+// кто делает запрос: Mini App (initData) или сайт (токен)
+async function whoami(body: any): Promise<{ id: number; first_name?: string } | null> {
+  if (body?.initData) { const u = await verifyInitData(String(body.initData)); return u?.id ? u : null; }
+  if (body?.token) { const o = await readToken(String(body.token)); return o ? { id: o.id, first_name: o.name } : null; }
+  return null;
+}
+const json = (o: unknown, status = 200) => new Response(JSON.stringify(o), { status, headers: { ...CORS, "content-type": "application/json" } });
+const validNonce = (n: unknown) => typeof n === "string" && /^[A-Za-z0-9]{24,48}$/.test(n);
+
+async function onLoginStart(body: any) {
+  if (!validNonce(body?.nonce)) return json({ ok: false }, 400);
+  await sb.from("pp_login").delete().lt("created_at", new Date(Date.now() - 15 * 60e3).toISOString());
+  await sb.from("pp_login").upsert({ nonce: body.nonce, tg_id: null }, { onConflict: "nonce" });
+  const me = await tg("getMe", {});
+  return json({ ok: true, bot: me?.result?.username || "langtiamo_bot" });
+}
+async function onLoginPoll(body: any) {
+  if (!validNonce(body?.nonce)) return json({ ok: false }, 400);
+  const { data } = await sb.from("pp_login").select("*").eq("nonce", body.nonce).maybeSingle();
+  if (!data) return json({ ok: false, expired: true });
+  if (Date.now() - Date.parse(data.created_at) > 10 * 60e3) { await sb.from("pp_login").delete().eq("nonce", body.nonce); return json({ ok: false, expired: true }); }
+  if (!data.tg_id) return json({ ok: true, pending: true });
+  await sb.from("pp_login").delete().eq("nonce", body.nonce);
+  return json({ ok: true, token: await makeToken(data.tg_id, data.first_name || ""), name: data.first_name || "" });
+}
+async function onLoad(body: any) {
+  const u = await whoami(body);
+  if (!u) return json({ ok: false }, 401);
+  const { data } = await sb.from("pp_progress").select("state, updated_at").eq("tg_id", u.id).maybeSingle();
+  return json({ ok: true, id: u.id, name: u.first_name || "", state: data?.state ?? null, updatedAt: data?.updated_at ?? 0 });
+}
+async function onSave(body: any) {
+  const u = await whoami(body);
+  if (!u) return json({ ok: false }, 401);
+  const st = body?.state, at = Number(body?.updatedAt) || 0;
+  if (!st || typeof st !== "object" || JSON.stringify(st).length > 900_000) return json({ ok: false }, 400);
+  const { data } = await sb.from("pp_progress").select("updated_at").eq("tg_id", u.id).maybeSingle();
+  if (data && Number(data.updated_at) > at && !body.force) return json({ ok: false, stale: true, updatedAt: data.updated_at });
+  await sb.from("pp_progress").upsert({ tg_id: u.id, state: st, updated_at: at, saved_at: new Date().toISOString() }, { onConflict: "tg_id" });
+  return json({ ok: true });
+}
+async function onCallback(q: any) {
+  const data: string = q.data || "";
+  if (!data.startsWith("login:")) { await tg("answerCallbackQuery", { callback_query_id: q.id }); return; }
+  const nonce = data.slice(6);
+  const { data: row } = validNonce(nonce) ? await sb.from("pp_login").select("*").eq("nonce", nonce).maybeSingle() : { data: null };
+  const fresh = row && !row.tg_id && Date.now() - Date.parse(row.created_at) < 10 * 60e3;
+  if (fresh) await sb.from("pp_login").update({ tg_id: q.from.id, first_name: q.from.first_name || null }).eq("nonce", nonce);
+  await tg("answerCallbackQuery", { callback_query_id: q.id, text: fresh ? "Вход подтверждён" : "Ссылка устарела" });
+  if (q.message) await tg("editMessageText", {
+    chat_id: q.message.chat.id, message_id: q.message.message_id,
+    text: fresh ? "✅ Вход на сайт подтверждён. Вернись в браузер, прогресс уже загружается." : "⌛ Эта ссылка для входа устарела. Нажми «Войти через Telegram» на сайте ещё раз.",
+  });
+}
+
 /* ---------- команды бота ---------- */
 async function onUpdate(u: any) {
+  if (u.callback_query) { await onCallback(u.callback_query); return; }
   const m = u.message;
   if (!m || !m.chat || m.chat.type !== "private") return;
   const chat = m.chat.id, from = m.from || {};
@@ -103,6 +182,16 @@ async function onUpdate(u: any) {
   const name = esc(from.first_name || "");
   const { data: row } = await sb.from("pp_users").select("*").eq("tg_id", from.id).maybeSingle();
 
+  if (text.startsWith("/start login_")) {
+    if (!row) await sb.from("pp_users").upsert({ tg_id: from.id, chat_id: chat, first_name: from.first_name || null }, { onConflict: "tg_id" });
+    const nonce = text.slice("/start login_".length).trim();
+    await tg("sendMessage", {
+      chat_id: chat, parse_mode: "HTML",
+      text: "🔐 <b>Вход на сайт Piano Piano</b>\n\nНажми кнопку, чтобы открыть свой прогресс в браузере.\nЕсли ты не начинал вход сам, ничего не нажимай.",
+      reply_markup: { inline_keyboard: [[{ text: "✅ Подтвердить вход", callback_data: "login:" + nonce }]] },
+    });
+    return;
+  }
   if (text.startsWith("/start") || !row) {
     await sb.from("pp_users").upsert({ tg_id: from.id, chat_id: chat, first_name: from.first_name || null }, { onConflict: "tg_id" });
     await tg("sendMessage", {
@@ -137,13 +226,13 @@ async function onUpdate(u: any) {
 
 /* ---------- синхронизация из Mini App ---------- */
 async function onSync(body: any) {
-  const user = await verifyInitData(String(body?.initData || ""));
-  if (!user?.id) return new Response(JSON.stringify({ ok: false }), { status: 401, headers: CORS });
+  const user = await whoami(body);
+  if (!user?.id) return json({ ok: false }, 401);
   const s = body.stats || {};
   let tz = typeof s.tz === "string" ? s.tz.slice(0, 64) : "Europe/Rome";
   try { new Intl.DateTimeFormat("en", { timeZone: tz }); } catch { tz = "Europe/Rome"; }
   const rec: Record<string, unknown> = {
-    tg_id: user.id, chat_id: user.id, first_name: user.first_name || null, tz,
+    tg_id: user.id, chat_id: user.id, ...(user.first_name ? { first_name: user.first_name } : {}), tz,
     due_sched: cleanSched(s.dueSched), new_left: clampInt(s.newLeft, 0, 1000),
     new_per_day: clampInt(s.newPerDay, 0, 1000), new_avail: clampInt(s.newAvail, 0, 100000),
     streak: clampInt(s.streak, 0, 100000), xp_today: clampInt(s.xpToday, 0, 100000), goal: clampInt(s.goal, 1, 1000),
@@ -181,7 +270,7 @@ async function onCron() {
 async function onSetup() {
   if (!TOKEN) return new Response(JSON.stringify({ ok: false, error: "PP_BOT_TOKEN не задан" }), { status: 500 });
   const out: Record<string, unknown> = {};
-  out.webhook = await tg("setWebhook", { url: SELF_URL, secret_token: await webhookSecret(), allowed_updates: ["message"], drop_pending_updates: true });
+  out.webhook = await tg("setWebhook", { url: SELF_URL, secret_token: await webhookSecret(), allowed_updates: ["message", "callback_query"], drop_pending_updates: true });
   out.commands = await tg("setMyCommands", { commands: [
     { command: "start", description: "Открыть Piano Piano" },
     { command: "time", description: "Час напоминания, например /time 9" },
@@ -198,6 +287,10 @@ Deno.serve(async (req) => {
   try {
     if (a === "setup") return await onSetup();
     if (a === "sync") return await onSync(await req.json());
+    if (a === "login_start") return await onLoginStart(await req.json());
+    if (a === "login_poll") return await onLoginPoll(await req.json());
+    if (a === "load") return await onLoad(await req.json());
+    if (a === "save") return await onSave(await req.json());
     if (a === "cron") {
       const { data } = await sb.from("pp_config").select("value").eq("key", "cron_secret").maybeSingle();
       if (!data || req.headers.get("x-pp-cron") !== data.value) return new Response("forbidden", { status: 403 });
@@ -210,6 +303,7 @@ Deno.serve(async (req) => {
     return new Response("ok");
   } catch (e) {
     console.error(e);
-    return new Response(a === "sync" ? JSON.stringify({ ok: false }) : "ok", { status: a === "sync" ? 500 : 200, headers: a === "sync" ? CORS : {} });
+    const api = a && a !== "cron" && a !== "setup";
+    return new Response(api ? JSON.stringify({ ok: false }) : "ok", { status: api ? 500 : 200, headers: api ? CORS : {} });
   }
 });

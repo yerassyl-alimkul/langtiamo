@@ -1309,8 +1309,87 @@ function statsPayload(){
   let tz="Europe/Rome";try{tz=Intl.DateTimeFormat().resolvedOptions().timeZone||tz}catch(e){}
   return{dueSched:keep,newLeft:Math.min(newLeft(),freshIds(99).length),newPerDay:state.settings.newPerDay,newAvail:freshIds(999).length,streak:state.streak,lastDay:state.lastDay,xpToday:state.xp[today()]||0,goal:state.settings.goal,tz};
 }
-function pushStats(){try{fetch(FUNC_URL+"?a=sync",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({initData:TG.initData,stats:statsPayload()}),keepalive:true}).catch(()=>{})}catch(e){}}
-function tgSaved(){if(!tgReady)return;clearTimeout(tgTimer);tgTimer=setTimeout(tgPush,1500);clearTimeout(statTimer);statTimer=setTimeout(pushStats,4000)}
+function authBody(){if(TG&&TG.initData)return{initData:TG.initData};if(acct&&acct.token)return{token:acct.token};return null}
+function pushStats(){const a=authBody();if(!a)return;try{fetch(FUNC_URL+"?a=sync",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...a,stats:statsPayload()}),keepalive:true}).catch(()=>{})}catch(e){}}
+function tgSaved(){
+  if(tgReady&&TGS){clearTimeout(tgTimer);tgTimer=setTimeout(tgPush,1500)}
+  if(srvReady){clearTimeout(srvTimer);srvTimer=setTimeout(srvPush,2000);clearTimeout(statTimer);statTimer=setTimeout(pushStats,4000)}
+}
+/* ---- общий аккаунт: прогресс на сервере, один для бота и сайта ---- */
+const ACC_KEY="pianopiano.session",BOT_NAME="langtiamo_bot";
+let acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null;
+try{acct=JSON.parse(localStorage.getItem(ACC_KEY)||"null")}catch(e){}
+async function api(a,body){const r=await fetch(FUNC_URL+"?a="+a,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{}),keepalive:a==="save"});return r.json()}
+async function srvPush(){
+  const a=authBody();if(!srvReady||!a)return;
+  if(srvWriting){srvAgain=true;return}srvWriting=true;
+  try{const r=await api("save",{...a,state,updatedAt:state.updatedAt||Date.now()});if(r&&r.stale)await srvPull()}
+  catch(e){}
+  srvWriting=false;if(srvAgain){srvAgain=false;srvPush()}
+}
+async function srvPull(){
+  const a=authBody();if(!a)return null;
+  try{const r=await api("load",a);
+    if(r&&r.ok&&r.state&&(r.updatedAt||0)>(state.updatedAt||0)){useState(r.state,uid);try{localStorage.setItem(KEY+":"+uid,JSON.stringify(state))}catch(e){}}
+    return r}catch(e){return null}
+}
+// первая загрузка: если на сервере уже есть прогресс, берём его; если нет, отправляем то, что есть на устройстве
+async function srvInit(local){
+  const a=authBody();if(!a)return false;
+  let r=null;try{r=await api("load",a)}catch(e){}
+  if(!r||!r.ok){if(r&&!r.ok&&!TG){logout(true)}return false}
+  const hasLocal=local&&Object.keys(local.cards||{}).length;
+  if(r.state&&(!hasLocal||(r.updatedAt||0)>=(local.updatedAt||0)||!TG))useState(r.state,uid);
+  else useState(local||DEF(),uid);
+  srvReady=true;
+  if(!r.state||state.updatedAt>(r.updatedAt||0))srvPush();
+  pushStats();
+  return true;
+}
+document.addEventListener("visibilitychange",()=>{
+  if(!srvReady)return;
+  if(document.visibilityState==="hidden"){clearTimeout(srvTimer);srvPush();clearTimeout(statTimer);pushStats()}
+  else srvPull();
+});
+async function initWeb(){
+  if(!acct||!acct.token){syncMode="local";render();return}
+  uid="tg"+acct.id;syncMode="account";
+  const mine=lsGet(KEY+":"+uid);
+  if(mine)useState(mine,uid);
+  await srvInit(mine);render();
+}
+function randomNonce(){const a=new Uint8Array(16);crypto.getRandomValues(a);return [...a].map(b=>b.toString(16).padStart(2,"0")).join("")}
+function decodeToken(t){try{return JSON.parse(decodeURIComponent(escape(atob(t.split(".")[0].replace(/-/g,"+").replace(/_/g,"/")))))}catch(e){return null}}
+function startLogin(){
+  const nonce=randomNonce(),url="https://t.me/"+BOT_NAME+"?start=login_"+nonce;
+  api("login_start",{nonce}).catch(()=>{});
+  try{window.open(url,"_blank")}catch(e){}
+  $("#sheet").innerHTML=`<h2 style="margin-top:0">Вход через Telegram</h2>
+  <p class="muted">1. Открой бота <b>@${BOT_NAME}</b> по кнопке ниже (если он не открылся сам).<br>2. Нажми в боте «Start», затем «✅ Подтвердить вход».<br>3. Вернись сюда, прогресс загрузится сам.</p>
+  <a class="btn block mt" href="${url}" target="_blank" rel="noopener">Открыть @${BOT_NAME}</a>
+  <p class="muted small center mt" id="loginStatus">Жду подтверждения в Telegram…</p>
+  <button class="btn ghost block" id="loginCancel">Отмена</button>`;
+  $("#modal").classList.add("on");
+  clearInterval(loginPoll);const t0=Date.now();
+  loginPoll=setInterval(async()=>{
+    if(Date.now()-t0>10*60e3){clearInterval(loginPoll);const st=$("#loginStatus");if(st)st.textContent="Время вышло. Попробуй ещё раз.";return}
+    try{const r=await api("login_poll",{nonce});
+      if(r&&r.token){clearInterval(loginPoll);const p=decodeToken(r.token)||{};acct={token:r.token,id:p.id,name:r.name||p.name||""};
+        try{localStorage.setItem(ACC_KEY,JSON.stringify(acct))}catch(e){}
+        const local=state;uid="tg"+acct.id;syncMode="account";
+        $("#modal").classList.remove("on");
+        const ok=await srvInit(local);
+        render();toast(ok?"Готово! Прогресс общий с ботом":"Вошёл, но не удалось загрузить прогресс");
+      }else if(r&&r.expired){clearInterval(loginPoll);const st=$("#loginStatus");if(st)st.textContent="Ссылка устарела. Нажми «Отмена» и попробуй ещё раз."}
+    }catch(e){}
+  },2000);
+}
+function logout(silent){
+  acct=null;srvReady=false;try{localStorage.removeItem(ACC_KEY)}catch(e){}
+  uid=null;syncMode="local";state=DEF();sess=null;les=null;prac=null;
+  if(!silent){$("#modal").classList.remove("on");toast("Ты вышел из аккаунта")}
+  render();
+}
 async function initTG(){
   const u=TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user;if(!u)return;
   uid="tg"+u.id;syncMode="tg";
@@ -1318,7 +1397,7 @@ async function initTG(){
   const best=(remote&&(!mine||(remote.updatedAt||0)>=(mine.updatedAt||0)))?remote:mine;
   useState(best||DEF(),uid);tgReady=true;syncReady=true;
   if(best!==remote)tgPush();
-  pushStats();
+  await srvInit(best);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){clearTimeout(tgTimer);tgPush();clearTimeout(statTimer);pushStats()}});
 }
 function tgHaptic(kind){try{if(TG&&TG.HapticFeedback){kind==="success"||kind==="error"?TG.HapticFeedback.notificationOccurred(kind):TG.HapticFeedback.impactOccurred("light")}}catch(e){}}
@@ -1455,6 +1534,7 @@ function vToday(){
     </div>
   </section>
   ${!("speechSynthesis" in window)?`<div class="card mt small" style="background:var(--terra-soft);border-color:transparent">В этом окне нет озвучки. Слушать произношение можно, если открыть приложение в браузере телефона.${TG&&TG.openLink?` <button class="link" id="openExt">Открыть в браузере</button>`:""}</div>`:""}
+  ${syncMode==="local"&&!TG&&!window.claude?`<div class="card mt row" style="border-color:var(--sea)"><span style="font-size:24px">🔗</span><div class="grow"><b class="small">Войди через Telegram</b><div class="muted small">Прогресс будет общим с ботом @${BOT_NAME}</div></div><button class="btn sea" id="loginBtn" style="padding:10px 14px">Войти</button></div>`:""}
   <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
   ${(()=>{const tx=totalXP(),L=levelOf(tx),lt=levelTitle(L),a0=lvXP(L),b0=lvXP(L+1);return `<div class="card mt"><div class="row between"><div><div class="muted small">Уровень ${L}</div><h3>${lt[0]} <span class="muted small" style="font-family:Manrope;font-weight:600">· ${lt[1]}</span></h3></div><span class="pill">${tx} очков</span></div><div class="bar mt"><i style="width:${Math.round(100*(tx-a0)/(b0-a0))}%"></i></div><div class="muted small" style="margin-top:6px">До уровня ${L+1} (${levelTitle(L+1)[0]}): ${b0-tx} очков</div></div>`})()}
   <h2>Задания дня</h2>
@@ -1844,10 +1924,11 @@ function openSettings(){
   <div class="setrow"><div class="row between"><b>Новых слов в день</b><span class="muted" id="npdV">${s.newPerDay}</span></div><input type="range" min="3" max="30" step="1" value="${s.newPerDay}" id="npd"></div>
   <div class="setrow"><div class="row between"><b>Цель дня (очков)</b><span class="muted" id="goalV">${s.goal}</span></div><input type="range" min="10" max="100" step="5" value="${s.goal}" id="goal"></div>
   <div class="setrow row between"><div><b>Автоозвучка карточек</b><div class="muted small">Произносить слово при показе</div></div><button class="switch ${s.autoSpeak?"on":""}" id="auto"></button></div>
-  <div class="setrow"><b>Сохранение прогресса</b><div class="muted small">${syncMode==="tg"?"Хранится в твоём Telegram-аккаунте: одинаковый прогресс на телефоне и компьютере.":syncMode==="cloud"?"Синхронизируется с твоим аккаунтом Claude: одинаковый прогресс на телефоне и компьютере.":"Хранится в этом браузере. Если очистить данные браузера, прогресс пропадёт."}</div>
-  <div class="muted small" style="margin-top:4px">Голос: ${itVoice?esc(itVoice.name):"итальянский голос не найден"}</div></div>
+  <div class="setrow"><b>Аккаунт и прогресс</b><div class="muted small">${syncMode==="account"?`Ты вошёл через Telegram${acct&&acct.name?" как <b>"+esc(acct.name)+"</b>":""}. Прогресс общий с ботом @${BOT_NAME}: занимайся там или здесь, всё сохраняется в одном месте.`:syncMode==="tg"?`Прогресс сохраняется в твоём аккаунте и общий с сайтом ${location.host}${location.pathname}: там можно войти через Telegram.`:syncMode==="cloud"?"Синхронизируется с твоим аккаунтом Claude.":"Сейчас прогресс хранится только в этом браузере."}</div>
+  ${syncMode==="account"?`<button class="btn ghost block mt" id="logoutBtn">Выйти из аккаунта</button>`:syncMode==="local"&&!window.claude?`<button class="btn block mt" id="loginBtn">Войти через Telegram</button>`:""}
+  <div class="muted small" style="margin-top:6px">Голос: ${itVoice?esc(itVoice.name):"итальянский голос не найден"}</div></div>
   ${TG?`<div class="setrow"><b>Напоминания</b><div class="muted small">Настраиваются в чате с ботом: /time 9 — час напоминания, /remind — включить или выключить.</div></div>`:""}
-  <div class="setrow"><b>Перенос прогресса</b><div class="muted small">Код со всем прогрессом. Пригодится, чтобы перенести его в Telegram-версию или другой браузер.</div>
+  <div class="setrow"><b>Перенос прогресса</b><div class="muted small">Код со всем прогрессом. Пригодится, чтобы перенести прогресс из версии в Claude в бот или на сайт.</div>
   <div class="row mt" style="gap:8px"><button class="btn ghost grow" id="exportBtn">Скопировать код</button><button class="btn ghost grow" id="importBtn">Вставить код</button></div><div id="xfer"></div></div>
   <div class="setrow"><button class="btn ghost block" id="reset" style="color:var(--red)">Сбросить весь прогресс</button></div>`;
   $("#modal").classList.add("on");
@@ -1926,6 +2007,9 @@ document.addEventListener("click",e=>{
     case "claimYes":window._claim&&window._claim(true);break;
     case "claimNo":window._claim&&window._claim(false);break;
     case "openExt":try{TG.openLink(location.href)}catch(e){}break;
+    case "loginBtn":startLogin();break;
+    case "loginCancel":clearInterval(loginPoll);$("#modal").classList.remove("on");break;
+    case "logoutBtn":logout();break;
     case "gear":openSettings();break;
     case "lvchip":case "openAwards":openAwards();break;
     case "closeM":$("#modal").classList.remove("on");render();break;
@@ -1964,7 +2048,7 @@ window.addEventListener("hashchange",()=>{stopDialog();sub=null;les=null;dlg=nul
 
 fromHash();render();
 setTimeout(()=>{pickVoice();if(view==="practice")render()},800);
-if(TG)initTG();else initSync();
+if(TG)initTG();else if(window.claude&&typeof window.claude.use==="function")initSync();else initWeb();
 </script>
 </body>
 </html>
