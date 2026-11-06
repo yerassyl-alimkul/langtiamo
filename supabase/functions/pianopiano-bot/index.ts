@@ -6,6 +6,7 @@
 //   GET/POST ?a=setup     — регистрирует вебхук, команды и кнопку меню (идемпотентно)
 //   POST ?a=login_start / ?a=login_poll — вход на сайт через бота (одноразовый код + подтверждение в Telegram)
 //   POST ?a=load / ?a=save — общий прогресс для Mini App и сайта (initData или токен сессии)
+//   POST ?a=tr            — перевод IT↔RU (MyMemory) с кэшем в pp_tr
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const TOKEN = Deno.env.get("PP_BOT_TOKEN") ?? "";
@@ -160,6 +161,20 @@ async function onSave(body: any) {
   await sb.from("pp_progress").upsert({ tg_id: u.id, state: st, updated_at: at, saved_at: new Date().toISOString() }, { onConflict: "tg_id" });
   return json({ ok: true });
 }
+async function onTr(body: any) {
+  const q = String(body?.q || "").trim().slice(0, 450);
+  const from = body?.from === "ru" ? "ru" : "it", to = from === "it" ? "ru" : "it";
+  if (!q) return json({ ok: false }, 400);
+  const key = (from + "|" + to + "|" + q.toLowerCase()).slice(0, 600);
+  const { data } = await sb.from("pp_tr").select("res").eq("k", key).maybeSingle();
+  if (data) return json({ ok: true, text: data.res, cached: true });
+  const r = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(q)}&langpair=${from}|${to}`);
+  const j = await r.json().catch(() => null);
+  const text: string = j?.responseData?.translatedText || "";
+  if (!text || Number(j?.responseStatus) !== 200 || /^MYMEMORY WARNING/i.test(text)) return json({ ok: false }, 502);
+  await sb.from("pp_tr").upsert({ k: key, res: text }, { onConflict: "k" });
+  return json({ ok: true, text });
+}
 async function onCallback(q: any) {
   const data: string = q.data || "";
   if (!data.startsWith("login:")) { await tg("answerCallbackQuery", { callback_query_id: q.id }); return; }
@@ -293,6 +308,7 @@ Deno.serve(async (req) => {
     if (a === "login_poll") return await onLoginPoll(await req.json());
     if (a === "load") return await onLoad(await req.json());
     if (a === "save") return await onSave(await req.json());
+    if (a === "tr") return await onTr(await req.json());
     if (a === "cron") {
       const { data } = await sb.from("pp_config").select("value").eq("key", "cron_secret").maybeSingle();
       if (!data || req.headers.get("x-pp-cron") !== data.value) return new Response("forbidden", { status: 403 });
