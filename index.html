@@ -182,6 +182,43 @@ textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px s
 .quest{display:flex;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
 .combo{display:block;margin-top:6px;color:var(--terra);font-weight:800}
 .tile[disabled]{opacity:.5}
+.side-logo{display:none}
+.dash>div>*:first-child{margin-top:0}
+@media (min-width:900px){
+  body{padding-left:236px}
+  nav.tabs{top:0;bottom:0;left:0;right:auto;width:236px;flex-direction:column;justify-content:flex-start;align-items:stretch;border-top:0;border-right:1px solid var(--line);padding:26px 14px}
+  .side-logo{display:block;font-family:Fraunces,serif;font-weight:700;font-size:25px;padding:2px 14px 24px;letter-spacing:-.01em}
+  .side-logo span{color:var(--terra)}
+  nav.tabs .in{flex-direction:column;gap:4px;max-width:none}
+  nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;padding:11px 14px;font-size:15px;border-radius:12px}
+  nav.tabs button span{overflow:visible}
+  nav.tabs button.on{background:var(--terra-soft)}
+  nav.tabs button:not(.on):hover{background:var(--line);color:var(--ink)}
+  header.top .logo{visibility:hidden}
+  .wrap{max-width:1120px;padding:24px 44px 56px}
+  #app.narrow{max-width:760px;margin:0 auto}
+  h1{font-size:32px}
+  .dash{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+  .dash h2{margin-top:26px}
+  .modgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .modgrid>.card{margin-top:0!important}
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+  .split .sticky{position:sticky;top:24px}
+  .h2top{margin-top:4px}
+  .readtext{font-size:19px;line-height:1.85;padding:22px}
+  .toast{bottom:32px;left:calc(50% + 118px)}
+  body .gloss{bottom:28px;left:calc(50% + 118px);width:min(520px,60vw)}
+  body .gloss:not(.on){transform:translate(-50%,200%)}
+  .celeb{left:calc(50% + 118px)}
+  .modal{align-items:center}
+  .sheet{border-radius:20px;max-height:86vh;padding:24px}
+  .btn:hover:not([disabled]){filter:brightness(1.06)}
+  .opt:hover:not([disabled]),.tile:hover,.card[data-mod]:hover{border-color:var(--terra)}
+  .flash{min-height:320px}
+  .flash .big{font-size:42px}
+}
+@media (min-width:1320px){.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .readtext{font-size:18px;line-height:1.75}
 .w{cursor:pointer;border-radius:4px;padding:0 1px}
 .w:hover,.w:active{background:var(--sea-soft)}
@@ -201,7 +238,7 @@ textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px s
   <main id="app"></main>
 </div>
 
-<nav class="tabs"><div class="in" id="tabs"></div></nav>
+<nav class="tabs"><div class="side-logo">Piano <span>Piano</span></div><div class="in" id="tabs"></div></nav>
 <div class="toast" id="toast"></div>
 <div class="celeb" id="celeb"></div>
 <div class="gloss" id="gloss"></div>
@@ -1895,7 +1932,7 @@ function vToday(){
   const days=[...Array(7)].map((_,i)=>{const t=Date.now()-(6-i)*D;return{k:dayStr(t),d:new Date(t)}});
   const mx=Math.max(goal,...days.map(x=>state.xp[x.k]||0));
   const weekSum=days.reduce((a,x)=>a+(state.xp[x.k]||0),0);
-  return `
+  return `<div class="dash"><div>
   <section class="card hero">
     <div class="ring"><svg width="84" height="84"><circle cx="42" cy="42" r="36" stroke="var(--line)" stroke-width="8" fill="none"/>
       ${xp>0?`<circle cx="42" cy="42" r="36" stroke="var(--terra)" stroke-width="8" fill="none" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct)}"/>`:""}</svg>
@@ -1909,20 +1946,21 @@ function vToday(){
   ${!("speechSynthesis" in window)?`<div class="card mt small" style="background:var(--terra-soft);border-color:transparent">В этом окне нет озвучки. Слушать произношение можно, если открыть приложение в браузере телефона.${TG&&TG.openLink?` <button class="link" id="openExt">Открыть в браузере</button>`:""}</div>`:""}
   ${syncMode==="local"&&!TG&&!window.claude?`<div class="card mt row" style="border-color:var(--sea)"><span style="font-size:24px">🔗</span><div class="grow"><b class="small">Войди через Telegram</b><div class="muted small">Прогресс будет общим с ботом @${BOT_NAME}</div></div><button class="btn sea" id="loginBtn" style="padding:10px 14px">Войти</button></div>`:""}
   <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
-  ${(()=>{const tx=totalXP(),L=levelOf(tx),lt=levelTitle(L),a0=lvXP(L),b0=lvXP(L+1);return `<div class="card mt"><div class="row between"><div><div class="muted small">Уровень ${L}</div><h3>${lt[0]} <span class="muted small" style="font-family:Manrope;font-weight:600">· ${lt[1]}</span></h3></div><span class="pill">${tx} очков</span></div><div class="bar mt"><i style="width:${Math.round(100*(tx-a0)/(b0-a0))}%"></i></div><div class="muted small" style="margin-top:6px">До уровня ${L+1} (${levelTitle(L+1)[0]}): ${b0-tx} очков</div></div>`})()}
-  <h2>Задания дня</h2>
-  ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
-  <h2>Фраза дня</h2>
-  <div class="card row"><div class="grow"><div class="it">${esc(pd[0])}</div><div class="tr">${esc(pd[2])}</div><div class="ru">${esc(pd[1])}</div></div>${playBtns(pd[0],{slow:1})}</div>
   <h2>Курс A1</h2>
   ${(()=>{const ci=currentModIndex(),m=COURSE[ci],pr=modProgress(m),allDone=COURSE.every(x=>modPassed(x.id));
     return `<button class="card row" data-mod="${m.id}" style="width:100%;text-align:left;border-color:var(--terra);border-width:2px"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":"Модуль "+(ci+1)+" из "+COURSE.length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
+  <h2>Задания дня</h2>
+  ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
+</div><div class="dashside">
+  ${(()=>{const tx=totalXP(),L=levelOf(tx),lt=levelTitle(L),a0=lvXP(L),b0=lvXP(L+1);return `<div class="card mt"><div class="row between"><div><div class="muted small">Уровень ${L}</div><h3>${lt[0]} <span class="muted small" style="font-family:Manrope;font-weight:600">· ${lt[1]}</span></h3></div><span class="pill">${tx} очков</span></div><div class="bar mt"><i style="width:${Math.round(100*(tx-a0)/(b0-a0))}%"></i></div><div class="muted small" style="margin-top:6px">До уровня ${L+1} (${levelTitle(L+1)[0]}): ${b0-tx} очков</div></div>`})()}
+  <h2>Фраза дня</h2>
+  <div class="card row"><div class="grow"><div class="it">${esc(pd[0])}</div><div class="tr">${esc(pd[2])}</div><div class="ru">${esc(pd[1])}</div></div>${playBtns(pd[0],{slow:1})}</div>
   <h2>Неделя</h2>
   <div class="card"><div class="week">${days.map((x,i)=>{const v=state.xp[x.k]||0;return `<div class="wcol ${i===6?"today":""}"><div class="wbar"><i class="${v>=goal?"full":""}" style="height:${Math.round(100*v/mx)}%"></i></div><span>${WD[x.d.getDay()]}</span></div>`}).join("")}</div>
   <div class="muted small">За 7 дней: ${weekSum} ${plural(weekSum,"очко","очка","очков")}. Яркий столбик — цель дня выполнена.</div></div>
   ${(()=>{const got=ACH.filter(a=>state.ach[a[0]]).sort((x,y)=>state.ach[y[0]]-state.ach[x[0]]);return `<h2>Награды <span class="muted small" style="font-family:Manrope">${got.length}/${ACH.length}</span></h2><button class="card row" id="openAwards" style="width:100%;text-align:left"><span class="grow" style="font-size:26px;letter-spacing:4px">${got.length?got.slice(0,7).map(a=>a[1]).join(""):'<span class="muted small" style="letter-spacing:0">Пока нет наград. Первая — за первое выученное слово</span>'}</span><span class="link">Все</span></button>`})()}
   <h2>Прогресс</h2>
-  <div class="stats"><div class="stat"><b>${learnedCount()}</b><span>в изучении</span></div><div class="stat"><b>${strongCount()}</b><span>знаю надёжно</span></div><div class="stat"><b>${Object.keys(state.lessons).length}/${LESSONS.length}</b><span>уроков</span></div></div>`;
+  <div class="stats"><div class="stat"><b>${learnedCount()}</b><span>в изучении</span></div><div class="stat"><b>${strongCount()}</b><span>знаю надёжно</span></div><div class="stat"><b>${Object.keys(state.lessons).length}/${LESSONS.length}</b><span>уроков</span></div></div></div></div>`;
 }
 function plural(n,a,b,c){n=Math.abs(n)%100;const m=n%10;if(n>10&&n<20)return c;if(m>1&&m<5)return b;if(m===1)return a;return c}
 
@@ -2200,7 +2238,7 @@ function vCourse(){
   <p class="muted">10 модулей по программе уровня A1 (силлабус Университета Брешии, формат экзамена CILS A1 Университета для иностранцев Сиены). В каждом модуле: слова, грамматика, чтение, аудирование, письмо, говорение и тест. Следующий модуль открывается, когда сдан тест предыдущего.</p>
   <div class="card mt"><div class="row between"><b>Пройдено модулей</b><span class="muted">${passedN} из ${COURSE.length}</span></div><div class="bar mt"><i style="width:${Math.round(100*passedN/COURSE.length)}%"></i></div></div>
   ${mk?`<button class="card row mt" id="mistAll" style="width:100%;text-align:left;border-color:var(--terra)"><span style="font-size:24px">🔁</span><div class="grow"><b>Работа над ошибками</b><div class="muted small">${mk} ${plural(mk,"вопрос","вопроса","вопросов")} из уроков грамматики</div></div><span class="link">Начать</span></button>`:""}
-  <div class="mt">${COURSE.map((m,i)=>{const open=modUnlocked(i),pr=modProgress(m),pass=modPassed(m.id);
+  <div class="mt modgrid">${COURSE.map((m,i)=>{const open=modUnlocked(i),pr=modProgress(m),pass=modPassed(m.id);
     return `<button class="card row mt" data-mod="${m.id}" style="width:100%;text-align:left;${i===cur&&open&&!pass?"border-color:var(--terra);border-width:2px":""}${open?"":"opacity:.6"}">
     <div style="font-size:28px;width:40px;text-align:center">${open?m.em:"🔒"}</div>
     <div class="grow"><div class="muted small">Модуль ${i+1}${pass?` · <span style="color:var(--olive);font-weight:700">сдан, ${(state.mod[m.id]||{}).test}%</span>`:""}</div><b>${m.t}</b>
@@ -2245,10 +2283,10 @@ function vRead(m){
   const done=mcDoneAll(R.q,act.ans);
   return `<button class="back" id="cBack">${ICON.back} Модуль</button><div class="muted small">📖 Чтение</div><h1>${esc(R.t)}</h1>
   <div class="row mt" style="gap:8px"><button class="btn sea grow" id="readPlay">▶ Слушать текст</button><button class="btn ghost" id="readRu">${act.showRu?"Скрыть перевод":"Перевод"}</button></div>
-  <p class="muted small">Нажми на любое слово, чтобы увидеть перевод.</p>
+  <div class="split"><div class="sticky"><p class="muted small">Нажми на любое слово, чтобы увидеть перевод.</p>
   <div class="card readtext">${tokenHTML(R.text)}</div>
-  ${act.showRu?`<div class="card mt small" style="background:var(--olive-soft);border-color:transparent">${esc(R.ru)}</div>`:""}
-  <h2>Вопросы к тексту</h2>${mcBlock(R.q,act.ans,"read")}
+  ${act.showRu?`<div class="card mt small" style="background:var(--olive-soft);border-color:transparent">${esc(R.ru)}</div>`:""}</div>
+  <div><h2 class="h2top">Вопросы к тексту</h2>${mcBlock(R.q,act.ans,"read")}</div></div>
   ${done?`<div class="card center mt"><b>Результат: ${mcScore(R.q,act.ans)}%</b><button class="btn block mt" id="cBack">Готово, к модулю</button></div>`:""}`;
 }
 /* ---- аудирование ---- */
@@ -2262,11 +2300,11 @@ function vListen(m){
   const L=m.listen;if(!act||act.k!=="listen")act={k:"listen",ans:{},plays:0,slow:false};
   const done=mcDoneAll(L.q,act.ans);
   return `<button class="back" id="cBack">${ICON.back} Модуль</button><div class="muted small">🎧 Аудирование</div><h1>${esc(L.t)}</h1>
-  <div class="card center"><p class="muted small">Сначала послушай, потом отвечай. Можно слушать сколько угодно раз${act.plays?` (прослушано: ${act.plays})`:""}.</p>
+  <div class="split"><div class="card center sticky"><p class="muted small">Сначала послушай, потом отвечай. Можно слушать сколько угодно раз${act.plays?` (прослушано: ${act.plays})`:""}.</p>
   <button class="bigplay" id="lisPlay" aria-label="Слушать">${ICON.play}</button>
   <div class="row" style="justify-content:center;gap:8px"><button class="chip ${act.slow?"on":""}" id="lisSlow">Медленнее</button></div></div>
-  <h2>Вопросы</h2>${mcBlock(L.q,act.ans,"listen")}
-  ${done?`<h2>Текст записи</h2><div class="card list">${L.lines.map(l=>`<div class="item"><div class="grow"><div class="it" style="font-size:15.5px">${tokenHTML(l[1])}</div><div class="ru">${esc(l[2])}</div></div>${playBtns(l[1])}</div>`).join("")}</div>
+  <div><h2 class="h2top">Вопросы</h2>${mcBlock(L.q,act.ans,"listen")}</div>
+  </div>${done?`<h2>Текст записи</h2><div class="card list">${L.lines.map(l=>`<div class="item"><div class="grow"><div class="it" style="font-size:15.5px">${tokenHTML(l[1])}</div><div class="ru">${esc(l[2])}</div></div>${playBtns(l[1])}</div>`).join("")}</div>
   <div class="card center mt"><b>Результат: ${mcScore(L.q,act.ans)}%</b><button class="btn block mt" id="cBack">Готово, к модулю</button></div>`:""}`;
 }
 /* ---- письмо ---- */
@@ -2328,7 +2366,7 @@ function vTest(m){
     <button class="btn ghost block mt" id="actRestart">Пересдать тест</button><button class="btn ghost block mt" id="cBack">К модулю</button>`;
   }
   const q=T[act.i];if(!act.order)act.order=shuffle(q[1].map((_,j)=>j));const a=act.a;
-  return `<button class="back" id="cBack">${ICON.back} Модуль</button><div class="pill terra" style="margin-bottom:10px">🏁 Тест модуля · ${m.t}</div>
+  return `<div><button class="back" id="cBack">${ICON.back} Модуль</button></div><div class="pill terra" style="margin-bottom:10px">🏁 Тест модуля · ${m.t}</div>
   <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*act.i/T.length)}%"></i></div><span class="muted small">${act.i+1}/${T.length}</span></div>
   <div class="card">${q[4]?`<div class="center"><button class="bigplay" data-say="${esc(q[4])}" aria-label="Слушать">${ICON.play}</button></div>`:""}<div class="q mt">${esc(q[0])}</div>
   <div class="opts">${act.order.map(j=>{let c="";if(a!==null){if(j===q[2])c="right";else if(j===a)c="wrong"}return `<button class="opt ${c}" data-tq="${j}" ${a!==null?"disabled":""}>${esc(q[1][j])}</button>`}).join("")}</div>
@@ -2553,7 +2591,8 @@ function confirmReset(){
 
 /* ================== RENDER & EVENTS ================== */
 function render(){
-  const app=$("#app");
+  const app=$("#app");hideGloss();
+  app.className=(les||(view==="words"&&wordsMode!=="home")||(view==="course"&&["write","speak","test"].includes(cact))||(view==="practice"&&prac&&prac.mode!=="sounds")||(view==="phrases"&&(dlg||sub)))?"narrow":"";
   app.innerHTML=view==="today"?vToday():view==="words"?vWords():view==="phrases"?vPhrases():view==="course"?vCourse():vPractice();
   {const L=levelOf(totalXP());$("#lvchip").textContent="⭐ Ур. "+L;}
   $("#tabs").innerHTML=TABS.map(t=>`<button class="${view===t[0]?"on":""}" data-tab="${t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("");
