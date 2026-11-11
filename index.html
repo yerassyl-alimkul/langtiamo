@@ -2705,6 +2705,10 @@ function tgSaved(){
 const ACC_KEY="pianopiano.session",BOT_NAME="langtiamo_bot";
 let srvBase=0,acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null;
 try{acct=JSON.parse(localStorage.getItem(ACC_KEY)||"null")}catch(e){}
+// ссылка на сайт из бота (/site): #login=<токен> — сразу входим в общий аккаунт
+try{const m=location.hash.match(/(?:^#|&)login=([A-Za-z0-9_\-]+\.[a-f0-9]+)/);if(m){const p=decodeToken(m[1]);
+  if(p&&p.id&&(!p.exp||p.exp>Date.now())){acct={token:m[1],id:p.id,name:p.name||""};localStorage.setItem(ACC_KEY,JSON.stringify(acct))}
+  history.replaceState(null,"",location.pathname+location.search)}}catch(e){}
 async function api(a,body){const r=await fetch(FUNC_URL+"?a="+a,{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify(body||{}),keepalive:a==="save"});return r.json()}
 async function srvPush(){
   const a=authBody();if(!srvReady||!a)return;

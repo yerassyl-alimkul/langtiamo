@@ -8,6 +8,7 @@
 //   POST ?a=load / ?a=save — общий прогресс для Mini App и сайта (initData или токен сессии)
 //   POST ?a=tr            — перевод IT↔RU (MyMemory) с кэшем в pp_tr
 //   POST ?a=check         — проверка итальянского текста (LanguageTool)
+// Команда /site в боте присылает ссылку на сайт с токеном входа (#login=…).
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const TOKEN = Deno.env.get("PP_BOT_TOKEN") ?? "";
@@ -232,7 +233,16 @@ async function onUpdate(u: any) {
     await sb.from("pp_users").upsert({ tg_id: from.id, chat_id: chat, first_name: from.first_name || null }, { onConflict: "tg_id" });
     await tg("sendMessage", {
       chat_id: chat, parse_mode: "HTML", reply_markup: appButton(),
-      text: `Ciao${name ? ", " + name : ""}! 👋\n\n<b>Piano Piano</b> — итальянский с нуля: карточки слов, фразы для жизни в Италии, грамматика, диалоги и тренировки на слух.\n\n⏰ Каждый день в <b>${row?.remind_hour ?? 19}:00</b> я напомню позаниматься, если ты ещё не занимался.\n\n/time 9 — поменять час напоминания\n/remind — включить или выключить напоминания\n\nНажми кнопку, чтобы начать 👇`,
+      text: `Ciao${name ? ", " + name : ""}! 👋\n\n<b>Piano Piano</b> — итальянский с нуля: карточки слов, фразы для жизни в Италии, грамматика, диалоги и тренировки на слух.\n\n⏰ Каждый день в <b>${row?.remind_hour ?? 19}:00</b> я напомню позаниматься, если ты ещё не занимался.\n\n/site — ссылка на сайт (с твоим прогрессом)\n/time 9 — поменять час напоминания\n/remind — включить или выключить напоминания\n\nНажми кнопку, чтобы начать 👇`,
+    });
+    return;
+  }
+  if (/^\/(site|web|sait)\b/i.test(text) || /^(сайт|ссылка на сайт|веб)$/i.test(text)) {
+    const token = await makeToken(from.id, from.first_name || "");
+    await tg("sendMessage", {
+      chat_id: chat, parse_mode: "HTML", disable_web_page_preview: true,
+      text: `🌐 <b>Piano Piano на сайте</b>\n\nКнопка ниже откроет сайт сразу с твоим прогрессом, входить не нужно. Удобно на ноутбуке: перешли себе это сообщение или открой бота в Telegram Desktop.\n\nОбычная ссылка: ${APP_URL}\n\n⚠️ Кнопку не пересылай другим людям: по ней открывается твой аккаунт.`,
+      reply_markup: { inline_keyboard: [[{ text: "🌐 Открыть сайт с моим прогрессом", url: `${APP_URL}#login=${token}` }]] },
     });
     return;
   }
@@ -309,6 +319,7 @@ async function onSetup() {
   out.webhook = await tg("setWebhook", { url: SELF_URL, secret_token: await webhookSecret(), allowed_updates: ["message", "callback_query"], drop_pending_updates: true });
   out.commands = await tg("setMyCommands", { commands: [
     { command: "start", description: "Открыть Piano Piano" },
+    { command: "site", description: "Ссылка на сайт с моим прогрессом" },
     { command: "time", description: "Час напоминания, например /time 9" },
     { command: "remind", description: "Включить или выключить напоминания" },
   ] });
