@@ -7,6 +7,7 @@
 //   POST ?a=login_start / ?a=login_poll — вход на сайт через бота (одноразовый код + подтверждение в Telegram)
 //   POST ?a=load / ?a=save — общий прогресс для Mini App и сайта (initData или токен сессии)
 //   POST ?a=tr            — перевод IT↔RU (MyMemory) с кэшем в pp_tr
+//   POST ?a=check         — проверка итальянского текста (LanguageTool)
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const TOKEN = Deno.env.get("PP_BOT_TOKEN") ?? "";
@@ -175,6 +176,24 @@ async function onTr(body: any) {
   await sb.from("pp_tr").upsert({ k: key, res: text }, { onConflict: "k" });
   return json({ ok: true, text });
 }
+async function onCheck(body: any) {
+  const text = String(body?.text || "").slice(0, 3000);
+  if (!text.trim()) return json({ ok: false }, 400);
+  const form = new URLSearchParams({ text, language: "it-IT", motherTongue: "ru" });
+  const r = await fetch("https://api.languagetool.org/v2/check", {
+    method: "POST", headers: { "content-type": "application/x-www-form-urlencoded", accept: "application/json" }, body: form,
+  });
+  if (!r.ok) return json({ ok: false, status: r.status }, 502);
+  const raw = await r.text();
+  let j: any = null;
+  try { j = JSON.parse(raw); } catch { return json({ ok: false, bad: raw.slice(0, 200) }, 502); }
+  const matches = (j?.matches || []).slice(0, 40).map((m: any) => ({
+    o: m.offset, l: m.length, msg: m.message || "", sh: m.shortMessage || "",
+    rep: (m.replacements || []).slice(0, 3).map((x: any) => x.value),
+    cat: m.rule?.category?.id || "", type: m.rule?.issueType || "", rule: m.rule?.id || "",
+  }));
+  return json({ ok: true, matches, lang: j?.language?.code || "" });
+}
 async function onCallback(q: any) {
   const data: string = q.data || "";
   if (!data.startsWith("login:")) { await tg("answerCallbackQuery", { callback_query_id: q.id }); return; }
@@ -309,6 +328,7 @@ Deno.serve(async (req) => {
     if (a === "load") return await onLoad(await req.json());
     if (a === "save") return await onSave(await req.json());
     if (a === "tr") return await onTr(await req.json());
+    if (a === "check") return await onCheck(await req.json());
     if (a === "cron") {
       const { data } = await sb.from("pp_config").select("value").eq("key", "cron_secret").maybeSingle();
       if (!data || req.headers.get("x-pp-cron") !== data.value) return new Response("forbidden", { status: 403 });

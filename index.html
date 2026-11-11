@@ -183,6 +183,26 @@ textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px s
 .combo{display:block;margin-top:6px;color:var(--terra);font-weight:800}
 .tile[disabled]{opacity:.5}
 .side-logo{display:none}
+.pill.olive{background:var(--olive-soft);color:var(--olive)}
+.lvtabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
+.lvtab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);text-align:left;color:var(--ink)}
+.lvtab.on{border-color:var(--terra);background:var(--terra-soft)}
+.lvbig{font-family:"DM Serif Display",Georgia,serif;font-size:30px;line-height:1}
+.lvsub{font-size:13px;color:var(--muted);font-weight:600}
+.lvbar{display:block;width:100%;height:5px;border-radius:9px;background:var(--line);margin-top:8px;overflow:hidden}.lvbar i{display:block;height:100%;background:var(--terra)}
+.lvtab.on .lvbar{background:rgba(0,0,0,.08)}
+.ne{font-style:italic;margin-top:1px}
+mark.err{background:transparent;border-bottom:2.5px solid var(--red);color:inherit;padding:0 1px;border-radius:2px}
+mark.err.typo{border-bottom-color:#d9a400}mark.err.style{border-bottom:2px dashed var(--muted)}
+mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
+.errlist{margin:6px 0 0;padding-left:22px}.errlist li{margin:8px 0}.errlist .frag{text-decoration:line-through;color:var(--red)}
+.okline{padding:10px 0;font-weight:700;color:var(--olive)}
+.reqs{display:flex;flex-direction:column;gap:6px}.req{font-size:14px}.req.no{color:var(--muted)}
+.verdict{padding:10px 12px;border-radius:12px;font-weight:700;font-size:14px}.verdict.ok{background:var(--olive-soft);color:var(--olive)}.verdict.no{background:var(--terra-soft);color:var(--terra)}
+.h3s{font-size:16px;margin:4px 0}
+.checkgrid{display:grid;gap:14px}
+@media (min-width:900px){.checkgrid{grid-template-columns:1.3fr 1fr}.lvtab{padding:16px 20px}.lvbig{font-size:34px}}
+
 .dash>div>*:first-child{margin-top:0}
 @media (min-width:900px){
   body{padding-left:236px}
@@ -1416,6 +1436,835 @@ c:["A che ora parte il treno? — ___ dieci.",["Alle","Le","A"],0,"Во скол
 ]
 };
 LESSON_STEPS.g17=EXTRA_STEPS;
+function ppAddWords(...a){const s=new Set(WORDS.map(w=>w[0]));a.forEach(w=>{if(!s.has(w[0])){WORDS.push(w);s.add(w[0])}})}
+/* ===== A1 · Lezione 8 «Sapori d'Italia»: покупки продуктов ===== */
+ppAddWords(
+["un etto","100 граммов","ун Этто","food"],["un chilo","килограмм","ун кИло","food"],["mezzo chilo","полкило","мЕддзо кИло","food"],
+["il pacco","пачка, упаковка","иль пАкко","food"],["la scatola","коробка, банка","ла скАтола","food"],["il vasetto","баночка","иль вазЕтто","food"],
+["la pasta","макароны, паста","ла пАста","food"],["la mozzarella","моцарелла","ла моццарЕлла","food"],["la ricotta","рикотта","ла рикОтта","food"],
+["le olive","оливки","ле олИве","food"],["il basilico","базилик","иль базИлико","food"],["fresco","свежий","фрЕско","food"],
+["il mercato","рынок","иль меркАто","food"],["l'alimentari","продуктовый магазин","л-алиментАри","food"],["la ricetta","рецепт","ла ричЕтта","food"],
+["altro","ещё, другое (Altro? — Что-нибудь ещё?)","Альтро","food"]
+);
+LESSONS.push({id:"g18",t:"Del, della и местоимение ne",
+ex:[["Vorrei del pane.","Мне бы хлеба (немного)."],["Compro delle mele.","Куплю яблок."],["Un chilo di pomodori.","Килограмм помидоров."],["Il formaggio? Lo prendo.","Сыр? Беру его."],["Le olive? Le compro io.","Оливки? Их куплю я."],["Quante mele? — Ne prendo tre.","Сколько яблок? — Возьму три (из них)."]],
+rule:`<p><b>Del, della, dei, delle</b> = «немного, какое-то количество»: di + артикль. С количеством после меры ставим просто <b>di</b>: un chilo <b>di</b> mele.</p>
+<p><b>lo, la, li, le</b> заменяют уже названный предмет: «его, её, их». <b>ne</b> = «этого, из них» — нужен, когда называешь количество: Ne prendo due.</p>`,
+q:[["Vorrei ___ pane. (немного)",["del","della","di il"],0,"pane м. р. → di + il = del."],
+["Un chilo ___ pomodori.",["di","dei","del"],0,"После меры (un chilo) — просто di."],
+["Compro ___ mele. (немного)",["delle","dei","della"],0,"mele ж. р. мн. ч. → di + le = delle."],
+["Il prosciutto? ___ prendo, grazie.",["Lo","La","Ne"],0,"prosciutto м. р. ед. ч. → lo."],
+["La mozzarella? ___ compro io.",["La","Lo","Le"],0,"mozzarella ж. р. → la."],
+["Quanti limoni vuole? — ___ voglio tre.",["Ne","Li","Lo"],0,"С количеством → ne: ne voglio tre."],
+["Le olive? ___ prendo.",["Le","Li","La"],0,"olive ж. р. мн. ч. → le."],
+["Mezzo chilo ___ ricotta.",["di","della","dalla"],0,"После меры → di."]]});
+LESSON_STEPS.g18=[
+{h:"«Немного»: del, della, dei, delle",
+pre:`<p>По-русски говорим «купи хлеба», «возьми яблок» — в родительном падеже, без «немного». В итальянском для этого есть <b>частичный артикль</b>: это предлог <b>di</b>, слитый с артиклем.</p>`,
+ex:[["del pane","хлеба (di + il)"],["dello zucchero","сахара (di + lo)"],["della frutta","фруктов (di + la)"],["dell'acqua","воды (di + l')"],["dei pomodori","помидоров (di + i)"],["delle mele","яблок (di + le)"]],
+post:`<p>Форма такая же, как у предлога di с артиклем из урока «Предлоги с артиклями». Выбираешь по артиклю слова: il pane → <b>del</b> pane, le mele → <b>delle</b> mele.</p><p>В вопросах и отрицаниях его часто опускают: Hai pane? Non ho zucchero.</p>`,
+c:["Vorrei ___ acqua.",["dell'","della","del"],0,"l'acqua → di + l' = dell'."]},
+{h:"Мера + di",
+pre:`<p>Когда называешь точное количество или упаковку, после неё ставится просто <b>di</b>, без артикля.</p>`,
+ex:[["un etto di prosciutto","100 г ветчины"],["due etti di formaggio","200 г сыра"],["un chilo di mele","килограмм яблок"],["mezzo chilo di pomodori","полкило помидоров"],["un pacco di pasta","пачка макарон"],["una bottiglia di vino","бутылка вина"],["un vasetto di olive","баночка оливок"]],
+post:`<p>В Италии сыр и колбасу в лавке меряют <b>етто</b> (100 граммов): «due etti di prosciutto crudo» — 200 граммов сыровяленой ветчины. Продавец обязательно спросит: <b>Altro?</b> — Что-нибудь ещё? Ответ: <b>Basta così, grazie.</b></p>`,
+c:["Un pacco ___ pasta.",["di","della","del"],0,"После упаковки — просто di."]},
+{h:"Его, её, их: lo, la, li, le",
+pre:`<p>Чтобы не повторять слово, его заменяют местоимением. Оно стоит <b>перед</b> глаголом.</p>`,
+ex:[["Il pane? Lo compro io.","Хлеб? Его куплю я."],["La pizza? La mangio adesso.","Пиццу? Съем её сейчас."],["I pomodori? Li prendo al mercato.","Помидоры? Возьму их на рынке."],["Le olive? Le vuole verdi o nere?","Оливки? Вам их зелёные или чёрные?"]],
+post:`<table><tr><td>lo</td><td>он, его (м. р. ед. ч.)</td></tr><tr><td>la</td><td>она, её (ж. р. ед. ч.)</td></tr><tr><td>li</td><td>их (м. р. мн. ч.)</td></tr><tr><td>le</td><td>их (ж. р. мн. ч.)</td></tr></table><p>С отрицанием: Non <b>lo</b> compro. Перед гласной lo и la сокращаются: L'ho visto.</p>`,
+c:["Il formaggio? ___ prendo.",["Lo","Li","La"],0,"formaggio м. р. ед. ч. → lo."]},
+{h:"Ne — «этого, из них»",
+pre:`<p>Если называешь количество, а сам предмет уже упомянут, нужен <b>ne</b>. Без него фраза звучит неполной.</p>`,
+ex:[["Quante mele? — Ne prendo quattro.","Сколько яблок? — Возьму четыре."],["Quanto formaggio? — Ne vorrei due etti.","Сколько сыра? — Мне бы 200 граммов."],["Hai dei fratelli? — Sì, ne ho due.","У тебя есть братья? — Да, два."],["Non ne ho.","У меня этого нет."]],
+post:`<p>Разница: <b>Lo</b> prendo — беру его (весь, этот). <b>Ne</b> prendo un chilo — беру килограмм (часть).</p>`,
+c:["Quanti pomodori? — ___ prendo un chilo.",["Ne","Li","Lo"],0,"Количество → ne."]}
+];
+const M11={id:"m11",em:"🧀",t:"На рынке и в лавке",goal:"Купить продукты на рынке и в лавке, назвать количество и упаковку, спросить, свежее ли, и сказать «достаточно».",
+words:["un etto","un chilo","mezzo chilo","il pacco","la scatola","il vasetto","la pasta","la mozzarella","la ricotta","le olive","il basilico","fresco","il mercato","l'alimentari","la ricetta","altro"],
+grammar:["g18"],
+read:{t:"La spesa del sabato",text:"Il sabato mattina Yera e Julie vanno al mercato vicino a casa. Al mercato la frutta e la verdura sono fresche e costano poco. Comprano un chilo di pomodori, delle arance e un po' di basilico. Poi vanno all'alimentari di Salvo. Salvo è simpatico e parla sempre molto. Yera chiede due etti di prosciutto e una mozzarella. Julie vuole anche delle olive per la cena. «Altro?» chiede Salvo. «Basta così, grazie!» A casa cucinano la pasta con pomodoro e basilico: una ricetta semplice e buonissima.",
+ru:"В субботу утром Ера и Джули ходят на рынок рядом с домом. На рынке фрукты и овощи свежие и стоят недорого. Они покупают килограмм помидоров, апельсинов и немного базилика. Потом идут в продуктовую лавку Сальво. Сальво приятный и всегда много говорит. Ера просит 200 граммов ветчины и одну моцареллу. Джули хочет ещё оливок к ужину. «Что-нибудь ещё?» — спрашивает Сальво. «Достаточно, спасибо!» Дома они готовят пасту с помидорами и базиликом: простой и очень вкусный рецепт.",
+gl:"il=артикль м. р.|sabato=суббота|mattina=утро|yera=Ера (имя)|julie=Джули (имя)|e=и|vanno=идут (andare)|al=на, в (a + il)|mercato=рынок|vicino=рядом|a=к, в|casa=дом|la=артикль ж. р.|frutta=фрукты|verdura=овощи|sono=есть, являются|fresche=свежие (ж. р. мн. ч.)|costano=стоят (о цене)|poco=мало, недорого|comprano=покупают|un=один, артикль|chilo=килограмм|di=из (мера + di)|pomodori=помидоры|delle=немного (di + le)|arance=апельсины|po'=немного (un po')|basilico=базилик|poi=потом|all'=в (a + l')|alimentari=продуктовая лавка|salvo=Сальво (имя)|è=есть, является|simpatico=приятный|parla=говорит|sempre=всегда|molto=много|chiede=просит, спрашивает|due=два|etti=по 100 граммов (due etti = 200 г)|prosciutto=ветчина|una=одна, артикль ж. р.|mozzarella=моцарелла|vuole=хочет|anche=тоже, ещё|olive=оливки|per=для, к|cena=ужин|altro=ещё что-нибудь|basta=достаточно|così=так|grazie=спасибо|cucinano=готовят|pasta=паста|con=с|pomodoro=помидор|ricetta=рецепт|semplice=простой|buonissima=очень вкусная",
+q:[["Dove vanno il sabato mattina? (Куда они идут в субботу утром?)",["Al supermercato","Al mercato","All'università"],1,"«vanno al mercato vicino a casa»."],
+["Quanti pomodori comprano? (Сколько помидоров покупают?)",["Due etti","Un chilo","Mezzo chilo"],1,"«un chilo di pomodori»."],
+["Che cosa chiede Yera da Salvo? (Что просит Ера у Сальво?)",["Prosciutto e mozzarella","Olive e pane","Vino e formaggio"],0,"«due etti di prosciutto e una mozzarella»."],
+["Che cosa cucinano a casa? (Что готовят дома?)",["La pizza","La pasta con pomodoro","Il pesce"],1,"«cucinano la pasta con pomodoro e basilico»."]]},
+listen:{t:"Dal salumiere — в мясной лавке",lines:[[0,"Buongiorno! Mi dica.","Добрый день! Слушаю вас."],[1,"Buongiorno. Vorrei due etti di prosciutto crudo.","Добрый день. Мне 200 граммов сыровяленой ветчины."],[0,"Ecco. Altro?","Вот. Что-нибудь ещё?"],[1,"Sì, del formaggio. Il pecorino è fresco?","Да, сыра. Пекорино свежий?"],[0,"Freschissimo! Quanto ne vuole?","Свежайший! Сколько вам?"],[1,"Ne prendo un etto. E un vasetto di olive verdi.","Возьму 100 граммов. И баночку зелёных оливок."],[0,"Basta così?","Это всё?"],[1,"Sì, basta così. Quanto pago?","Да, всё. Сколько с меня?"],[0,"Sono dodici euro e cinquanta.","Двенадцать евро пятьдесят."]],
+q:[["Quanto prosciutto compra? (Сколько ветчины покупает?)",["Un etto","Due etti","Un chilo"],1,"«due etti di prosciutto crudo»."],
+["Quanto pecorino prende? (Сколько пекорино берёт?)",["Un etto","Due etti","Mezzo chilo"],0,"«Ne prendo un etto»."],
+["Quanto paga? (Сколько платит?)",["12,50 €","20,50 €","2,50 €"],0,"«dodici euro e cinquanta»."]]},
+write:[{k:"order",ru:"Мне бы килограмм яблок.",it:"Vorrei un chilo di mele"},{k:"order",ru:"Достаточно, спасибо.",it:"Basta così grazie"},
+{k:"tr",ru:"Пачку макарон, пожалуйста.",ans:["Un pacco di pasta, per favore","Un pacco di pasta per favore","Vorrei un pacco di pasta, per favore"]},
+{k:"tr",ru:"Сколько помидоров? — Возьму два килограмма.",ans:["Quanti pomodori? Ne prendo due chili","Quanti pomodori? — Ne prendo due chili"]},
+{k:"free",p:"Напиши список покупок для ужина и как ты попросишь это в лавке (3–4 фразы). Используй меры: un etto, un chilo, un pacco.",model:"Buongiorno! Vorrei due etti di prosciutto e una mozzarella. Poi un chilo di pomodori e un pacco di pasta. Basta così, grazie. Quanto pago?",chk:[["Vorrei…","vorrei"],["мера + di: un chilo di…, due etti di…","(un|due|tre|mezzo) (etto|etti|chilo|chili|pacco|vasetto|bottiglia|scatola) di"],["Basta così / Quanto pago?","basta cosi|quanto pago|quanto costa"]]}],
+speak:[{k:"say",it:"Vorrei due etti di prosciutto, per favore.",ru:"Мне 200 граммов ветчины, пожалуйста."},{k:"say",it:"Basta così, grazie. Quanto pago?",ru:"Достаточно, спасибо. Сколько с меня?"},
+{k:"ans",q:"Buongiorno, mi dica!",ru:"Добрый день, слушаю вас!",model:"Buongiorno, vorrei un chilo di mele."},{k:"ans",q:"Altro?",ru:"Что-нибудь ещё?",model:"Sì, un pacco di pasta, per favore."},{k:"ans",q:"Quanto formaggio vuole?",ru:"Сколько сыра вам?",model:"Ne vorrei un etto."}],
+test:[["Vorrei ___ pane.",["del","della","dei"],0,"pane м. р. → del."],
+["Un chilo ___ arance.",["di","delle","dell'"],0,"После меры → di."],
+["Le olive? ___ prendo.",["Le","Li","Lo"],0,"olive ж. р. мн. ч. → le."],
+["Quante mele? — ___ prendo cinque.",["Ne","Le","Li"],0,"Количество → ne."],
+["«Что-нибудь ещё?» в магазине:",["Altro?","Basta?","Ancora no?"],0,"Altro? — Что-нибудь ещё?"],
+["un etto —",["100 граммов","1 килограмм","10 граммов"],0,"un etto = 100 г."],
+{k:"type",q:"Напиши по-итальянски: «пачка макарон»",ans:["un pacco di pasta","il pacco di pasta"],e:"un pacco di pasta: после упаковки — di без артикля."},
+{k:"type",q:"Il prosciutto? ___ compro io. (впиши местоимение)",ans:["lo"],e:"prosciutto м. р. ед. ч. → lo."},
+["Что ты услышал?",["Полкило помидоров","Килограмм помидоров","Два помидора"],0,"«Mezzo chilo di pomodori».","Mezzo chilo di pomodori."],
+["Что ты услышал?",["Это всё, спасибо","Ещё, пожалуйста","Сколько стоит?"],0,"«Basta così, grazie».","Basta così, grazie."]]};
+Object.assign(TOPICS,{shop:"Покупки",past:"Детство",char:"Характер",free:"Встречи",travel:"Путешествия",cook:"Кухня",health:"Здоровье",work:"Работа",love:"Отношения",house:"Квартира"});
+ppAddWords(
+// a1 — в магазине одежды
+["il commesso","продавец","иль коммЕссо","shop"],["il camerino","примерочная","иль камерИно","shop"],["la vetrina","витрина","ла ветрИна","shop"],
+["i saldi","распродажа","и сАльди","shop"],["lo sconto","скидка","ло скОнто","shop"],["lo scontrino","чек","ло сконтрИно","shop"],
+["provare","примерять, пробовать","провАре","shop"],["cambiare","менять, обменять","камбьЯре","shop"],["stretto","узкий, тесный","стрЕтто","shop"],
+["largo","широкий, свободный","лАрго","shop"],["elegante","элегантный","элегАнте","shop"],["sportivo","спортивный","спортИво","shop"],
+["il maglione","свитер","иль мальЁне","shop"],["gli stivali","сапоги","льи стивАли","shop"],["la cintura","ремень","ла чинтУра","shop"],
+["di cotone","из хлопка","ди котОне","shop"],["di lana","шерстяной","ди лАна","shop"],["quello","тот","куЭлло","shop"],
+// a2 — детство
+["da piccolo","в детстве","да пИкколо","past"],["l'infanzia","детство","л-инфАнция","past"],["il cortile","двор","иль кортИле","past"],
+["giocare","играть","джокАре","past"],["il giocattolo","игрушка","иль джокАттоло","past"],["il cartone animato","мультфильм","иль картОне анимАто","past"],
+["la scuola elementare","начальная школа","ла скуОла элементАре","past"],["la maestra","учительница (начальной школы)","ла маЭстра","past"],["ricordare","помнить, вспоминать","рикордАре","past"],
+["il ricordo","воспоминание","иль рикОрдо","past"],["di solito","обычно","ди сОлито","past"],["spesso","часто","спЕссо","past"],
+["ogni estate","каждое лето","Онни эстАте","past"],["la campagna","деревня, сельская местность","ла кампАнья","past"],["il gatto","кот","иль гАтто","past"],
+["il cane","собака","иль кАне","past"],
+// a3 — характер и внешность
+["il carattere","характер","иль карАттере","char"],["timido","застенчивый","тИмидо","char"],["allegro","весёлый","аллЕгро","char"],
+["generoso","щедрый","дженерОзо","char"],["sincero","искренний","синчЕро","char"],["pigro","ленивый","пИгро","char"],
+["ordinato","аккуратный","ординАто","char"],["disordinato","неряшливый","дизординАто","char"],["divertente","смешной, весёлый","дивертЕнте","char"],
+["serio","серьёзный","сЕрио","char"],["curioso","любопытный","куриОзо","char"],["i capelli","волосы","и капЕлли","char"],
+["biondo","светловолосый","биОндо","char"],["castano","шатен, каштановый","кастАно","char"],["magro","худой","мАгро","char"],
+["la barba","борода","ла бАрба","char"],["qualcuno","кто-то","куалькУно","char"],["nessuno","никто","нессУно","char"],
+// a4 — приглашения
+["ti va di…?","не хочешь…? (приглашение)","ти ва ди","free"],["l'invito","приглашение","л-инвИто","free"],["la festa","праздник, вечеринка","ла фЕста","free"],
+["la mostra","выставка","ла мОстра","free"],["lo spettacolo","спектакль, шоу","ло спеттАколо","free"],["il concerto","концерт","иль кончЕрто","free"],
+["volentieri","с удовольствием","волентьЕри","free"],["purtroppo","к сожалению","пуртрОппо","free"],["d'accordo","договорились, согласен","д-аккОрдо","free"],
+["l'appuntamento","встреча, свидание","л-аппунтамЕнто","free"],["già","уже","джа","free"],["ancora","ещё","анкОра","free"],
+["stasera","сегодня вечером","стазЕра","free"],["prenotare","бронировать","пренотАре","free"],["il posto","место","иль пОсто","free"],
+["un'altra volta","в другой раз","ун-Альтра вОльта","free"],
+// a5 — путешествия
+["il volo","рейс, полёт","иль вОло","travel"],["l'aeroporto","аэропорт","л-аэропОрто","travel"],["la valigia","чемодан","ла валИджа","travel"],
+["il bagaglio","багаж","иль багАльо","travel"],["la coincidenza","пересадка","ла коинчидЕнца","travel"],["cancellato","отменён","канчеллАто","travel"],
+["andata e ritorno","туда и обратно","андАта э ритОрно","travel"],["il soggiorno","пребывание (в отеле, городе)","иль соджОрно","travel"],["l'agriturismo","агротуризм, гостевой дом на ферме","л-агритурИзмо","travel"],
+["la spiaggia","пляж","ла спьЯджа","travel"],["la guida","гид, путеводитель","ла гуИда","travel"],["ci vuole","нужно (столько-то)","чи вуОле","travel"],
+["conoscere","знать, быть знакомым","конОшере","travel"],["sapere","знать (факт), уметь","сапЕре","travel"],["il viaggio","поездка, путешествие","иль вьЯджо","travel"],
+["in anticipo","заранее, раньше времени","ин антИчипо","travel"],
+// a6 — кухня
+["assaggiare","пробовать (еду)","ассаджАре","cook"],["il primo","первое блюдо (паста, суп)","иль прИмо","cook"],["il secondo","второе блюдо (мясо, рыба)","иль секОндо","cook"],
+["il contorno","гарнир","иль контОрно","cook"],["salato","солёный","салАто","cook"],["crudo","сырой","крУдо","cook"],
+["cotto","варёный, приготовленный","кОтто","cook"],["il forno","духовка","иль фОрно","cook"],["la padella","сковорода","ла падЕлла","cook"],
+["la pentola","кастрюля","ла пЕнтола","cook"],["aggiungere","добавлять","аджУнджере","cook"],["mescolare","перемешивать","месколАре","cook"],
+["tagliare","резать","тальЯре","cook"],["il sapore","вкус","иль сапОре","cook"],["la dieta","диета","ла диЕта","cook"],
+["servire","быть нужным; подавать (еду)","сервИре","cook"],
+// a7 — здоровье
+["il medico","врач","иль мЕдико","health"],["l'ambulatorio","кабинет врача, поликлиника","л-амбулатОрио","health"],["la visita","осмотр, приём у врача","ла вИзита","health"],
+["il dolore","боль","иль долОре","health"],["avere mal di…","болит…","авЕре маль ди","health"],["la pastiglia","таблетка","ла пастИлья","health"],
+["lo sciroppo","сироп","ло ширОппо","health"],["riposare","отдыхать","рипозАре","health"],["sano","здоровый","сАно","health"],
+["malato","больной","малАто","health"],["guarire","выздоравливать","гуарИре","health"],["la palestra","спортзал","ла палЕстра","health"],
+["la salute","здоровье","ла салУте","health"],["meglio","лучше","мЕльо","health"],["peggio","хуже","пЕджо","health"],
+["il pronto soccorso","скорая помощь, травмпункт","иль прОнто соккОрсо","health"],
+// a8 — работа
+["il colloquio","собеседование","иль коллОквио","work"],["il curriculum","резюме","иль куррИкулум","work"],["l'annuncio","объявление","л-аннУнчо","work"],
+["il contratto","договор, контракт","иль контрАтто","work"],["lo stipendio","зарплата","ло стипЕндио","work"],["l'azienda","компания, фирма","л-адзьЕнда","work"],
+["l'esperienza","опыт","л-эсперьЕнца","work"],["il capo","начальник","иль кАпо","work"],["la riunione","совещание","ла риуньОне","work"],
+["a tempo pieno","на полный день","а тЕмпо пьЕно","work"],["le ferie","отпуск","ле фЕрие","work"],["candidarsi","подавать кандидатуру","кандидАрси","work"],
+["il futuro","будущее","иль футУро","work"],["bisogna","нужно (безлично)","бизОнья","work"],["la laurea","диплом о высшем образовании","ла лАуреа","work"],
+["il turno","смена","иль тУрно","work"],
+// a9 — отношения
+["innamorarsi","влюбляться","иннаморАрси","love"],["il colpo di fulmine","любовь с первого взгляда","иль кОльпо ди фУльмине","love"],["il fidanzato","жених, парень","иль фиданцАто","love"],
+["la fidanzata","невеста, девушка","ла фиданцАта","love"],["sposarsi","жениться, выходить замуж","спозАрси","love"],["conoscersi","знакомиться","конОшерси","love"],
+["lasciarsi","расставаться","лашАрси","love"],["il bacio","поцелуй","иль бАчо","love"],["geloso","ревнивый","джелОзо","love"],
+["il matrimonio","свадьба, брак","иль матримОнио","love"],["all'inizio","сначала","алль-инИцио","love"],["alla fine","в конце концов","алла фИне","love"],
+["finalmente","наконец","финальмЕнте","love"],["mentre","пока, в то время как","мЕнтре","love"],["durante","во время","дурАнте","love"],
+["però","но, однако","перО","love"],["quindi","поэтому","куИнди","love"],
+// a10 — квартира
+["il monolocale","однокомнатная квартира (студия)","иль монолокАле","house"],["il bilocale","двухкомнатная квартира","иль билокАле","house"],["il balcone","балкон","иль балкОне","house"],
+["il terrazzo","терраса","иль террАццо","house"],["l'ascensore","лифт","л-ашенсОре","house"],["il piano","этаж","иль пьЯно","house"],
+["il quartiere","район","иль куартьЕре","house"],["luminoso","светлый","луминОзо","house"],["rumoroso","шумный","руморОзо","house"],
+["arredato","меблированный","арредАто","house"],["il riscaldamento","отопление","иль рискальдамЕнто","house"],["il condominio","многоквартирный дом, ТСЖ","иль кондомИнио","house"],
+["il coinquilino","сосед по квартире","иль коинквилИно","house"],["il trasloco","переезд","иль тразлОко","house"],["l'agenzia immobiliare","агентство недвижимости","л-адженцИя иммобильЯре","house"],
+["magari","если бы; может быть","магАри","house"]
+);
+/* ===== Грамматика A2 (порядок тем — Nuovo Espresso 2, тексты и примеры свои) ===== */
+LESSONS.push(
+{id:"g20",t:"Кому? mi, ti, gli, le",
+ex:[["Ti piace questa giacca?","Тебе нравится эта куртка?"],["Gli piace il calcio.","Ему нравится футбол."],["Le piacciono le scarpe rosse.","Ей нравятся красные туфли."],["Le sta bene, signora!","Вам идёт, синьора!"],["Mi presti la penna?","Одолжишь мне ручку?"],["Ci serve una borsa.","Нам нужна сумка."]],
+rule:`<p>Косвенные местоимения отвечают на вопрос «кому?»: <b>mi</b> мне, <b>ti</b> тебе, <b>gli</b> ему, <b>le</b> ей, <b>Le</b> Вам (вежливо), <b>ci</b> нам, <b>vi</b> вам, <b>gli</b> им. Стоят перед глаголом.</p>`,
+q:[["A Marco ___ piace la pizza.",["gli","le","lo"],0,"Ему → gli."],
+["A Giulia ___ piacciono i gatti.",["le","gli","la"],0,"Ей → le."],
+["Signora, ___ piace il colore?",["Le","Ti","Gli"],0,"Вежливое «Вам» → Le."],
+["A noi ___ piace viaggiare.",["ci","vi","ne"],0,"Нам → ci."],
+["___ piacciono queste scarpe? (тебе)",["Ti","Te","Tu"],0,"Тебе → ti."],
+["Questa giacca ___ sta bene. (ему)",["gli","lo","lui"],0,"Ему → gli."],
+["Ai miei genitori ___ piace il mare.",["gli","le","li"],0,"Им → gli (в разговоре)."]]},
+{id:"g21",t:"Сравнение: più… di, meno… che",
+ex:[["Roma è più grande di Messina.","Рим больше Мессины."],["Questa giacca è meno cara di quella.","Эта куртка дешевле той."],["Il treno è più comodo dell'autobus.","Поезд удобнее автобуса."],["È più facile parlare che scrivere.","Говорить легче, чем писать."],["Sono alto come mio padre.","Я такого же роста, как мой отец."],["Questo vino è migliore.","Это вино лучше."]],
+rule:`<p><b>più</b> = более, <b>meno</b> = менее. «Чем» перед существительным или местоимением — <b>di</b> (с артиклем: del, della…), перед глаголом, прилагательным или предлогом — <b>che</b>. «Такой же, как» — <b>come</b>. Особые формы: buono → <b>migliore</b> (лучше), cattivo → <b>peggiore</b>.</p>`,
+q:[["Milano è più grande ___ Messina.",["di","che","come"],0,"Перед названием → di."],
+["Il caffè è più forte ___ tè.",["del","che il","di"],0,"di + il tè → del tè."],
+["È più bello viaggiare ___ lavorare.",["che","di","del"],0,"Сравниваем глаголы → che."],
+["Questa maglia costa ___ di quella. (меньше)",["meno","più","come"],0,"меньше → meno."],
+["Luca è alto ___ suo fratello. (такой же)",["come","di","che"],0,"Такой же, как → come."],
+["Questa pizza è ___ di quella. (лучше)",["migliore","più buona di","meglio"],0,"buono → migliore."]]},
+{id:"g22",t:"Повелительное: tu и voi",
+ex:[["Prova questa giacca!","Примерь эту куртку!"],["Prendi la taglia M.","Возьми размер M."],["Senti, che ne pensi?","Слушай, что думаешь?"],["Guardate che bella!","Смотрите, какая красивая!"],["Scusa, dov'è la cassa?","Извини, где касса?"],["Aspetta un momento!","Подожди минутку!"]],
+rule:`<p>Просьба или совет другу: глаголы на <b>-are</b> → <b>-a</b> (guarda), на <b>-ere/-ire</b> → <b>-i</b> (prendi, senti). Для «вы» (несколько людей) форма как в настоящем: guardate, prendete, sentite. Для «давайте» — форма noi: andiamo!</p>`,
+q:[["___ questa maglietta! (provare, ты)",["Prova","Provi","Provate"],0,"-are → -a: prova."],
+["___ il cappotto, fa freddo! (prendere, ты)",["Prendi","Prenda","Prende"],0,"-ere → -i: prendi."],
+["Ragazzi, ___ qui! (guardare, вы)",["guardate","guarda","guardi"],0,"Вы → guardate."],
+["___ la porta, per favore. (aprire, ты)",["Apri","Apra","Apre"],0,"-ire → -i: apri."],
+["___ un momento! (aspettare, ты)",["Aspetta","Aspetti","Aspettate"],0,"aspettare → aspetta."],
+["___ al cinema stasera! (давайте пойдём)",["Andiamo","Andate","Va'"],0,"Давайте → форма noi: andiamo."]]},
+{id:"g23",t:"Imperfetto: когда я был маленьким",
+ex:[["Da piccolo abitavo ad Almaty.","В детстве я жил в Алматы."],["Ogni estate andavamo in montagna.","Каждое лето мы ездили в горы."],["Mia nonna cucinava benissimo.","Моя бабушка прекрасно готовила."],["Ero un bambino tranquillo.","Я был спокойным ребёнком."],["Avevo un cane che si chiamava Bars.","У меня была собака по кличке Барс."],["Che cosa facevi la sera?","Что ты делал по вечерам?"]],
+rule:`<p><b>Imperfetto</b> — прошедшее для привычек («раньше всегда…»), описаний и фона. Окончания одни для всех: -<b>vo</b>, -<b>vi</b>, -<b>va</b>, -<b>vamo</b>, -<b>vate</b>, -<b>vano</b> после основы с гласной глагола: parla-vo, ave-vo, dormi-vo. Неправильный в основном только essere: ero, eri, era, eravamo, eravate, erano. Fare → face-vo, bere → beve-vo, dire → dice-vo.</p>`,
+q:[["Da bambino ___ ad Almaty. (abitare, io)",["abitavo","abitava","ho abitato"],0,"io → -vo: abitavo."],
+["Mia nonna ___ sempre la pasta. (fare)",["faceva","fava","faveva"],0,"fare → face-va."],
+["Noi ___ al mare ogni estate. (andare)",["andavamo","andavano","andiamo"],0,"noi → -vamo."],
+["Quando ___ piccola, tu? (essere)",["eri","era","ero"],0,"tu → eri."],
+["I miei genitori ___ molto. (lavorare)",["lavoravano","lavoravamo","lavorano"],0,"loro → -vano."],
+["Da piccolo ___ un gatto. (avere, io)",["avevo","aveva","ho"],0,"avere → avevo."],
+["La sera io ___ i cartoni animati. (guardare)",["guardavo","guardava","guarderò"],0,"io → guardavo."]]},
+{id:"g24",t:"Imperfetto или passato prossimo?",
+ex:[["Mentre leggevo, è arrivato Marco.","Пока я читал, пришёл Марко."],["Ieri pioveva, così sono rimasto a casa.","Вчера шёл дождь, поэтому я остался дома."],["Ero stanco e sono andato a letto.","Я устал и пошёл спать."],["Quando abitavo a Roma, andavo spesso al cinema.","Когда я жил в Риме, часто ходил в кино."],["Una volta sono andato a Venezia.","Однажды я съездил в Венецию."]],
+rule:`<p><b>Passato prossimo</b> — событие: что случилось, один раз, закончилось (ieri, una volta, all'improvviso). <b>Imperfetto</b> — фон, состояние, привычка: какая была погода, как себя чувствовал, что обычно делал (sempre, di solito, mentre). В одном предложении: фон (imperfetto) + событие (passato prossimo).</p>`,
+q:[["Mentre ___ la doccia, è suonato il telefono.",["facevo","ho fatto","faccio"],0,"Фон, длилось → imperfetto."],
+["Ieri ___ a Catania. (andare, io, один раз)",["sono andato","andavo","vado"],0,"Одно событие → passato prossimo."],
+["Da piccolo ___ sempre il latte. (bere)",["bevevo","ho bevuto","bevo"],0,"Привычка (sempre) → imperfetto."],
+["___ stanca, perciò sono tornata a casa. (essere)",["Ero","Sono stata","Sono"],0,"Состояние, фон → ero."],
+["All'improvviso ___ a piovere.",["è cominciato","cominciava","comincia"],0,"all'improvviso — событие → passato prossimo."],
+["Quando ___ a Roma, prendevo la metro. (abitare)",["abitavo","ho abitato","abito"],0,"Период в прошлом, фон → abitavo."]]},
+{id:"g25",t:"Condizionale: vorrei, potrei",
+ex:[["Vorrei un ragazzo simpatico.","Я бы хотела приятного парня."],["Potresti aiutarmi?","Ты не мог бы мне помочь?"],["Dovresti dormire di più.","Тебе стоило бы больше спать."],["Mi piacerebbe vivere al mare.","Мне бы хотелось жить у моря."],["Al tuo posto non lo farei.","На твоём месте я бы этого не делал."],["Sarebbe bello!","Было бы здорово!"]],
+rule:`<p>Condizionale = «бы»: вежливая просьба, желание, совет. Основа будущего времени + -<b>ei</b>, -<b>esti</b>, -<b>ebbe</b>, -<b>emmo</b>, -<b>este</b>, -<b>ebbero</b>. parlare → parler-ei, prendere → prender-ei, dormire → dormir-ei. Сокращённые основы: volere → <b>vorr</b>ei, potere → <b>potr</b>ei, dovere → <b>dovr</b>ei, andare → <b>andr</b>ei, avere → <b>avr</b>ei, essere → <b>sar</b>ei, fare → <b>far</b>ei, venire → <b>verr</b>ei.</p>`,
+q:[["___ un caffè, per favore. (volere, io)",["Vorrei","Voglio","Volerei"],0,"Вежливо → vorrei."],
+["___ chiudere la finestra? (potere, tu)",["Potresti","Potrei","Puoi essere"],0,"tu → potresti."],
+["Mi ___ visitare Firenze. (piacere)",["piacerebbe","piacerei","piace bene"],0,"Мне бы хотелось → mi piacerebbe."],
+["Al tuo posto io ___ con lui. (parlare)",["parlerei","parlerebbe","parlavo"],0,"io → parlerei."],
+["Marco ___ studiare di più. (dovere)",["dovrebbe","dovrei","doverebbe"],0,"lui → dovrebbe."],
+["Noi ___ volentieri. (venire)",["verremmo","veniremmo","verrebbero"],0,"venire → verr-emmo."],
+["___ bello andare al mare! (essere)",["Sarebbe","Essrebbe","Era"],0,"essere → sarebbe."]]},
+{id:"g26",t:"Sto facendo, già, non… ancora",
+ex:[["Che cosa stai facendo?","Что ты сейчас делаешь?"],["Sto cucinando, ti chiamo dopo.","Я готовлю, перезвоню потом."],["Hai già comprato i biglietti?","Ты уже купил билеты?"],["Non ho ancora deciso.","Я ещё не решил."],["Il film? L'ho visto ieri.","Фильм? Я его посмотрел вчера."],["Le chiavi? Le ho dimenticate!","Ключи? Я их забыл!"]],
+rule:`<p><b>stare + gerundio</b> — действие прямо сейчас: -are → -<b>ando</b> (parlando), -ere/-ire → -<b>endo</b> (leggendo, dormendo); fare → facendo, bere → bevendo, dire → dicendo. <b>già</b> — уже, <b>non… ancora</b> — ещё не. В passato prossimo местоимения lo/la/li/le стоят перед avere, и причастие согласуется: l'ho visto (его), l'ho vista (её), li ho visti, le ho viste.</p>`,
+q:[["Non posso parlare, ___ lavorando.",["sto","sono","ho"],0,"stare + gerundio: sto lavorando."],
+["Che cosa ___ facendo i bambini?",["stanno","stano","sono"],0,"loro → stanno."],
+["Sto ___ un libro. (leggere)",["leggendo","leggando","letto"],0,"-ere → -endo."],
+["Hai ___ mangiato? — Sì, alle sette.",["già","ancora","mai"],0,"уже → già."],
+["Non ho ___ finito. (ещё)",["ancora","già","più"],0,"ещё не → non… ancora."],
+["La pizza? L'ho ___ tutta! (mangiare)",["mangiata","mangiato","mangiati"],0,"la pizza ж. р. → mangiata."],
+["I biglietti? ___ ho comprati ieri.",["Li","Le","Lo"],0,"biglietti м. р. мн. ч. → li, comprati."]]}
+);
+LESSONS.push(
+{id:"g27",t:"Не делай! Скажи мне!",
+ex:[["Non mangiare troppo!","Не ешь слишком много!"],["Non preoccuparti.","Не волнуйся."],["Assaggialo!","Попробуй его!"],["Dimmi la verità.","Скажи мне правду."],["Fammi vedere!","Дай посмотреть!"],["Va' piano!","Езжай потише!"]],
+rule:`<p>Запрет для «ты»: <b>non + инфинитив</b>: non mangiare, non bere. Для «вы»: non mangiate. Короткие неправильные формы: andare → <b>va'</b>, fare → <b>fa'</b>, dare → <b>da'</b>, dire → <b>di'</b>, stare → <b>sta'</b>, essere → <b>sii</b>, avere → <b>abbi</b>. Местоимения <b>приклеиваются</b> к повелительному: prendilo, assaggiala, dimmi. После va', fa', di', da', sta' согласная удваивается: dimmi, fammi, dammi, vacci.</p>`,
+q:[["___ il sale, è già salato! (не клади)",["Non mettere","Non metti","Non mette"],0,"Запрет для ты → non + инфинитив."],
+["La torta è buona, ___! (попробуй её)",["assaggiala","la assaggia","assaggiarla"],0,"Местоимение приклеивается: assaggiala."],
+["___ la verità! (dire, ты)",["Di'","Dici","Dica"],0,"dire → di'."],
+["___ vedere la foto! (дай мне посмотреть)",["Fammi","Mi fa","Fami"],0,"fa' + mi → fammi."],
+["Ragazzi, non ___ tardi! (tornare)",["tornate","tornare","tornino"],0,"Для вы: non tornate."],
+["___ tranquillo, va tutto bene! (stare, ты)",["Sta'","Stai essere","Stia"],0,"stare → sta'."],
+["Il pane? ___ due, per favore! (дай мне их)",["Dammene","Dami","Mi da"],0,"da' + me + ne → dammene."]]},
+{id:"g28",t:"Вежливое повелительное (Lei)",
+ex:[["Prenda questa medicina.","Принимайте это лекарство."],["Scusi, può ripetere?","Извините, можете повторить?"],["Mi dica!","Слушаю вас! (Скажите мне)"],["Venga domani alle nove.","Приходите завтра в девять."],["Non beva alcol.","Не пейте алкоголь."],["Si accomodi!","Присаживайтесь!"]],
+rule:`<p>Врач, продавец, незнакомый человек говорят на «Lei». Форма меняет гласную: -are → -<b>i</b> (scusi, guardi), -ere/-ire → -<b>a</b> (prenda, senta, dorma). Частые неправильные: <b>faccia</b>, <b>vada</b>, <b>venga</b>, <b>dica</b>, <b>beva</b>, <b>stia</b>, <b>abbia</b>, <b>sia</b>. Отрицание: non + та же форма (non beva). Местоимения стоят перед глаголом: <b>mi</b> dica, <b>si</b> accomodi. Сравнение: buono → <b>migliore</b>, bene → <b>meglio</b> (Sto meglio — мне лучше).</p>`,
+q:[["Dottore, ___ ! (dire, Lei)",["mi dica","dimmi","mi dice"],0,"Lei → mi dica."],
+["___ questa medicina due volte al giorno. (prendere, Lei)",["Prenda","Prendi","Prende"],0,"-ere → -a: prenda."],
+["___ , dov'è la farmacia? (scusare, Lei)",["Scusi","Scusa","Scuse"],0,"-are → -i: scusi."],
+["Non ___ caffè la sera. (bere, Lei)",["beva","bevi","bere"],0,"bere → beva."],
+["___ pure, signora! (accomodarsi)",["Si accomodi","Accomodati","Si accomoda"],0,"Вежливо: si accomodi."],
+["Oggi sto ___ di ieri. (лучше)",["meglio","migliore","più bene"],0,"bene → meglio."],
+["___ a destra, poi dritto. (andare, Lei)",["Vada","Va'","Vai"],0,"andare → vada."]]},
+{id:"g29",t:"Будущее время и «если»",
+ex:[["Domani lavorerò fino alle sei.","Завтра я буду работать до шести."],["L'anno prossimo andremo in Sicilia.","В следующем году мы поедем на Сицилию."],["Se trovo lavoro, resterò a Messina.","Если найду работу, останусь в Мессине."],["Sarà vero?","Неужели правда? (наверное)"],["Che ore sono? — Saranno le otto.","Который час? — Наверное, восемь."],["Ci metto mezz'ora.","У меня это занимает полчаса."]],
+rule:`<p><b>Futuro semplice</b>: -are и -ere → основа на -er, -ire → на -ir, + окончания -<b>ò</b>, -<b>ai</b>, -<b>à</b>, -<b>emo</b>, -<b>ete</b>, -<b>anno</b>: lavorer-ò, prender-ò, partir-ò. Неправильные основы как в condizionale: sarò, avrò, andrò, farò, potrò, vorrò, verrò, dovrò. Будущее ещё выражает догадку: Sarà stanco — наверное, он устал. <b>Se</b> + настоящее или будущее → будущее: Se piove, resto a casa. <b>metterci</b> — сколько времени уходит: Ci metto dieci minuti.</p>`,
+q:[["Domani ___ un colloquio. (avere, io)",["avrò","averò","ho avuto"],0,"avere → avr-ò."],
+["L'anno prossimo ___ a Milano. (andare, noi)",["andremo","anderemo","andiamo stati"],0,"andare → andr-emo."],
+["Se ___ bel tempo, andiamo al mare. (fare)",["fa","farà stato","faceva"],0,"После se — настоящее: se fa bel tempo."],
+["Quando ___ la laurea? (prendere, tu)",["prenderai","prendrai","prenderà"],0,"tu → prender-ai."],
+["Marco non risponde. ___ in riunione. (наверное)",["Sarà","Sono","Sarei"],0,"Догадка → futuro: sarà."],
+["Per andare a Catania ___ un'ora e mezza. (у меня занимает)",["ci metto","ci vuole io","metto"],0,"metterci: ci metto."],
+["I miei amici ___ a trovarmi. (venire)",["verranno","veniranno","vengano"],0,"venire → verr-anno."]]},
+{id:"g30",t:"Рассказ: mentre, durante, stavo per",
+ex:[["Mentre aspettavo il treno, ho conosciuto Sara.","Пока я ждал поезд, я познакомился с Сарой."],["Durante la cena abbiamo parlato tanto.","За ужином мы много говорили."],["Stavo per uscire quando ha chiamato.","Я как раз собирался выйти, когда он позвонил."],["All'inizio ero timido, però poi…","Сначала я стеснялся, но потом…"],["Ho dovuto lavorare.","Мне пришлось работать."],["Sono dovuto partire presto.","Мне пришлось уехать рано."]],
+rule:`<p><b>mentre</b> + глагол (пока, в то время как), <b>durante</b> + существительное (во время). <b>stare per</b> + инфинитив — «вот-вот, собирался»: Stavo per dormire. Связки рассказа: all'inizio, poi, quindi, però, perché, quando, alla fine, finalmente. Модальные (dovere, potere, volere) в passato prossimo берут вспомогательный глагол от следующего глагола: ho dovuto lavorare, но <b>sono</b> dovuto andare.</p>`,
+q:[["___ il film ho dormito. (во время)",["Durante","Mentre","Quando"],0,"Перед существительным → durante."],
+["___ cucinavo, ascoltavo la radio. (пока)",["Mentre","Durante","Per"],0,"Перед глаголом → mentre."],
+["Il treno sta ___ partire!",["per","a","di"],0,"stare per + инфинитив."],
+["Ieri ___ dovuto studiare tutto il giorno.",["ho","sono","sto"],0,"dovere + studiare (с avere) → ho dovuto."],
+["Lucia ___ dovuta tornare a casa.",["è","ha","sta"],0,"tornare идёт с essere → è dovuta tornare."],
+["Ero stanco, ___ sono andato a letto. (поэтому)",["quindi","però","mentre"],0,"поэтому → quindi."],
+["Volevo venire, ___ non ho potuto. (но)",["però","quindi","perché"],0,"но → però."]]},
+{id:"g31",t:"Congiuntivo: penso che sia",
+ex:[["Penso che sia una bella casa.","Думаю, что это красивый дом."],["Credo che costi troppo.","Мне кажется, это стоит слишком дорого."],["Spero che tu stia bene.","Надеюсь, у тебя всё хорошо."],["È importante che la casa abbia il balcone.","Важно, чтобы у дома был балкон."],["Voglio che venga anche tu.","Я хочу, чтобы ты тоже пришёл."],["Magari!","Если бы! / Хорошо бы!"]],
+rule:`<p><b>Congiuntivo</b> нужен после мнения, надежды, желания, важности: penso che, credo che, spero che, voglio che, è importante che, bisogna che. Если субъект тот же, без che и с инфинитивом: Penso di partire. Формы (io = tu = lui): -are → -<b>i</b> (parli), -ere/-ire → -<b>a</b> (prenda, dorma); noi -iamo, voi -iate, loro -ino / -ano. Неправильные: essere → <b>sia</b> (siano), avere → <b>abbia</b>, fare → <b>faccia</b>, andare → <b>vada</b>, stare → <b>stia</b>, potere → <b>possa</b>.</p>`,
+q:[["Penso che questa casa ___ troppo piccola. (essere)",["sia","è","essere"],0,"penso che + congiuntivo → sia."],
+["Spero che tu ___ bene. (stare)",["stia","stai","stare"],0,"stare → stia."],
+["Credo che l'affitto ___ 600 euro. (costare)",["costi","costa","costare"],0,"-are → -i: costi."],
+["È importante che la camera ___ luminosa. (essere)",["sia","è","fosse stata"],0,"È importante che + sia."],
+["Voglio che i bambini ___ presto. (dormire)",["dormano","dormono","dormino"],0,"-ire → loro -ano: dormano."],
+["Penso ___ restare a casa. (я сам)",["di","che","a"],0,"Тот же субъект → di + инфинитив."],
+["Credo che Marco ___ una macchina nuova. (avere)",["abbia","ha","avesse"],0,"avere → abbia."]]},
+{id:"g32",t:"Sapere и conoscere, ci vuole",
+ex:[["Conosci Palermo?","Ты знаешь (бывал в) Палермо?"],["Sai a che ora parte il treno?","Знаешь, во сколько отходит поезд?"],["Non sapevo che eri qui!","Я не знал, что ты здесь!"],["Ho conosciuto Julie a Roma.","Я познакомился с Джули в Риме."],["L'ho saputo ieri.","Я узнал это вчера."],["Ci vuole un'ora in treno.","На поезде нужен час."],["Ci vogliono tre ore.","Нужно три часа."]],
+rule:`<p><b>conoscere</b> — знать человека или место; <b>sapere</b> — знать факт или уметь (So nuotare — умею плавать). В прошлом смысл меняется: <b>ho conosciuto</b> = познакомился, <b>conoscevo</b> = был знаком; <b>ho saputo</b> = узнал (новость), <b>sapevo</b> = знал. <b>ci vuole</b> + одно (ci vuole un'ora), <b>ci vogliono</b> + много (ci vogliono due ore) — сколько нужно времени или вещей вообще. А <b>ci metto</b> — сколько трачу я.</p>`,
+q:[["___ mia sorella? (знаешь, ты)",["Conosci","Sai","Sapi"],0,"Человека → conoscere."],
+["___ dov'è la stazione? (знаешь, ты)",["Sai","Conosci","Conosce"],0,"Факт → sapere."],
+["Ieri ___ Paolo a una festa. (познакомился)",["ho conosciuto","conoscevo","ho saputo"],0,"Познакомился → ho conosciuto."],
+["Non ___ che eri in Italia! (не знал)",["sapevo","ho saputo","conoscevo"],0,"Знал/не знал (состояние) → sapevo."],
+["Per Roma ___ sette ore di treno.",["ci vogliono","ci vuole","ci metto"],0,"Много (ore) → ci vogliono."],
+["___ un passaporto per viaggiare.",["Ci vuole","Ci vogliono","Ci metti"],0,"Одно → ci vuole."],
+["Tu sai ___ ? (плавать)",["nuotare","nuoti","a nuotare"],0,"sapere + инфинитив = уметь."]]}
+);
+Object.assign(LESSON_STEPS,{
+g20:[
+{h:"«Кому?» — косвенные местоимения",
+pre:`<p>В русском «мне, тебе, ему» — это дательный падеж. В итальянском для этого короткие слова, которые стоят <b>перед глаголом</b>.</p>`,
+ex:[["Mi piace.","Мне нравится."],["Ti scrivo domani.","Напишу тебе завтра."],["Gli telefono stasera.","Позвоню ему вечером."],["Le compro un regalo.","Куплю ей подарок."],["Ci serve aiuto.","Нам нужна помощь."],["Vi mando la foto.","Пришлю вам фото."]],
+post:`<table><tr><td>mi</td><td>мне</td></tr><tr><td>ti</td><td>тебе</td></tr><tr><td>gli</td><td>ему (и им — в разговоре)</td></tr><tr><td>le / Le</td><td>ей / Вам (вежливо, с большой буквы на письме)</td></tr><tr><td>ci</td><td>нам</td></tr><tr><td>vi</td><td>вам</td></tr></table>`,
+c:["Telefono a Marco → ___ telefono.",["Gli","Le","Lo"],0,"a Marco = ему → gli."]},
+{h:"Piacere с местоимениями",
+pre:`<p>Piacere работает как русское «нравиться»: нравится <b>что-то</b> (подлежащее) <b>кому-то</b>. Поэтому глагол согласуется с тем, что нравится.</p>`,
+ex:[["Ti piace il vestito?","Тебе нравится платье?"],["Gli piacciono le scarpe.","Ему нравятся туфли."],["A lei non piace il rosso.","Ей не нравится красный."],["Le piace, signora?","Вам нравится, синьора?"]],
+post:`<p>Одна вещь или действие → <b>piace</b>, несколько вещей → <b>piacciono</b>. Для выделения можно сказать полной формой: <b>a me</b> piace, <b>a te</b>, <b>a lui</b>, <b>a lei</b>, <b>a noi</b>… «A me sì, a te no» — мне да, тебе нет.</p>`,
+c:["A Giulia ___ i colori scuri.",["piacciono","piace","piaci"],0,"colori — мн. ч. → piacciono."]},
+{h:"Stare bene и servire в магазине",
+pre:`<p>Две полезные конструкции работают так же, как piacere:</p>`,
+ex:[["Questa giacca ti sta bene.","Эта куртка тебе идёт."],["Questi pantaloni mi stanno stretti.","Эти брюки мне узки."],["Le serve una taglia più grande?","Вам нужен размер побольше?"],["Mi serve un regalo per mia moglie.","Мне нужен подарок для жены."]],
+post:`<p><b>stare bene / male a qualcuno</b> — идти / не идти кому-то. <b>servire a qualcuno</b> — быть нужным кому-то. Глагол снова согласуется с вещью: la giacca ti sta, i pantaloni ti stanno.</p>`,
+c:["Queste scarpe ___ stanno benissimo! (тебе)",["ti","tu","te"],0,"Тебе → ti."]}
+],
+g21:[
+{h:"Больше и меньше: più, meno",
+pre:`<p>Сравнение строится словами <b>più</b> (более) и <b>meno</b> (менее) перед прилагательным.</p>`,
+ex:[["più grande","больше"],["più caro","дороже"],["meno caro","дешевле (менее дорогой)"],["più comodo","удобнее"],["meno difficile","не такой трудный"]],
+post:`<p>Окончание прилагательного по-прежнему согласуется: una gonna più cara, dei pantaloni più cari.</p>`,
+c:["Questa gonna è ___ corta. (короче)",["più","meno","molto"],0,"короче = более короткая → più corta."]},
+{h:"«Чем»: di или che",
+pre:`<p>«Чем» переводится двумя способами. Это самое трудное в теме.</p>`,
+ex:[["Roma è più grande di Messina.","перед названием → di"],["Il mio telefono è più nuovo del tuo.","перед существительным с артиклем → del"],["Sono più alto di te.","перед местоимением → di"],["È più facile leggere che parlare.","сравниваем два глагола → che"],["È più bello che comodo.","два прилагательных → che"],["Fa più caldo a Messina che a Milano.","два места с предлогом → che"]],
+post:`<p>Правило: если после «чем» идёт <b>кто-то или что-то</b> (имя, существительное, местоимение) — <b>di</b>. Если сравниваешь <b>действия, качества или места с предлогом</b> — <b>che</b>.</p>`,
+c:["Preferisco camminare ___ prendere l'autobus.",["che","di","del"],0,"Два глагола → che."]},
+{h:"Как и особые формы",
+pre:`<p>Равенство и несколько неправильных сравнений:</p>`,
+ex:[["È alto come me.","Он такого же роста, как я."],["Costa come quella.","Стоит столько же, как та."],["Questo è migliore.","Это лучше. (buono → migliore)"],["Il tempo è peggiore di ieri.","Погода хуже, чем вчера."],["Questa è la giacca più bella del negozio.","Это самая красивая куртка в магазине."]],
+post:`<p><b>come</b> — как, такой же. buono → <b>migliore</b>, cattivo → <b>peggiore</b>. Самый: артикль + più + прилагательное + <b>di</b>: la più bella <b>del</b> negozio.</p>`,
+c:["È ___ ristorante della città. (самый хороший)",["il migliore","il più migliore","il meglio"],0,"il migliore — самый лучший."]}
+],
+g22:[
+{h:"Совет другу: формы на «ты»",
+pre:`<p>Повелительное наклонение — «сделай!». Для «ты» всё просто:</p>`,
+ex:[["guardare → guarda!","смотри!"],["provare → prova!","примерь! попробуй!"],["prendere → prendi!","возьми!"],["scrivere → scrivi!","напиши!"],["sentire → senti!","послушай!"],["aprire → apri!","открой!"]],
+post:`<p>-are → <b>-a</b>, -ere и -ire → <b>-i</b>. Не перепутай: guarda (ты, повелительное) и guardi (ты, настоящее — «ты смотришь»).</p>`,
+c:["___ questa camicia! (provare)",["Prova","Provi","Prove"],0,"-are → -a."]},
+{h:"Для нескольких и «давайте»",
+pre:`<p>Для «вы» и «мы» повелительное совпадает с настоящим временем:</p>`,
+ex:[["Guardate!","Смотрите! (вы)"],["Prendete un caffè!","Выпейте кофе!"],["Andiamo!","Пойдём!"],["Proviamo questo!","Давай попробуем это!"]],
+post:`<p>Слова-помощники в магазине: <b>Senti</b>/<b>Scusa</b> — слушай, извини (другу), <b>Guarda</b> — смотри, <b>Dai!</b> — да ладно, давай!</p>`,
+c:["Ragazzi, ___ ! (andare, вы)",["andate","vanno","va'"],0,"Вы → andate."]}
+],
+g23:[
+{h:"Зачем второе прошедшее время",
+pre:`<p>В русском есть «делал» и «сделал». В итальянском похоже: <b>passato prossimo</b> — сделал (факт, результат), <b>imperfetto</b> — делал, бывало, обычно делал.</p>`,
+ex:[["Da piccolo giocavo a calcio.","В детстве я играл в футбол (регулярно)."],["Ieri ho giocato a calcio.","Вчера я сыграл в футбол (один раз)."],["Mio nonno era molto alto.","Мой дедушка был очень высоким (описание)."]],
+post:`<p>Imperfetto — для <b>привычек</b> в прошлом, <b>описаний</b> людей, мест, погоды, чувств и для <b>фона</b> истории.</p>`,
+c:["Da bambino ___ sempre dalla nonna. (andare)",["andavo","sono andato"],0,"Привычка (sempre) → imperfetto."]},
+{h:"Как образуется",
+pre:`<p>Хорошая новость: окончания одинаковые для всех трёх групп.</p>`,
+ex:[["parlare → parlavo","я говорил"],["avere → avevi","ты имел"],["dormire → dormiva","он спал"],["andare → andavamo","мы ходили"],["leggere → leggevate","вы читали"],["vivere → vivevano","они жили"]],
+post:`<table><tr><td>io</td><td>-vo</td></tr><tr><td>tu</td><td>-vi</td></tr><tr><td>lui/lei</td><td>-va</td></tr><tr><td>noi</td><td>-vamo</td></tr><tr><td>voi</td><td>-vate</td></tr><tr><td>loro</td><td>-vano</td></tr></table><p>Отбрось -re у инфинитива и добавь окончание: parla-re → parla-vo.</p>`,
+c:["Noi ___ in centro. (abitare)",["abitavamo","abitavano"],0,"noi → -vamo."]},
+{h:"Неправильные",
+pre:`<p>Их мало:</p>`,
+ex:[["essere: ero, eri, era, eravamo, eravate, erano","был"],["fare → facevo","делал"],["bere → bevevo","пил"],["dire → dicevo","говорил"],["Quando ero piccolo, facevo nuoto.","Когда я был маленьким, ходил на плавание."]],
+post:`<p>Слова-подсказки для imperfetto: <b>da piccolo</b> (в детстве), <b>sempre</b>, <b>di solito</b> (обычно), <b>ogni giorno / ogni estate</b>, <b>spesso</b> (часто), <b>una volta</b> в значении «раньше».</p>`,
+c:["Mia madre ___ insegnante. (essere)",["era","erava","è stata"],0,"essere → era."]}
+],
+g24:[
+{h:"Событие или фон?",
+pre:`<p>Представь фильм: <b>imperfetto</b> — декорации и то, что длится; <b>passato prossimo</b> — то, что произошло в кадре.</p>`,
+ex:[["Era sera e pioveva.","Был вечер, шёл дождь. (декорации)"],["All'improvviso è entrato un uomo.","Вдруг вошёл мужчина. (событие)"],["Mentre parlavamo, è suonato il telefono.","Пока мы разговаривали, зазвонил телефон."]],
+post:`<p>Вопрос себе: «Это случилось?» → passato prossimo. «Это было, длилось, бывало?» → imperfetto.</p>`,
+c:["Mentre ___ , è arrivato l'autobus. (aspettare, io)",["aspettavo","ho aspettato"],0,"Длилось → imperfetto."]},
+{h:"Слова-подсказки",
+pre:`<p>Многие слова подсказывают время:</p>`,
+ex:[["ieri, una volta, all'improvviso, alle tre","→ passato prossimo"],["sempre, di solito, ogni giorno, spesso, mentre","→ imperfetto"],["Ieri sono stato male.","Вчера мне было плохо (весь вчерашний день как событие)."],["Stavo male, perciò non sono uscito.","Мне было плохо (состояние), поэтому я не вышел (событие)."]],
+post:`<p>Иногда оба варианта правильны, но смысл разный: «Ieri ero stanco» — описываю состояние, «Ieri sono stato stanco tutto il giorno» — подвожу итог дня.</p>`,
+c:["Di solito ___ a piedi. (andare, io)",["andavo","sono andato"],0,"di solito → imperfetto."]}
+],
+g25:[
+{h:"Вежливость и желания",
+pre:`<p>Condizionale = частица «бы». Ты уже знаешь <b>vorrei</b> — я бы хотел. Это самая вежливая форма просьбы.</p>`,
+ex:[["Vorrei un'informazione.","Мне нужна информация (я бы хотел)."],["Potrebbe aiutarmi?","Не могли бы Вы мне помочь?"],["Mi piacerebbe imparare a ballare.","Мне бы хотелось научиться танцевать."],["Preferirei restare a casa.","Я бы предпочёл остаться дома."]],
+post:`<p>Используется для просьб, желаний, советов (dovresti — тебе стоило бы) и предположений.</p>`,
+c:["___ un bicchiere d'acqua, per favore. (вежливо)",["Vorrei","Voglio"],0,"Вежливо → vorrei."]},
+{h:"Формы",
+pre:`<p>Основа: инфинитив без последней -e, у -are гласная a меняется на e: parlare → parler-, prendere → prender-, dormire → dormir-.</p>`,
+ex:[["io parlerei","я бы говорил"],["tu prenderesti","ты бы взял"],["lui dormirebbe","он бы спал"],["noi andremmo","мы бы пошли"],["voi fareste","вы бы сделали"],["loro sarebbero","они были бы"]],
+post:`<table><tr><td>io</td><td>-ei</td></tr><tr><td>tu</td><td>-esti</td></tr><tr><td>lui/lei</td><td>-ebbe</td></tr><tr><td>noi</td><td>-emmo</td></tr><tr><td>voi</td><td>-este</td></tr><tr><td>loro</td><td>-ebbero</td></tr></table><p>Короткие основы: vorr-, potr-, dovr-, andr-, avr-, sar-, far-, verr-, berr-.</p>`,
+c:["Tu ___ con me al cinema? (venire)",["verresti","veniresti"],0,"venire → verr-esti."]},
+{h:"Описание человека",
+pre:`<p>В этом модуле condizionale помогает говорить об идеальном человеке и характере:</p>`,
+ex:[["Il mio coinquilino ideale sarebbe ordinato.","Мой идеальный сосед был бы аккуратным."],["Non vorrei un capo severo.","Я бы не хотел строгого начальника."],["Al tuo posto ci penserei.","На твоём месте я бы подумал."]],
+post:`<p>Полезно рядом: <b>né… né</b> — ни… ни (Non è né alto né basso), <b>qualcuno</b> — кто-то, <b>nessuno</b> — никто (Non conosco nessuno).</p>`,
+c:["Non è ___ bello ___ brutto.",["né… né","o… o"],0,"ни… ни → né… né."]}
+],
+g26:[
+{h:"Прямо сейчас: stare + gerundio",
+pre:`<p>«Я сейчас готовлю» по-итальянски можно сказать просто «cucino», но если важно, что именно <b>в этот момент</b>, используй stare + gerundio.</p>`,
+ex:[["Sto mangiando.","Я ем (прямо сейчас)."],["Stai dormendo?","Ты спишь?"],["Sta piovendo.","Идёт дождь."],["Stiamo arrivando!","Мы уже подъезжаем!"],["State studiando?","Вы занимаетесь?"],["Stanno uscendo.","Они выходят."]],
+post:`<p>stare: sto, stai, sta, stiamo, state, stanno + gerundio: -are → -<b>ando</b>, -ere/-ire → -<b>endo</b>. Неправильные: fare → facendo, bere → bevendo, dire → dicendo.</p>`,
+c:["Che cosa ___ facendo? (tu)",["stai","sei"],0,"tu → stai."]},
+{h:"Già и non… ancora",
+pre:`<p>Уже / ещё не — с passato prossimo:</p>`,
+ex:[["Hai già mangiato?","Ты уже поел?"],["Sì, ho già mangiato.","Да, уже поел."],["No, non ho ancora mangiato.","Нет, ещё не ел."],["Non sono ancora arrivati.","Они ещё не приехали."]],
+post:`<p>Слова стоят между вспомогательным глаголом и причастием: ho <b>già</b> visto, non ho <b>ancora</b> visto.</p>`,
+c:["Non ho ___ deciso.",["ancora","già"],0,"ещё не → non… ancora."]},
+{h:"Lo, la в прошедшем",
+pre:`<p>Если перед avere стоит lo/la/li/le, причастие согласуется с ним, как прилагательное.</p>`,
+ex:[["Il film? L'ho visto.","Фильм? Видел его."],["La mostra? L'ho vista.","Выставку? Видел её."],["I biglietti? Li ho presi.","Билеты? Я их взял."],["Le foto? Le ho mandate.","Фото? Я их отправил."]],
+post:`<p>lo/la перед гласной → <b>l'</b>. Окончание причастия: lo → -o, la → -a, li → -i, le → -e.</p>`,
+c:["Le chiavi? Le ho ___ . (perdere)",["perse","perso"],0,"le (ж. мн.) → perse."]}
+],
+g27:[
+{h:"Запрет: non + инфинитив",
+pre:`<p>Сказать другу «не делай» очень просто — non + неопределённая форма:</p>`,
+ex:[["Non mangiare troppo dolce.","Не ешь много сладкого."],["Non bere freddo!","Не пей холодное!"],["Non dimenticare il pane!","Не забудь хлеб!"],["Non toccate!","Не трогайте! (вы — обычная форма)"]],
+post:`<p>Только для «ты» берётся инфинитив. Для «вы»: non + toccate.</p>`,
+c:["___ il telefono a tavola! (не используй)",["Non usare","Non usi"],0,"ты → non + инфинитив."]},
+{h:"Короткие неправильные формы",
+pre:`<p>Пять частых глаголов имеют короткое повелительное:</p>`,
+ex:[["andare → va'","иди"],["fare → fa'","сделай"],["dare → da'","дай"],["dire → di'","скажи"],["stare → sta'","будь, стой"],["essere → sii, avere → abbi","будь / имей"]],
+post:`<p>В разговоре часто говорят и полные формы: vai, fai, dai, stai. «Sii gentile!» — будь вежлив. «Abbi pazienza!» — потерпи.</p>`,
+c:["___ attenzione! (fare, ты)",["Fa'","Fai essere"],0,"fare → fa' (или fai)."]},
+{h:"Местоимения приклеиваются",
+pre:`<p>С повелительным на «ты/вы/мы» местоимения пишутся вместе с глаголом, в конце:</p>`,
+ex:[["Prendilo!","Возьми его!"],["Assaggiala!","Попробуй её!"],["Dimmi!","Скажи мне!"],["Fammi un favore.","Сделай мне одолжение."],["Mangiane un po'!","Съешь немного (этого)!"],["Non preoccuparti!","Не волнуйся!"]],
+post:`<p>После коротких форм va', fa', da', di', sta' согласная удваивается: di' + mi → <b>dimmi</b>, fa' + lo → <b>fallo</b>. Исключение: gli не удваивается (digli).</p>`,
+c:["La ricetta? ___ ! (скажи мне её)",["Dimmela","Dimela"],0,"di' + me + la → dimmela."]}
+],
+g28:[
+{h:"Вежливая просьба на «Lei»",
+pre:`<p>У врача, в аптеке, в офисе говорят на «Lei», и повелительное звучит иначе. Гласные как будто «меняются местами»:</p>`,
+ex:[["(tu) guarda → (Lei) guardi","посмотрите"],["(tu) scusa → (Lei) scusi","извините"],["(tu) prendi → (Lei) prenda","возьмите, принимайте"],["(tu) senti → (Lei) senta","послушайте"],["(tu) apri → (Lei) apra","откройте"]],
+post:`<p>-are → <b>-i</b>, -ere/-ire → <b>-a</b>. Это та же форма, что congiuntivo, который ты выучишь в последнем модуле.</p>`,
+c:["___ la bocca, per favore. (aprire, Lei)",["Apra","Apri"],0,"-ire → -a."]},
+{h:"Частые неправильные",
+pre:`<p>Их ты будешь слышать каждый день:</p>`,
+ex:[["Mi dica!","Слушаю вас! (dire)"],["Venga!","Проходите! (venire)"],["Vada sempre dritto.","Идите всё прямо. (andare)"],["Faccia attenzione.","Будьте внимательны. (fare)"],["Stia tranquillo.","Не волнуйтесь. (stare)"],["Non beva alcolici.","Не пейте алкоголь. (bere)"]],
+post:`<p>Местоимения в вежливой форме стоят <b>перед</b> глаголом: <b>Mi</b> dica, <b>Si</b> accomodi, <b>La</b> prenda.</p>`,
+c:["___ pure! (accomodarsi, Lei)",["Si accomodi","Accomodati"],0,"Lei → si accomodi."]},
+{h:"Лучше: meglio и migliore",
+pre:`<p>Когда говорим о здоровье:</p>`,
+ex:[["Come sta? — Meglio, grazie.","Как Вы? — Лучше, спасибо."],["Sto meglio di ieri.","Мне лучше, чем вчера."],["Questa medicina è migliore.","Это лекарство лучше."],["Il rimedio migliore è dormire.","Лучшее средство — сон."]],
+post:`<p><b>meglio</b> — наречие (как? лучше), сравнение от bene. <b>migliore</b> — прилагательное (какой? лучший), сравнение от buono.</p>`,
+c:["Oggi sto ___ .",["meglio","migliore"],0,"stare bene → meglio."]}
+],
+g29:[
+{h:"Будущее время",
+pre:`<p>Futuro semplice — одно слово вместо русского «буду делать / сделаю».</p>`,
+ex:[["lavorare → lavorerò","я буду работать"],["prendere → prenderai","ты возьмёшь"],["partire → partirà","он уедет"],["finire → finiremo","мы закончим"],["scrivere → scriverete","вы напишете"],["cominciare → cominceranno","они начнут"]],
+post:`<table><tr><td>io</td><td>-ò</td></tr><tr><td>tu</td><td>-ai</td></tr><tr><td>lui/lei</td><td>-à</td></tr><tr><td>noi</td><td>-emo</td></tr><tr><td>voi</td><td>-ete</td></tr><tr><td>loro</td><td>-anno</td></tr></table><p>У -are гласная a → e: lavorare → lavor<b>e</b>rò. Неправильные основы: sarò, avrò, andrò, farò, potrò, dovrò, vorrò, verrò.</p>`,
+c:["Domani ___ tardi. (finire, io)",["finirò","finerò"],0,"-ire → finir-ò."]},
+{h:"Догадка и «если»",
+pre:`<p>Будущее время ещё выражает предположение о настоящем:</p>`,
+ex:[["Dov'è Marco? — Sarà al lavoro.","Где Марко? — Наверное, на работе."],["Avrà trent'anni.","Ему, наверное, лет тридцать."],["Se ho tempo, ti chiamo.","Если будет время, позвоню."],["Se finirò presto, verrò.","Если закончу рано, приду."]],
+post:`<p>После <b>se</b> в разговоре чаще ставят настоящее: Se piove, resto a casa. В русском «если будет дождь» — с будущим, в итальянском так говорить не обязательно.</p>`,
+c:["Se ___ lavoro, resto in Italia. (trovare, io)",["trovo","troverei"],0,"se + настоящее."]},
+{h:"Работа: bisogna, ci metto",
+pre:`<p>Полезные конструкции для разговора о работе:</p>`,
+ex:[["Bisogna parlare inglese.","Нужно говорить по-английски."],["Bisogna avere esperienza.","Нужен опыт."],["Ci metto venti minuti per arrivare.","Мне добираться двадцать минут."],["Quanto ci metti?","Сколько у тебя уходит?"]],
+post:`<p><b>bisogna</b> + инфинитив — нужно (вообще, для всех). <b>metterci</b> — тратить время: ci metto, ci metti, ci mette…</p>`,
+c:["Per questo lavoro ___ sapere l'inglese.",["bisogna","bisogno"],0,"Нужно (безлично) → bisogna."]}
+],
+g30:[
+{h:"Mentre и durante",
+pre:`<p>Оба значат «во время», но после них разные слова:</p>`,
+ex:[["Mentre mangiavo, guardavo la TV.","Пока я ел, смотрел ТВ."],["Durante la cena guardavo la TV.","Во время ужина смотрел ТВ."],["Mentre lui parlava, lei sorrideva.","Пока он говорил, она улыбалась."],["Durante il viaggio ho letto un libro.","В дороге я прочитал книгу."]],
+post:`<p><b>mentre</b> + глагол (обычно imperfetto), <b>durante</b> + существительное.</p>`,
+c:["___ le vacanze ho conosciuto Luca.",["Durante","Mentre"],0,"le vacanze — существительное → durante."]},
+{h:"Stavo per… — «как раз собирался»",
+pre:`<p><b>stare per</b> + инфинитив — действие, которое вот-вот произойдёт:</p>`,
+ex:[["Il film sta per cominciare.","Фильм сейчас начнётся."],["Stavo per uscire quando hai chiamato.","Я уже собирался выходить, когда ты позвонил."],["Stiamo per partire.","Мы вот-вот уезжаем."]],
+post:`<p>В рассказе о прошлом stare стоит в imperfetto: stavo, stavi, stava… per + инфинитив.</p>`,
+c:["Il treno sta ___ partire.",["per","a"],0,"stare per."]},
+{h:"Как рассказывать историю",
+pre:`<p>Связки делают рассказ живым:</p>`,
+ex:[["All'inizio…","Сначала…"],["Poi… / Dopo…","Потом…"],["Però…","Но…"],["Quindi… / Così…","Поэтому… / И вот…"],["Alla fine…","В конце концов…"],["Finalmente!","Наконец-то!"],["Ho dovuto aspettare. / Sono dovuto andare via.","Пришлось ждать. / Пришлось уйти."]],
+post:`<p>dovere, potere, volere в passato prossimo берут вспомогательный глагол от инфинитива: ho voluto vedere (vedere → avere), sono voluto andare (andare → essere). В разговоре с essere-глаголами часто говорят и с avere — это тоже допустимо.</p>`,
+c:["Ieri ___ dovuto lavorare fino a tardi.",["ho","sono"],0,"lavorare идёт с avere → ho dovuto lavorare."]}
+],
+g31:[
+{h:"Зачем congiuntivo",
+pre:`<p>Congiuntivo — наклонение мнений, желаний и сомнений. В русском похоже на «чтобы»: «хочу, <b>чтобы</b> ты пришёл».</p>`,
+ex:[["Voglio che tu venga.","Хочу, чтобы ты пришёл."],["Penso che sia caro.","Думаю, что это дорого."],["Spero che piaccia anche a te.","Надеюсь, тебе тоже понравится."],["È meglio che tu dorma.","Лучше тебе поспать."]],
+post:`<p>После <b>penso che, credo che, spero che, voglio che, è importante che, è meglio che, bisogna che</b>. Но после <b>so che</b> (знаю, что) и <b>è vero che</b> — обычное настоящее: So che è caro.</p>`,
+c:["So che la casa ___ grande.",["è","sia"],0,"so che (факт) → индикатив è."]},
+{h:"Формы",
+pre:`<p>Для io, tu, lui одна и та же форма, поэтому часто добавляют местоимение: che tu venga.</p>`,
+ex:[["parlare → che io/tu/lui parli","-are → -i"],["prendere → che prenda","-ere → -a"],["dormire → che dorma","-ire → -a"],["capire → che capisca","-isc- сохраняется"],["noi parliamo, voi parliate","мы, вы"],["loro parlino / prendano / dormano","они"]],
+post:`<p>Неправильные: essere → <b>sia</b>, avere → <b>abbia</b>, fare → <b>faccia</b>, andare → <b>vada</b>, stare → <b>stia</b>, potere → <b>possa</b>, volere → <b>voglia</b>, venire → <b>venga</b>, dire → <b>dica</b>.</p>`,
+c:["Credo che lui ___ ragione. (avere)",["abbia","ha"],0,"credo che → abbia."]},
+{h:"Тот же человек: di + инфинитив",
+pre:`<p>Если думаешь сам о себе, congiuntivo не нужен:</p>`,
+ex:[["Penso di cambiare casa.","Думаю сменить квартиру."],["Spero di trovare lavoro.","Надеюсь найти работу."],["Credo di avere ragione.","Думаю, я прав."],["Magari!","Если бы! Хорошо бы!"]],
+post:`<p>Сравни: Penso <b>di</b> partire (я — я) и Penso <b>che</b> tu parta (я — ты). <b>Magari</b> в ответ значит «хорошо бы».</p>`,
+c:["Spero ___ vederti presto.",["di","che"],0,"Тот же субъект → di + инфинитив."]}
+],
+g32:[
+{h:"Знать: sapere или conoscere",
+pre:`<p>В русском одно слово «знать», в итальянском два:</p>`,
+ex:[["Conosco Marco.","Я знаю Марко (знаком)."],["Conosci Taormina?","Ты знаешь Таормину (бывал там)?"],["So che parte domani.","Я знаю, что он уезжает завтра."],["Sai dov'è il binario?","Знаешь, где платформа?"],["So guidare.","Я умею водить."]],
+post:`<p><b>conoscere</b> + человек, место, город. <b>sapere</b> + факт (che, dove, quando, se…) или инфинитив (= уметь).</p>`,
+c:["___ guidare la macchina? (умеешь)",["Sai","Conosci"],0,"уметь → sapere."]},
+{h:"В прошлом смысл меняется",
+pre:`<p>Это важно для рассказов о поездках:</p>`,
+ex:[["Ho conosciuto Julie in viaggio.","Я познакомился с Джули в поездке."],["Conoscevo già Roma.","Я уже знал Рим."],["Ho saputo che il volo era cancellato.","Я узнал, что рейс отменили."],["Non sapevo niente.","Я ничего не знал."]],
+post:`<p>passato prossimo = момент: <b>познакомился</b>, <b>узнал</b>. imperfetto = состояние: <b>был знаком</b>, <b>знал</b>.</p>`,
+c:["Quando ___ la notizia? (ты узнал)",["hai saputo","sapevi"],0,"узнал (момент) → hai saputo."]},
+{h:"Сколько нужно: ci vuole",
+pre:`<p>«Нужно столько-то времени» — ci vuole / ci vogliono:</p>`,
+ex:[["Ci vuole un'ora.","Нужен час."],["Ci vogliono due ore.","Нужно два часа."],["Quanto ci vuole da Messina a Palermo?","Сколько ехать из Мессины в Палермо?"],["Ci vogliono pazienza e tempo.","Нужны терпение и время."]],
+post:`<p>Ci vuole — для общего «нужно». Ci metto — сколько трачу <b>я</b>: Ci metto tre ore in macchina.</p>`,
+c:["Da qui alla stazione ___ dieci minuti.",["ci vogliono","ci vuole"],0,"minuti — мн. ч. → ci vogliono."]}
+]
+});
+const COURSE_A2=[
+{id:"a1",em:"🛍️",t:"В магазине одежды",ne:"Lezione 1 · In giro per negozi",goal:"Выбрать и примерить одежду, спросить размер и цвет, сравнить вещи и дать совет другу.",
+words:["il commesso","il camerino","la vetrina","i saldi","lo sconto","lo scontrino","provare","cambiare","stretto","largo","elegante","sportivo","il maglione","gli stivali","la cintura","di cotone","di lana","quello"],
+grammar:["g20","g21","g22"],
+read:{t:"I saldi di gennaio",text:"A gennaio in Italia cominciano i saldi e tutti vanno a fare shopping. Sabato Julie e la sua amica Chiara sono andate in via Garibaldi. In vetrina c'era un cappotto blu molto elegante con lo sconto del quaranta per cento. Julie l'ha provato nel camerino, ma era un po' stretto. «Prova la taglia più grande!» le ha detto Chiara. La taglia 44 le stava benissimo. Poi Chiara ha visto due maglioni: uno di lana e uno di cotone. Quello di lana era più caro, ma più caldo. «Prendi quello, d'inverno fa freddo anche in Sicilia!» Alla cassa la commessa ha dato loro lo scontrino: «Potete cambiare la merce entro quindici giorni.»",
+ru:"В январе в Италии начинаются распродажи, и все идут за покупками. В субботу Джули и её подруга Кьяра пошли на улицу Гарибальди. В витрине было очень элегантное синее пальто со скидкой сорок процентов. Джули примерила его в примерочной, но оно было немного тесным. «Примерь размер побольше!» — сказала ей Кьяра. 44-й размер сидел на ней прекрасно. Потом Кьяра увидела два свитера: шерстяной и хлопковый. Шерстяной был дороже, но теплее. «Бери тот, зимой и на Сицилии холодно!» На кассе продавщица дала им чек: «Вы можете обменять товар в течение пятнадцати дней».",
+gl:"a=в|gennaio=январь|in=в|italia=Италия|cominciano=начинаются|i=артикль м. р. мн. ч.|saldi=распродажа|e=и|tutti=все|vanno=идут|fare=делать (fare shopping — ходить по магазинам)|shopping=покупки|sabato=в субботу|julie=Джули (имя)|la=артикль ж. р.; её|sua=её, своя|amica=подруга|chiara=Кьяра (имя)|sono=(вспомогательный глагол essere)|andate=пошли (ж. р. мн. ч.)|via=улица|garibaldi=Гарибальди|vetrina=витрина|c'era=было, имелось (imperfetto от c'è)|un=артикль м. р.|cappotto=пальто|blu=синий|molto=очень|elegante=элегантный|con=с|lo=артикль м. р.|sconto=скидка|del=(di + il)|quaranta=сорок|per=на (per cento — процент)|cento=сто|l'ha=его (l' = lo) + ha|provato=примерила|nel=в (in + il)|camerino=примерочная|ma=но|era=было (essere, imperfetto)|po'=немного (un po')|stretto=тесный|prova=примерь (повелительное)|taglia=размер|più=более|grande=большой|le=ей|ha=(вспомогательный avere)|detto=сказала (dire)|44=44|stava=сидела (stare bene — идти, сидеть)|benissimo=отлично|poi=потом|visto=увидела (vedere)|due=два|maglioni=свитера|uno=один|di=из|lana=шерсть|cotone=хлопок|quello=тот|caro=дорогой|caldo=тёплый|prendi=возьми (повелительное)|d'inverno=зимой|fa=(fa freddo — холодно)|freddo=холод|anche=тоже, даже|sicilia=Сицилия|alla=на, в (a + la)|cassa=касса|commessa=продавщица|dato=дала (dare)|loro=им|scontrino=чек|potete=можете|cambiare=обменять|merce=товар|entro=в течение, до|quindici=пятнадцать|giorni=дней",
+q:[["Che cosa c'era in vetrina? (Что было в витрине?)",["Un cappotto blu","Una giacca rossa","Due maglioni"],0,"«In vetrina c'era un cappotto blu»."],
+["Perché Julie ha provato un'altra taglia? (Почему Джули примерила другой размер?)",["Il cappotto era stretto","Il colore non le piaceva","Era troppo caro"],0,"«era un po' stretto»."],
+["Quale maglione era più caro? (Какой свитер был дороже?)",["Quello di cotone","Quello di lana","Costavano uguale"],1,"«Quello di lana era più caro»."],
+["Entro quanti giorni si può cambiare la merce? (За сколько дней можно обменять товар?)",["Sette","Quindici","Trenta"],1,"«entro quindici giorni»."]]},
+listen:{t:"In camerino — в примерочной",lines:[[0,"Buongiorno, posso aiutarLa?","Добрый день, могу Вам помочь?"],[1,"Sì, vorrei provare quei pantaloni neri in vetrina.","Да, я хотел бы примерить те чёрные брюки с витрины."],[0,"Certo. Che taglia porta?","Конечно. Какой размер вы носите?"],[1,"La 48, credo.","48-й, кажется."],[0,"Ecco. Il camerino è lì in fondo.","Вот. Примерочная там, в глубине."],[1,"Mi stanno un po' larghi. Avete la 46?","Мне немного широки. Есть 46-й?"],[0,"Sì, eccola. E Le piace anche questa cintura? È in saldo.","Да, вот. А ремень этот вам тоже нравится? Он со скидкой."],[1,"Sì, è bella. Prendo tutti e due. Posso pagare con la carta?","Да, красивый. Беру оба. Можно картой?"]],
+q:[["Che cosa vuole provare il cliente? (Что хочет примерить покупатель?)",["Una camicia","Dei pantaloni neri","Un maglione"],1,"«vorrei provare quei pantaloni neri»."],
+["Come gli stanno i pantaloni 48? (Как сидят брюки 48-го размера?)",["Stretti","Larghi","Perfetti"],1,"«Mi stanno un po' larghi»."],
+["Che cosa compra alla fine? (Что он покупает в итоге?)",["Solo i pantaloni","Pantaloni e cintura","Niente"],1,"«Prendo tutti e due»."]]},
+write:[{k:"order",ru:"Эта куртка тебе идёт.",it:"Questa giacca ti sta bene"},{k:"order",ru:"Пальто дороже свитера.",it:"Il cappotto è più caro del maglione"},
+{k:"tr",ru:"Можно примерить?",ans:["Posso provare?","Posso provarlo?","Posso provarla?","Lo posso provare?"]},
+{k:"tr",ru:"Ей нравятся красные туфли.",ans:["Le piacciono le scarpe rosse","A lei piacciono le scarpe rosse"]},
+{k:"tr",ru:"Примерь размер побольше! (другу)",ans:["Prova la taglia più grande!","Prova una taglia più grande!","Prova la taglia più grande"]},
+{k:"free",p:"Ты в магазине одежды. Напиши диалог-реплики: что хочешь примерить, какой размер, как сидит, и сравни две вещи (4–5 фраз).",model:"Buongiorno, vorrei provare quella giacca in vetrina. Porto la 48. Mi sta un po' stretta, avete la 50? Questa è più comoda di quella. La prendo!",chk:[["Vorrei provare…","vorrei provare|posso provare"],["размер: la taglia / porto la…","taglia|porto la"],["mi sta / mi stanno…","mi sta|mi stanno"],["сравнение: più… di / meno… di","(piu|meno) \\w+ (di|del|della|dello|dei|delle|che)"]]}],
+speak:[{k:"say",it:"Mi sta un po' stretta. Avete una taglia più grande?",ru:"Мне тесновато. У вас есть размер побольше?"},{k:"say",it:"Questo maglione è più caldo di quello.",ru:"Этот свитер теплее того."},
+{k:"ans",q:"Che taglia porta?",ru:"Какой размер вы носите?",model:"Porto la 46."},{k:"ans",q:"Come ti sta?",ru:"Как тебе сидит?",model:"Mi sta benissimo!"},{k:"ans",q:"Ti piace questo colore?",ru:"Тебе нравится этот цвет?",model:"Sì, mi piace molto, ma preferisco il blu."}],
+test:[["A mia sorella ___ piacciono gli stivali.",["le","gli","la"],0,"Ей → le."],
+["Signore, ___ piace questa camicia?",["Le","Ti","Gli"],0,"Вежливое «Вам» → Le."],
+["Il cappotto è più caro ___ giacca.",["della","di","che"],0,"di + la → della."],
+["È più facile comprare ___ cambiare.",["che","di","della"],0,"Два глагола → che."],
+["___ questi pantaloni! (provare, ты)",["Prova","Provi","Prove"],0,"-are → -a."],
+["Questi pantaloni ___ stanno larghi. (мне)",["mi","me","io"],0,"Мне → mi."],
+{k:"type",q:"Напиши по-итальянски: «распродажа»",ans:["i saldi","saldi"],e:"i saldi — распродажа."},
+{k:"type",q:"Il maglione di lana è ___ caldo di quello di cotone. (более)",ans:["più","piu"],e:"более → più."},
+["Что ты услышал?",["Где примерочная?","Где касса?","Сколько стоит?"],0,"«Dov'è il camerino?»","Dov'è il camerino?"],
+["Что ты услышал?",["Можно обменять?","Можно примерить?","Можно картой?"],0,"«Si può cambiare?»","Si può cambiare?"]]},
+
+{id:"a2",em:"🧸",t:"Когда я был маленьким",ne:"Lezione 2 · Quando ero piccolo",goal:"Рассказать о детстве и привычках в прошлом, описать, каким был ты и твой город.",
+words:["da piccolo","l'infanzia","il cortile","giocare","il giocattolo","il cartone animato","la scuola elementare","la maestra","ricordare","il ricordo","di solito","spesso","ogni estate","la campagna","il gatto","il cane"],
+grammar:["g23"],
+read:{t:"La mia infanzia ad Almaty",text:"Da piccolo abitavo ad Almaty, in un palazzo grande con un cortile. Ogni pomeriggio giocavo a calcio con i bambini del palazzo. Non avevamo molti giocattoli, ma ci divertivamo tantissimo. La mia maestra della scuola elementare si chiamava Gulnara: era severa, però molto giusta. La sera guardavo i cartoni animati con mio fratello e la mamma ci preparava il tè con i biscotti. Ogni estate andavamo in campagna dai nonni. Lì c'erano un cane, due gatti e tante mucche. Mio nonno si alzava alle cinque e io lo aiutavo con gli animali. È il ricordo più bello della mia infanzia.",
+ru:"В детстве я жил в Алматы, в большом доме с двором. Каждый день после обеда я играл в футбол с ребятами из дома. Игрушек у нас было немного, но нам было очень весело. Мою учительницу в начальной школе звали Гульнара: она была строгой, но очень справедливой. Вечером я смотрел мультфильмы с братом, а мама готовила нам чай с печеньем. Каждое лето мы ездили в деревню к бабушке с дедушкой. Там были собака, две кошки и много коров. Дедушка вставал в пять, и я помогал ему с животными. Это самое светлое воспоминание моего детства.",
+gl:"da=с, в (da piccolo — в детстве)|piccolo=маленький|abitavo=я жил (imperfetto)|ad=в (a перед гласной)|almaty=Алматы|in=в|un=артикль м. р.|palazzo=многоэтажный дом|grande=большой|con=с|cortile=двор|ogni=каждый|pomeriggio=время после обеда|giocavo=я играл|a=в|calcio=футбол|i=артикль мн. ч.|bambini=дети|del=из (di + il)|non=не|avevamo=у нас было|molti=много|giocattoli=игрушки|ma=но|ci=нам; себя|divertivamo=веселились (divertirsi)|tantissimo=очень много|la=артикль ж. р.|mia=моя|maestra=учительница|della=из (di + la)|scuola=школа|elementare=начальная|si=себя (si chiamava — её звали)|chiamava=звали|gulnara=Гульнара (имя)|era=была (essere)|severa=строгая|però=однако|molto=очень|giusta=справедливая|sera=вечер|guardavo=я смотрел|cartoni=мультфильмы (cartoni animati)|animati=мультипликационные|mio=мой|fratello=брат|e=и|mamma=мама|preparava=готовила|il=артикль м. р.|tè=чай|biscotti=печенье|estate=лето|andavamo=мы ездили|campagna=деревня|dai=к (da + i)|nonni=бабушка и дедушка|lì=там|c'erano=были, имелись|cane=собака|due=две|gatti=кошки, коты|tante=много|mucche=коровы|nonno=дедушка|alzava=вставал (si alzava)|alle=в (a + le)|cinque=пять|io=я|lo=его|aiutavo=помогал|gli=артикль м. р. мн. ч.|animali=животные|è=это есть|ricordo=воспоминание|più=самый|bello=красивый, хороший|infanzia=детство",
+q:[["Dove abitava da piccolo? (Где он жил в детстве?)",["In campagna","Ad Almaty, in un palazzo","A Messina"],1,"«abitavo ad Almaty, in un palazzo grande»."],
+["Com'era la maestra? (Какой была учительница?)",["Severa ma giusta","Simpatica e pigra","Giovane e timida"],0,"«era severa, però molto giusta»."],
+["Che cosa facevano ogni estate? (Что они делали каждое лето?)",["Andavano al mare","Andavano dai nonni in campagna","Restavano in città"],1,"«Ogni estate andavamo in campagna dai nonni»."],
+["Quali animali c'erano dai nonni? (Какие животные были у бабушки с дедушкой?)",["Un cane, due gatti e mucche","Solo cavalli","Nessuno"],0,"«c'erano un cane, due gatti e tante mucche»."]]},
+listen:{t:"Com'eri da piccola?",lines:[[0,"Julie, com'eri da piccola?","Джули, какой ты была в детстве?"],[1,"Ero molto timida e parlavo poco. E tu?","Я была очень застенчивой и мало говорила. А ты?"],[0,"Io invece ero vivace, non stavo mai fermo!","А я, наоборот, был шустрым, никогда не сидел на месте!"],[1,"Che cosa ti piaceva fare?","Что ты любил делать?"],[0,"Mi piaceva disegnare e andare in bicicletta. Tu leggevi molto?","Любил рисовать и кататься на велосипеде. А ты много читала?"],[1,"Sì, leggevo sempre. E ogni sabato andavo a lezione di danza.","Да, всё время читала. И каждую субботу ходила на танцы."]],
+q:[["Com'era Julie da piccola? (Какой была Джули в детстве?)",["Vivace","Timida","Pigra"],1,"«Ero molto timida»."],
+["Che cosa piaceva fare a lui? (Что любил делать он?)",["Leggere","Disegnare e andare in bicicletta","Ballare"],1,"«Mi piaceva disegnare e andare in bicicletta»."],
+["Che cosa faceva Julie ogni sabato? (Что Джули делала каждую субботу?)",["Andava a danza","Andava al mare","Guardava i cartoni"],0,"«ogni sabato andavo a lezione di danza»."]]},
+write:[{k:"order",ru:"В детстве я жил в Алматы.",it:"Da piccolo abitavo ad Almaty"},{k:"order",ru:"Каждое лето мы ездили на море.",it:"Ogni estate andavamo al mare"},
+{k:"tr",ru:"Я был спокойным ребёнком.",ans:["Ero un bambino tranquillo","Ero una bambina tranquilla"]},
+{k:"tr",ru:"Обычно я играл во дворе.",ans:["Di solito giocavo nel cortile","Di solito giocavo in cortile"]},
+{k:"free",p:"Расскажи о своём детстве в 4–5 предложениях: где жил, каким был, во что играл, что делал летом.",model:"Da piccolo abitavo ad Almaty con i miei genitori. Ero un bambino vivace e curioso. Di solito giocavo a calcio nel cortile. Ogni estate andavamo dai nonni in campagna.",chk:[["Da piccolo / Quando ero piccolo…","da piccol|quando ero"],["глаголы в imperfetto: -vo, -va, -vamo…","\\w+(avo|evo|ivo|avamo|evamo|ivamo|avano|evano|ivano)\\b"],["ero / era…","\\bero\\b|\\bera\\b|eravamo"],["di solito / ogni estate / spesso","di solito|ogni|spesso|sempre"]]}],
+speak:[{k:"say",it:"Da piccolo abitavo in un palazzo con un cortile.",ru:"В детстве я жил в доме с двором."},{k:"say",it:"Ogni estate andavamo in campagna dai nonni.",ru:"Каждое лето мы ездили в деревню к бабушке с дедушкой."},
+{k:"ans",q:"Com'eri da piccolo?",ru:"Каким ты был в детстве?",model:"Ero un bambino vivace e curioso."},{k:"ans",q:"Dove abitavi?",ru:"Где ты жил?",model:"Abitavo ad Almaty."},{k:"ans",q:"Che cosa ti piaceva fare?",ru:"Что ты любил делать?",model:"Mi piaceva giocare a calcio."}],
+test:[["Da piccola ___ molto timida. (essere, io)",["ero","era","sono stata"],0,"essere → ero."],
+["Ogni estate ___ al mare. (andare, noi)",["andavamo","siamo andati","andiamo"],0,"Привычка → imperfetto: andavamo."],
+["Mio nonno ___ sempre il giornale. (leggere)",["leggeva","leggevo","ha letto"],0,"lui → leggeva."],
+["Che cosa ___ da piccolo? (fare, tu)",["facevi","favevi","hai fatto"],0,"fare → facevi."],
+["I miei genitori ___ in centro. (lavorare)",["lavoravano","lavoravate","lavorano"],0,"loro → lavoravano."],
+["___ un cane che si chiamava Rex. (avere, io)",["Avevo","Avevi","Aveva"],0,"io → avevo."],
+{k:"type",q:"Напиши imperfetto: io (giocare) → ___",ans:["giocavo"],e:"giocare → gioca-vo."},
+{k:"type",q:"Напиши imperfetto: noi (essere) → ___",ans:["eravamo"],e:"essere: ero, eri, era, eravamo…"},
+["Что ты услышал?",["В детстве я много читал","Вчера я много читал","Я читаю каждый день"],0,"«Da piccolo leggevo molto».","Da piccolo leggevo molto."],
+["Что ты услышал?",["Мы жили в деревне","Мы ездили в деревню","Мы живём в деревне"],0,"«Abitavamo in campagna».","Abitavamo in campagna."]]},
+
+{id:"a3",em:"🧑‍🎨",t:"Интересный человек",ne:"Lezione 3 · Un tipo interessante",goal:"Описать внешность и характер человека, сказать, каким был бы идеальный сосед или друг.",
+words:["il carattere","timido","allegro","generoso","sincero","pigro","ordinato","disordinato","divertente","serio","curioso","i capelli","biondo","castano","magro","la barba","qualcuno","nessuno"],
+grammar:["g25"],
+read:{t:"Cerco coinquilino",text:"Annuncio sulla bacheca dell'università: «Ciao! Mi chiamo Davide, ho 23 anni e studio ingegneria. Cerco un coinquilino per un appartamento in centro, vicino al Duomo. Come sono io? Sono allegro, sincero e abbastanza ordinato. Mi piace cucinare, ma non sono un grande cuoco! Il mio coinquilino ideale sarebbe una persona tranquilla, pulita e simpatica. Non vorrei qualcuno che fa feste tutte le sere, perché la mattina lavoro in una pizzeria. Preferirei una persona che non fuma. Se sei curioso e ti piacerebbe conoscere gente nuova, scrivimi! Potremmo prendere un caffè insieme e parlare.»",
+ru:"Объявление на доске в университете: «Привет! Меня зовут Давиде, мне 23 года, я учусь на инженера. Ищу соседа в квартиру в центре, рядом с Собором. Какой я? Весёлый, искренний и довольно аккуратный. Люблю готовить, но повар из меня так себе! Мой идеальный сосед был бы спокойным, чистоплотным и приятным человеком. Я бы не хотел того, кто устраивает вечеринки каждый вечер, потому что по утрам я работаю в пиццерии. Я бы предпочёл некурящего. Если тебе любопытно и хотелось бы познакомиться с новыми людьми, напиши мне! Мы могли бы выпить кофе вместе и поговорить».",
+gl:"annuncio=объявление|sulla=на (su + la)|bacheca=доска объявлений|dell'=(di + l')|università=университет|ciao=привет|mi=меня, мне|chiamo=зову (mi chiamo — меня зовут)|davide=Давиде (имя)|ho=мне (ho … anni — мне … лет)|23=23|anni=лет|e=и|studio=учусь, изучаю|ingegneria=инженерия|cerco=ищу|un=артикль м. р.|coinquilino=сосед по квартире|per=для|appartamento=квартира|in=в|centro=центр|vicino=рядом|al=к, с (a + il)|duomo=собор|come=как, какой|sono=я есть|io=я|allegro=весёлый|sincero=искренний|abbastanza=довольно|ordinato=аккуратный|piace=нравится|cucinare=готовить|ma=но|non=не|grande=большой|cuoco=повар|il=артикль м. р.|mio=мой|ideale=идеальный|sarebbe=был бы (condizionale от essere)|una=артикль ж. р.|persona=человек|tranquilla=спокойная|pulita=чистоплотная|simpatica=приятная|vorrei=я бы хотел|qualcuno=кто-то|che=который|fa=делает|feste=вечеринки|tutte=все|le=артикль ж. р. мн. ч.|sere=вечера|perché=потому что|la=артикль ж. р.|mattina=утро|lavoro=работаю|pizzeria=пиццерия|preferirei=я бы предпочёл|fuma=курит|se=если|sei=ты есть|curioso=любопытный|ti=тебе|piacerebbe=понравилось бы, хотелось бы|conoscere=знакомиться, узнавать|gente=люди|nuova=новая|scrivimi=напиши мне|potremmo=мы могли бы|prendere=взять, выпить|caffè=кофе|insieme=вместе|parlare=поговорить",
+q:[["Che cosa studia Davide? (Что изучает Давиде?)",["Medicina","Ingegneria","Economia"],1,"«studio ingegneria»."],
+["Com'è Davide? (Какой Давиде?)",["Allegro, sincero e ordinato","Timido e pigro","Serio e disordinato"],0,"«Sono allegro, sincero e abbastanza ordinato»."],
+["Perché non vuole feste tutte le sere? (Почему он не хочет вечеринок каждый вечер?)",["Studia di notte","La mattina lavora","Non gli piace la musica"],1,"«la mattina lavoro in una pizzeria»."],
+["Che cosa propone alla fine? (Что он предлагает в конце?)",["Di prendere un caffè","Di cucinare insieme","Di vedere la casa"],0,"«Potremmo prendere un caffè insieme»."]]},
+listen:{t:"Com'è il tuo capo?",lines:[[0,"Allora, com'è il nuovo capo?","Ну, какой новый начальник?"],[1,"È alto, magro, con la barba e i capelli castani.","Высокий, худой, с бородой и каштановыми волосами."],[0,"E di carattere?","А по характеру?"],[1,"Sembra serio, ma in realtà è molto divertente.","Кажется серьёзным, но на самом деле очень весёлый."],[0,"Che fortuna! Il mio è pigro e disordinato.","Повезло! Мой ленивый и неорганизованный."],[1,"Al tuo posto cercherei un altro lavoro!","На твоём месте я бы искал другую работу!"]],
+q:[["Com'è fisicamente il nuovo capo? (Как выглядит новый начальник?)",["Basso e biondo","Alto, magro, con la barba","Grasso e senza capelli"],1,"«È alto, magro, con la barba»."],
+["Com'è di carattere? (Какой у него характер?)",["Divertente","Pigro","Timido"],0,"«in realtà è molto divertente»."],
+["Che consiglio dà alla fine? (Какой совет даёт в конце?)",["Di parlare con il capo","Di cercare un altro lavoro","Di essere più ordinato"],1,"«Al tuo posto cercherei un altro lavoro»."]]},
+write:[{k:"order",ru:"Мне бы хотелось жить у моря.",it:"Mi piacerebbe vivere al mare"},{k:"order",ru:"Он не высокий и не низкий.",it:"Non è né alto né basso"},
+{k:"tr",ru:"Не мог бы ты мне помочь?",ans:["Potresti aiutarmi?","Mi potresti aiutare?"]},
+{k:"tr",ru:"У неё светлые волосы.",ans:["Ha i capelli biondi","Lei ha i capelli biondi"]},
+{k:"free",p:"Опиши своего идеального соседа по квартире или друга: внешность не важна, главное характер. Используй condizionale (sarebbe, vorrei, mi piacerebbe), 4–5 фраз.",model:"Il mio coinquilino ideale sarebbe allegro e ordinato. Vorrei una persona sincera e generosa. Non mi piacerebbe vivere con qualcuno pigro. Sarebbe bello cucinare insieme la sera.",chk:[["sarebbe…","sarebbe"],["vorrei / mi piacerebbe…","vorrei|piacerebbe|preferirei"],["минимум 3 прилагательных характера","(allegr|sincer|generos|ordinat|tranquill|simpatic|divertent|seri|curios|gentil|pigr|timid)\\w*.*(allegr|sincer|generos|ordinat|tranquill|simpatic|divertent|seri|curios|gentil|pigr|timid)\\w*.*(allegr|sincer|generos|ordinat|tranquill|simpatic|divertent|seri|curios|gentil|pigr|timid)"]]}],
+speak:[{k:"say",it:"Sono una persona allegra e abbastanza ordinata.",ru:"Я весёлый и довольно аккуратный человек."},{k:"say",it:"Mi piacerebbe conoscere gente nuova.",ru:"Мне бы хотелось познакомиться с новыми людьми."},
+{k:"ans",q:"Com'è il tuo carattere?",ru:"Какой у тебя характер?",model:"Sono curioso, allegro e un po' pigro."},{k:"ans",q:"Com'è tua moglie?",ru:"Какая твоя жена?",model:"È intelligente, generosa e molto simpatica."},{k:"ans",q:"Che cosa ti piacerebbe fare questo weekend?",ru:"Что бы ты хотел сделать в эти выходные?",model:"Mi piacerebbe andare a Taormina."}],
+test:[["___ un cappuccino, per favore. (вежливо, io)",["Vorrei","Voglio","Volessi"],0,"Вежливо → vorrei."],
+["Mi ___ vivere a Roma. (piacere)",["piacerebbe","piacerei","piace bene"],0,"Мне бы хотелось → mi piacerebbe."],
+["Al tuo posto io ___ il treno. (prendere)",["prenderei","prenderebbe","prendrei"],0,"io → prenderei."],
+["Tu ___ dormire di più. (dovere)",["dovresti","doveresti","dovrebbe"],0,"tu → dovresti."],
+["Non conosco ___ qui.",["nessuno","qualcuno","niente"],0,"никого → nessuno."],
+["Chi è pigro…",["non ha voglia di fare niente","è sempre allegro","dice sempre la verità"],0,"pigro — ленивый."],
+{k:"type",q:"Напиши condizionale: noi (potere) → ___",ans:["potremmo"],e:"potere → potr-emmo."},
+{k:"type",q:"Противоположность «ordinato»: ___",ans:["disordinato"],e:"ordinato ↔ disordinato."},
+["Что ты услышал?",["У него светлые волосы и голубые глаза","У него тёмные волосы","Он лысый"],0,"«Ha i capelli biondi e gli occhi azzurri».","Ha i capelli biondi e gli occhi azzurri."],
+["Что ты услышал?",["Было бы здорово!","Это здорово!","Было здорово!"],0,"«Sarebbe fantastico!»","Sarebbe fantastico!"]]},
+
+{id:"a4",em:"🎟️",t:"Пойдёшь со мной?",ne:"Lezione 4 · Ti va di venire?",goal:"Пригласить, принять приглашение или вежливо отказаться, договориться о встрече, забронировать билеты.",
+words:["ti va di…?","l'invito","la festa","la mostra","lo spettacolo","il concerto","volentieri","purtroppo","d'accordo","l'appuntamento","già","ancora","stasera","prenotare","il posto","un'altra volta"],
+grammar:["g26"],
+read:{t:"Messaggi di venerdì",text:"Marco: Ciao Yera! Che stai facendo? Stasera al Teatro Vittorio Emanuele c'è uno spettacolo comico. Ti va di venire? | Yera: Ciao! Sto studiando per l'esame di lunedì… Purtroppo stasera non posso. | Marco: Peccato! E domani? C'è un concerto jazz in piazza, è gratis. | Yera: Domani volentieri! A che ora? | Marco: Comincia alle nove. Ci vediamo alle otto e mezza davanti al Duomo? | Yera: D'accordo! Viene anche Julie, va bene? | Marco: Certo! Hai già visto la mostra al Museo Regionale? | Yera: No, non l'ho ancora vista. Ci andiamo domenica? | Marco: Perfetto, compro io i biglietti online. A domani!",
+ru:"Марко: Привет, Ера! Что делаешь? Сегодня вечером в театре Витторио Эмануэле комедийный спектакль. Пойдёшь? | Ера: Привет! Готовлюсь к экзамену в понедельник… К сожалению, сегодня не могу. | Марко: Жаль! А завтра? На площади джазовый концерт, бесплатно. | Ера: Завтра с удовольствием! Во сколько? | Марко: Начинается в девять. Встретимся в полдевятого перед Собором? | Ера: Договорились! Джули тоже придёт, хорошо? | Марко: Конечно! Ты уже видел выставку в Региональном музее? | Ера: Нет, ещё не видел. Сходим в воскресенье? | Марко: Отлично, билеты куплю онлайн я. До завтра!",
+gl:"marco=Марко (имя)|ciao=привет|yera=Ера (имя)|che=что|stai=(stare) — stai facendo: делаешь сейчас|facendo=делая (gerundio от fare)|stasera=сегодня вечером|al=в (a + il)|teatro=театр|vittorio=Витторио|emanuele=Эмануэле|c'è=есть, будет|uno=артикль м. р.|spettacolo=спектакль|comico=комедийный|ti=тебе|va=(ti va di — тебе хочется)|di=(предлог)|venire=прийти|sto=я (stare) — sto studiando: я занимаюсь сейчас|studiando=занимаясь (gerundio)|per=для, к|l'esame=экзамен|lunedì=понедельник|purtroppo=к сожалению|non=не|posso=могу|peccato=жаль|e=и, а|domani=завтра|un=артикль м. р.|concerto=концерт|jazz=джаз|in=на, в|piazza=площадь|è=есть|gratis=бесплатно|volentieri=с удовольствием|a=в|ora=час (a che ora — во сколько)|comincia=начинается|alle=в (a + le)|nove=девять|ci=(ci vediamo — увидимся; ci andiamo — пойдём туда)|vediamo=видим|otto=восемь|mezza=половина|davanti=перед|duomo=собор|d'accordo=договорились|viene=приходит|anche=тоже|julie=Джули (имя)|bene=хорошо|certo=конечно|hai=ты (avere, вспомогательный)|già=уже|visto=видел|la=артикль ж. р.|mostra=выставка|museo=музей|regionale=региональный|no=нет|l'ho=её я (la + ho)|ancora=ещё|vista=видена (согласуется с la mostra)|andiamo=пойдём|domenica=воскресенье|perfetto=отлично|compro=куплю|io=я|i=артикль мн. ч.|biglietti=билеты|online=онлайн",
+q:[["Perché Yera non può andare a teatro? (Почему Ера не может пойти в театр?)",["Sta lavorando","Sta studiando per un esame","È malato"],1,"«Sto studiando per l'esame di lunedì»."],
+["Quanto costa il concerto? (Сколько стоит концерт?)",["Dieci euro","Niente, è gratis","Non lo sappiamo"],1,"«è gratis»."],
+["Dove si vedono? (Где они встречаются?)",["Davanti al Duomo","In piazza","Al museo"],0,"«davanti al Duomo»."],
+["Yera ha già visto la mostra? (Ера уже видел выставку?)",["Sì, ieri","No, non ancora","Sì, con Julie"],1,"«non l'ho ancora vista»."]]},
+listen:{t:"Al botteghino — в кассе театра",lines:[[0,"Buonasera, vorrei due biglietti per lo spettacolo di sabato.","Добрый вечер, мне два билета на спектакль в субботу."],[1,"Mi dispiace, per sabato è tutto esaurito.","Сожалею, на субботу всё распродано."],[0,"E per domenica pomeriggio?","А на воскресенье днём?"],[1,"Sì, ci sono ancora dei posti in platea, a trenta euro.","Да, ещё есть места в партере, по тридцать евро."],[0,"Va bene, li prendo. C'è uno sconto per studenti?","Хорошо, беру. Есть скидка для студентов?"],[1,"Sì, con la tessera universitaria costano venti euro.","Да, со студенческим билетом — двадцать евро."]],
+q:[["Perché non può andare sabato? (Почему не получится в субботу?)",["Il teatro è chiuso","È tutto esaurito","Lo spettacolo è cancellato"],1,"«per sabato è tutto esaurito»."],
+["Quanto costa un biglietto normale? (Сколько стоит обычный билет?)",["20 €","30 €","40 €"],1,"«a trenta euro»."],
+["Quanto costa per gli studenti? (Сколько для студентов?)",["15 €","20 €","25 €"],1,"«costano venti euro»."]]},
+write:[{k:"order",ru:"Не хочешь пойти в кино?",it:"Ti va di andare al cinema?"},{k:"order",ru:"Я ещё не купил билеты.",it:"Non ho ancora comprato i biglietti"},
+{k:"tr",ru:"К сожалению, сегодня вечером я не могу.",ans:["Purtroppo stasera non posso","Purtroppo non posso stasera"]},
+{k:"tr",ru:"Что ты сейчас делаешь?",ans:["Che cosa stai facendo?","Cosa stai facendo?","Che stai facendo?"]},
+{k:"tr",ru:"Фильм? Я его уже посмотрел.",ans:["Il film? L'ho già visto","Il film? L'ho già visto."]},
+{k:"free",p:"Напиши сообщение другу: пригласи его куда-нибудь, предложи время и место. Потом напиши ответ с вежливым отказом и другим предложением (4–6 фраз).",model:"Ciao Luca! Ti va di venire a un concerto sabato sera? Ci vediamo alle nove davanti al teatro? — Mi dispiace, purtroppo sabato lavoro. Possiamo andare un'altra volta? Che ne dici di domenica?",chk:[["приглашение: Ti va di…? / Vuoi venire…?","ti va di|vuoi venire|hai voglia di|andiamo"],["время: alle…","alle \\w+|all'una|a mezzogiorno"],["отказ: purtroppo / mi dispiace","purtroppo|mi dispiace|non posso"],["новое предложение: un'altra volta / che ne dici di…","altra volta|che ne dici|domani|domenica|sabato"]]}],
+speak:[{k:"say",it:"Ti va di venire a una mostra domenica?",ru:"Не хочешь сходить на выставку в воскресенье?"},{k:"say",it:"Mi dispiace, purtroppo non posso. Facciamo un'altra volta?",ru:"Жаль, к сожалению, не могу. Давай в другой раз?"},
+{k:"ans",q:"Che cosa stai facendo?",ru:"Что ты сейчас делаешь?",model:"Sto studiando l'italiano."},{k:"ans",q:"Ti va di prendere un aperitivo stasera?",ru:"Хочешь выпить аперитив сегодня вечером?",model:"Volentieri! A che ora?"},{k:"ans",q:"Hai già visto il nuovo film?",ru:"Ты уже видел новый фильм?",model:"No, non l'ho ancora visto."}],
+test:[["Non posso, ___ lavorando.",["sto","sono","ho"],0,"stare + gerundio."],
+["Sto ___ la cena. (preparare)",["preparando","preparendo","preparato"],0,"-are → -ando."],
+["La mostra? L'ho già ___ . (vedere)",["vista","visto","visti"],0,"la mostra (ж. р.) → vista."],
+["I biglietti? ___ ho comprati ieri.",["Li","Le","Gli"],0,"biglietti м. р. мн. ч. → li."],
+["Non ho ___ deciso.",["ancora","già","sempre"],0,"ещё не → non… ancora."],
+["Вежливый отказ:",["Purtroppo non posso","Volentieri!","D'accordo!"],0,"purtroppo — к сожалению."],
+{k:"type",q:"Напиши gerundio: leggere → ___",ans:["leggendo"],e:"-ere → -endo: leggendo."},
+{k:"type",q:"Напиши по-итальянски: «с удовольствием»",ans:["volentieri"],e:"volentieri."},
+["Что ты услышал?",["Встретимся в восемь перед театром","Встретимся в девять в театре","Встретимся завтра"],0,"«Ci vediamo alle otto davanti al teatro».","Ci vediamo alle otto davanti al teatro."],
+["Что ты услышал?",["Всё распродано","Билеты есть","Касса закрыта"],0,"«È tutto esaurito».","È tutto esaurito."]]},
+
+{id:"a5",em:"🧳",t:"Счастливого пути!",ne:"Lezione 5 · Buon viaggio!",goal:"Рассказать о поездке, понять объявления на вокзале и в аэропорту, вежливо попросить и пожаловаться.",
+words:["il volo","l'aeroporto","la valigia","il bagaglio","la coincidenza","cancellato","andata e ritorno","il soggiorno","l'agriturismo","la spiaggia","la guida","ci vuole","conoscere","sapere","il viaggio","in anticipo"],
+grammar:["g24","g32"],
+read:{t:"Un viaggio in Puglia",text:"L'estate scorsa io e Julie siamo andati in Puglia. Volevamo partire da Catania alle sette, ma il volo per Bari è stato cancellato. Eravamo stanchi e arrabbiati, però una signora gentile ci ha spiegato che c'era un treno. Ci sono volute nove ore! Durante il viaggio abbiamo conosciuto due ragazzi di Lecce: sapevano tutto sulla regione e ci hanno dato molti consigli. A Bari abbiamo dormito in un agriturismo vicino al mare. Ogni mattina facevamo colazione in giardino e poi andavamo in spiaggia. Un giorno abbiamo preso una guida per visitare Alberobello: i trulli erano bellissimi. Non sapevo che la Puglia era così bella!",
+ru:"Прошлым летом мы с Джули ездили в Апулию. Мы хотели вылететь из Катании в семь, но рейс в Бари отменили. Мы были уставшими и злыми, но одна любезная синьора объяснила нам, что есть поезд. Понадобилось девять часов! В дороге мы познакомились с двумя ребятами из Лечче: они знали всё о регионе и дали нам много советов. В Бари мы ночевали в агротуристическом гостевом доме у моря. Каждое утро мы завтракали в саду, а потом шли на пляж. Однажды мы взяли гида, чтобы посетить Альберобелло: трулли были великолепны. Я и не знал, что Апулия такая красивая!",
+gl:"l'estate=лето|scorsa=прошлая|io=я|e=и|julie=Джули (имя)|siamo=мы (essere, вспомогательный)|andati=поехали|in=в|puglia=Апулия (регион)|volevamo=мы хотели (imperfetto)|partire=уехать, вылететь|da=из|catania=Катания|alle=в (a + le)|sette=семь|ma=но|il=артикль м. р.|volo=рейс|per=в, на (направление)|bari=Бари|è=(essere, вспомогательный)|stato=был (essere)|cancellato=отменён|eravamo=мы были|stanchi=уставшие|arrabbiati=злые|però=однако|una=артикль ж. р.|signora=синьора|gentile=любезная|ci=нам|ha=(avere, вспомогательный)|spiegato=объяснила|che=что|c'era=был, имелся|un=артикль м. р.|treno=поезд|sono=(essere)|volute=понадобились (ci sono volute — понадобилось)|nove=девять|ore=часов|durante=во время|viaggio=поездка|abbiamo=мы (avere, вспомогательный)|conosciuto=познакомились|due=два|ragazzi=парни|di=из|lecce=Лечче|sapevano=знали|tutto=всё|sulla=о (su + la)|regione=регион|hanno=они (avere)|dato=дали|molti=много|consigli=советов|a=в|dormito=спали, ночевали|agriturismo=агротуризм, гостевой дом на ферме|vicino=рядом|al=к (a + il)|mare=море|ogni=каждое|mattina=утро|facevamo=мы делали (facevamo colazione — завтракали)|colazione=завтрак|giardino=сад|poi=потом|andavamo=мы ходили|spiaggia=пляж|giorno=день (un giorno — однажды)|preso=взяли|guida=гид|visitare=посетить|alberobello=Альберобелло (город)|i=артикль мн. ч.|trulli=трулли (круглые каменные домики)|erano=были|era=была|bellissimi=очень красивые|non=не|sapevo=я знал|la=артикль ж. р.|così=такая|bella=красивая",
+q:[["Perché non sono partiti in aereo? (Почему они не полетели самолётом?)",["Era troppo caro","Il volo è stato cancellato","Avevano paura"],1,"«il volo per Bari è stato cancellato»."],
+["Quanto tempo ci è voluto in treno? (Сколько ехали на поезде?)",["Tre ore","Sei ore","Nove ore"],2,"«Ci sono volute nove ore»."],
+["Chi hanno conosciuto in treno? (С кем познакомились в поезде?)",["Due ragazzi di Lecce","Una guida","Una signora di Bari"],0,"«abbiamo conosciuto due ragazzi di Lecce»."],
+["Che cosa facevano ogni mattina? (Что делали каждое утро?)",["Visitavano i musei","Facevano colazione in giardino","Prendevano il treno"],1,"«Ogni mattina facevamo colazione in giardino»."]]},
+listen:{t:"In stazione — на вокзале",lines:[[0,"Scusi, sa se il treno per Palermo è in orario?","Извините, не знаете, поезд в Палермо по расписанию?"],[1,"No, purtroppo ha quaranta minuti di ritardo.","Нет, к сожалению, опаздывает на сорок минут."],[0,"Accidenti! Ho una coincidenza a Messina alle undici.","Вот досада! У меня пересадка в Мессине в одиннадцать."],[1,"Allora Le conviene prendere il regionale delle dieci, parte dal binario tre.","Тогда вам лучше сесть на региональный в десять, он отходит с третьей платформы."],[0,"Quanto ci vuole?","Сколько ехать?"],[1,"Circa un'ora e un quarto.","Примерно час с четвертью."]],
+q:[["Il treno per Palermo è in orario? (Поезд в Палермо по расписанию?)",["Sì","No, ha 40 minuti di ritardo","È cancellato"],1,"«ha quaranta minuti di ritardo»."],
+["Da quale binario parte il regionale? (С какой платформы отходит региональный?)",["Uno","Tre","Dieci"],1,"«parte dal binario tre»."],
+["Quanto ci vuole? (Сколько ехать?)",["Un'ora e un quarto","Mezz'ora","Due ore"],0,"«Circa un'ora e un quarto»."]]},
+write:[{k:"order",ru:"Мы познакомились в поезде.",it:"Ci siamo conosciuti in treno"},{k:"order",ru:"Из Мессины в Палермо нужно три часа.",it:"Da Messina a Palermo ci vogliono tre ore"},
+{k:"tr",ru:"Я не знал, что рейс отменили.",ans:["Non sapevo che il volo era cancellato","Non sapevo che il volo è stato cancellato","Non sapevo che avevano cancellato il volo"]},
+{k:"tr",ru:"Билет туда и обратно, пожалуйста.",ans:["Un biglietto andata e ritorno, per favore","Un biglietto di andata e ritorno, per favore"]},
+{k:"free",p:"Расскажи о поездке, которая запомнилась: куда ездил, что случилось (passato prossimo), какая была погода и что вы обычно делали (imperfetto). 5–6 фраз.",model:"L'anno scorso sono andato a Palermo con mia moglie. Il treno era in ritardo e ci sono volute quattro ore. Faceva molto caldo. Ogni sera mangiavamo al mercato. Un giorno abbiamo visitato Monreale. È stato un viaggio bellissimo!",chk:[["passato prossimo: sono andato / abbiamo visitato…","(sono|siamo|ho|abbiamo|e) \\w+(ato|ata|ati|ate|uto|uta|uti|ito|ita|iti)\\b"],["imperfetto: era, faceva, -vamo…","\\b(era|erano|faceva|c'era|c era)\\b|\\w+(avamo|evamo|ivamo|ava|eva|iva)\\b"],["время: l'anno scorso / l'estate scorsa / un giorno…","scors|un giorno|ieri|fa\\b"]]}],
+speak:[{k:"say",it:"Scusi, sa a che ora parte il treno per Catania?",ru:"Извините, не знаете, во сколько отходит поезд в Катанию?"},{k:"say",it:"Il volo è stato cancellato e ci sono volute nove ore di treno.",ru:"Рейс отменили, и на поезде понадобилось девять часов."},
+{k:"ans",q:"Dove sei andato l'estate scorsa?",ru:"Куда ты ездил прошлым летом?",model:"Sono andato in Puglia."},{k:"ans",q:"Conosci Taormina?",ru:"Ты знаешь Таормину?",model:"Sì, ci sono stato due volte."},{k:"ans",q:"Quanto ci vuole da qui all'aeroporto?",ru:"Сколько отсюда до аэропорта?",model:"Ci vuole mezz'ora in macchina."}],
+test:[["Mentre ___ il treno, ho letto un libro. (aspettare, io)",["aspettavo","ho aspettato","aspetto"],0,"Фон → imperfetto."],
+["Ieri ___ a Taormina. (andare, noi, один раз)",["siamo andati","andavamo","andiamo"],0,"Событие → passato prossimo."],
+["___ Marco? — Sì, è un mio collega. (знаешь)",["Conosci","Sai","Sapete"],0,"Человек → conoscere."],
+["Non ___ che eri a Messina! (не знал)",["sapevo","conoscevo","ho conosciuto"],0,"Знал (состояние) → sapevo."],
+["Per arrivare a Roma ___ otto ore.",["ci vogliono","ci vuole","ci mette"],0,"ore — мн. ч. → ci vogliono."],
+["Il volo è ___ . (отменён)",["cancellato","annullata","finito"],0,"cancellato — отменён."],
+{k:"type",q:"Напиши по-итальянски: «пересадка»",ans:["la coincidenza","coincidenza"],e:"la coincidenza — пересадка."},
+{k:"type",q:"Ieri ___ (conoscere, io) una ragazza simpatica.",ans:["ho conosciuto"],e:"Познакомился → ho conosciuto."},
+["Что ты услышал?",["Поезд опаздывает на двадцать минут","Поезд прибыл вовремя","Поезд отменён"],0,"«Il treno ha venti minuti di ritardo».","Il treno ha venti minuti di ritardo."],
+["Что ты услышал?",["Где можно сдать багаж?","Где мой чемодан?","Сколько стоит багаж?"],0,"«Dove posso lasciare il bagaglio?»","Dove posso lasciare il bagaglio?"]]}
+];
+COURSE_A2.push(
+{id:"a6",em:"🍝",t:"К столу!",ne:"Lezione 6 · A tavola!",goal:"Объяснить рецепт, дать совет по еде, сказать, что тебе нужно, и прокомментировать вкус.",
+words:["assaggiare","il primo","il secondo","il contorno","salato","crudo","cotto","il forno","la padella","la pentola","aggiungere","mescolare","tagliare","il sapore","la dieta","servire"],
+grammar:["g27"],
+read:{t:"La pasta alla Norma di nonna Rosa",text:"Ciao a tutti! Oggi vi spiego la ricetta della pasta alla Norma, un primo tipico di Catania. Vi servono: mezzo chilo di pasta, due melanzane, una salsa di pomodoro, basilico e ricotta salata. Prima tagliate le melanzane a cubetti e friggetele in padella con l'olio. Non mettete troppo sale! Nel frattempo cuocete la pasta in una pentola con molta acqua. Quando è cotta, mescolatela con la salsa e le melanzane. Alla fine aggiungete il basilico e grattugiate sopra la ricotta salata. Assaggiatela subito, è buonissima calda! Un consiglio: se siete a dieta, cuocete le melanzane al forno invece di friggerle.",
+ru:"Всем привет! Сегодня объясню вам рецепт пасты «алла Норма» — типичного первого блюда Катании. Вам понадобятся: полкило пасты, два баклажана, томатный соус, базилик и солёная рикотта. Сначала нарежьте баклажаны кубиками и обжарьте их на сковороде в масле. Не кладите слишком много соли! Тем временем сварите пасту в кастрюле с большим количеством воды. Когда она сварится, перемешайте её с соусом и баклажанами. В конце добавьте базилик и натрите сверху солёную рикотту. Попробуйте сразу, горячей она очень вкусная! Совет: если вы на диете, запеките баклажаны в духовке, а не жарьте.",
+gl:"ciao=привет|a=всем (a tutti)|tutti=все|oggi=сегодня|vi=вам|spiego=объясняю|la=артикль ж. р.|ricetta=рецепт|della=(di + la)|pasta=паста|alla=в стиле (alla Norma)|norma=Норма (название блюда)|un=артикль м. р.|primo=первое блюдо|tipico=типичный|di=из|catania=Катания|servono=нужны (servire)|mezzo=пол-|chilo=килограмм|due=два|melanzane=баклажаны|una=артикль ж. р.|salsa=соус|pomodoro=помидор|basilico=базилик|e=и|ricotta=рикотта|salata=солёная|prima=сначала|tagliate=нарежьте|le=артикль ж. р. мн. ч.|cubetti=кубики|friggetele=обжарьте их (friggete + le)|in=в, на|padella=сковорода|con=с|l'olio=масло|non=не|mettete=кладите|troppo=слишком много|sale=соль|nel=(in + il)|frattempo=тем временем|cuocete=варите|pentola=кастрюля|molta=много|acqua=вода|quando=когда|è=есть|cotta=сварена|mescolatela=перемешайте её|alla=в (a + la)|fine=конец (alla fine — в конце)|aggiungete=добавьте|il=артикль м. р.|grattugiate=натрите|sopra=сверху|assaggiatela=попробуйте её|subito=сразу|buonissima=очень вкусная|calda=горячая|consiglio=совет|se=если|siete=вы есть|dieta=диета|al=в (a + il)|forno=духовка|invece=вместо (invece di)|friggerle=жарить их",
+q:[["Di dov'è la pasta alla Norma? (Откуда паста алла Норма?)",["Di Palermo","Di Catania","Di Napoli"],1,"«un primo tipico di Catania»."],
+["Che cosa si fa prima? (Что делают сначала?)",["Si cuoce la pasta","Si tagliano le melanzane","Si prepara la salsa"],1,"«Prima tagliate le melanzane»."],
+["Che cosa si mette alla fine? (Что кладут в конце?)",["Basilico e ricotta salata","Sale e olio","Parmigiano"],0,"«aggiungete il basilico e… la ricotta salata»."],
+["Che consiglio dà a chi è a dieta? (Какой совет тем, кто на диете?)",["Non mangiare la pasta","Cuocere le melanzane al forno","Usare meno ricotta"],1,"«cuocete le melanzane al forno»."]]},
+listen:{t:"A cena da amici",lines:[[0,"Assaggia questa caponata, l'ho fatta io!","Попробуй эту капонату, я сама её приготовила!"],[1,"Mmm, è buonissima! Che cosa c'è dentro?","Ммм, очень вкусно! Что в ней?"],[0,"Melanzane, sedano, olive, capperi, aceto e un po' di zucchero.","Баклажаны, сельдерей, оливки, каперсы, уксус и немного сахара."],[1,"Ha un sapore dolce e salato insieme. Dammi la ricetta!","У неё вкус и сладкий, и солёный сразу. Дай мне рецепт!"],[0,"Te la scrivo dopo. Ma non dimenticare: va mangiata fredda!","Напишу тебе потом. Только не забудь: её едят холодной!"],[1,"Va bene. Ne prendo ancora un po', se posso!","Хорошо. Возьму ещё немного, если можно!"]],
+q:[["Chi ha fatto la caponata? (Кто приготовил капонату?)",["La padrona di casa","Sua madre","Un ristorante"],0,"«l'ho fatta io»."],
+["Com'è il sapore della caponata? (Какой у капонаты вкус?)",["Piccante","Dolce e salato insieme","Amaro"],1,"«Ha un sapore dolce e salato insieme»."],
+["Come si mangia la caponata? (Как едят капонату?)",["Calda","Fredda","Con il pane caldo"],1,"«va mangiata fredda»."]]},
+write:[{k:"order",ru:"Не клади слишком много соли!",it:"Non mettere troppo sale!"},{k:"order",ru:"Попробуй её, она очень вкусная!",it:"Assaggiala è buonissima!"},
+{k:"tr",ru:"Скажи мне рецепт! (другу)",ans:["Dimmi la ricetta!","Dimmi la ricetta"]},
+{k:"tr",ru:"Нам нужна большая кастрюля.",ans:["Ci serve una pentola grande","Ci serve una grande pentola"]},
+{k:"free",p:"Напиши рецепт любимого блюда для друга, на «ты»: что нужно и что делать по шагам. Используй повелительное (taglia, metti, aggiungi) и одно «non + инфинитив» (5–6 фраз).",model:"Ti servono riso, carne, carote e cipolle. Prima taglia la carne e le verdure. Metti tutto in una pentola con l'olio. Poi aggiungi il riso e l'acqua. Non mescolare troppo! Alla fine assaggialo: è il plov di mia madre.",chk:[["что нужно: ti serve / ti servono…","ti serv|servono|serve"],["повелительное: taglia, metti, aggiungi…","\\b(taglia|metti|aggiungi|mescola|cuoci|prendi|lava|friggi|assaggia|versa|lascia)\\w*"],["запрет: non + инфинитив","non \\w+(are|ere|ire)\\b"],["порядок: prima / poi / alla fine","prima|poi|alla fine|dopo"]]}],
+speak:[{k:"say",it:"Assaggia, l'ho fatto io!",ru:"Попробуй, я сам это приготовил!"},{k:"say",it:"Non mettere troppo sale, per favore.",ru:"Не клади много соли, пожалуйста."},
+{k:"ans",q:"Che cosa ti serve per la pasta alla Norma?",ru:"Что тебе нужно для пасты алла Норма?",model:"Mi servono pasta, melanzane, pomodoro e ricotta salata."},{k:"ans",q:"Com'è il sugo?",ru:"Какой соус?",model:"È buonissimo, ma un po' salato."},{k:"ans",q:"Mi dai la ricetta?",ru:"Дашь мне рецепт?",model:"Certo, te la scrivo stasera."}],
+test:[["___ troppo zucchero! (не клади, ты)",["Non mettere","Non metti","Non mette"],0,"Запрет для ты → non + инфинитив."],
+["La torta? ___ ! (попробуй её)",["Assaggiala","La assaggia","Assaggiarla"],0,"Местоимение приклеивается."],
+["___ la verità! (dire, ты)",["Di'","Dice","Dica"],0,"dire → di'."],
+["___ attento! (stare, ты)",["Sta'","Stai essere","Stia"],0,"stare → sta' (будь внимателен)."],
+["Ci ___ due uova.",["servono","serve","servite"],0,"uova — мн. ч. → servono."],
+["Il secondo è…",["мясо или рыба","паста или суп","десерт"],0,"il secondo — второе блюдо."],
+{k:"type",q:"Повелительное для «ты»: aggiungere → ___ il sale!",ans:["aggiungi"],e:"-ere → -i: aggiungi."},
+{k:"type",q:"Fa' + mi = ___ vedere! (дай посмотреть)",ans:["fammi"],e:"fa' + mi → fammi (удвоение)."},
+["Что ты услышал?",["Режь лук мелко","Положи лук в духовку","Не режь лук"],0,"«Taglia la cipolla piccola».","Taglia la cipolla piccola."],
+["Что ты услышал?",["Слишком солёное","Очень сладкое","Совсем без вкуса"],0,"«È troppo salato».","È troppo salato."]]},
+
+{id:"a7",em:"🩺",t:"Как самочувствие?",ne:"Lezione 7 · Come va?",goal:"Описать симптомы врачу и в аптеке, понять советы на «Вы», сказать, что тебе лучше или хуже.",
+words:["il medico","l'ambulatorio","la visita","il dolore","avere mal di…","la pastiglia","lo sciroppo","riposare","sano","malato","guarire","la palestra","la salute","meglio","peggio","il pronto soccorso"],
+grammar:["g28"],
+read:{t:"Dal medico di base",text:"In Italia, quando stai male, prima vai dal medico di base. Ogni persona che ha la tessera sanitaria ha un medico di famiglia. Di solito l'ambulatorio è aperto la mattina o il pomeriggio e la visita è gratuita. Se hai la febbre alta e non puoi uscire, il medico può venire a casa. In farmacia puoi comprare molte medicine senza ricetta, per esempio uno sciroppo per la tosse o delle pastiglie per il mal di gola. Il farmacista dà spesso buoni consigli: «Beva molta acqua, riposi e non esca con questo freddo!» Per i casi urgenti, invece, c'è il pronto soccorso dell'ospedale, aperto giorno e notte. Il numero di emergenza è il 112.",
+ru:"В Италии, если тебе плохо, сначала идёшь к терапевту. У каждого, у кого есть медицинская карточка, есть семейный врач. Обычно кабинет открыт утром или днём, и приём бесплатный. Если у тебя высокая температура и ты не можешь выйти, врач может прийти на дом. В аптеке можно купить многие лекарства без рецепта, например сироп от кашля или таблетки от боли в горле. Фармацевт часто даёт хорошие советы: «Пейте много воды, отдыхайте и не выходите в такой холод!» А для срочных случаев есть приёмный покой больницы, открытый день и ночь. Номер экстренной службы — 112.",
+gl:"in=в|italia=Италия|quando=когда|stai=(stare male — плохо себя чувствовать)|male=плохо|prima=сначала|vai=идёшь|dal=к (da + il)|medico=врач|di=(предлог)|base=основа (medico di base — терапевт)|ogni=каждый|persona=человек|che=который|ha=имеет|la=артикль ж. р.|tessera=карточка|sanitaria=медицинская|un=артикль м. р.|famiglia=семья|solito=обычно (di solito)|l'ambulatorio=кабинет врача|è=есть|aperto=открыт|mattina=утро|o=или|il=артикль м. р.|pomeriggio=время после обеда|e=и|visita=приём, осмотр|gratuita=бесплатная|se=если|hai=имеешь|febbre=температура|alta=высокая|non=не|puoi=можешь|uscire=выходить|può=может|venire=прийти|a=на, в|casa=дом|farmacia=аптека|comprare=купить|molte=многие|medicine=лекарства|senza=без|ricetta=рецепт|per=для, от|esempio=пример (per esempio — например)|uno=артикль м. р.|sciroppo=сироп|tosse=кашель|delle=немного (di + le)|pastiglie=таблетки|mal=боль (mal di gola — боль в горле)|gola=горло|farmacista=фармацевт|dà=даёт|spesso=часто|buoni=хорошие|consigli=советы|beva=пейте (вежливое повелительное от bere)|molta=много|acqua=вода|riposi=отдыхайте (Lei)|esca=выходите (Lei, от uscire)|con=с, в|questo=этот|freddo=холод|i=артикль мн. ч.|casi=случаи|urgenti=срочные|invece=зато, а|c'è=есть|pronto=скорый (pronto soccorso — неотложная помощь)|soccorso=помощь|dell'=(di + l')|ospedale=больница|giorno=день|notte=ночь|numero=номер|emergenza=экстренная ситуация|112=112",
+q:[["Da chi vai prima quando stai male? (К кому идёшь сначала, если плохо?)",["Al pronto soccorso","Dal medico di base","In farmacia"],1,"«prima vai dal medico di base»."],
+["Quanto costa la visita dal medico di base? (Сколько стоит приём у терапевта?)",["Venti euro","È gratuita","Dipende"],1,"«la visita è gratuita»."],
+["Che cosa consiglia il farmacista? (Что советует фармацевт?)",["Bere acqua e riposare","Fare sport","Mangiare di più"],0,"«Beva molta acqua, riposi…»."],
+["Qual è il numero di emergenza? (Какой номер экстренной службы?)",["113","112","118"],1,"«Il numero di emergenza è il 112»."]]},
+listen:{t:"In farmacia",lines:[[0,"Buongiorno, mi dica.","Добрый день, слушаю вас."],[1,"Buongiorno. Ho mal di gola e un po' di tosse da tre giorni.","Добрый день. У меня три дня болит горло и немного кашель."],[0,"Ha anche la febbre?","Температура тоже есть?"],[1,"No, la febbre no, ma mi sento stanco.","Нет, температуры нет, но я чувствую усталость."],[0,"Allora prenda queste pastiglie tre volte al giorno, dopo i pasti. E beva tè caldo con il miele.","Тогда принимайте эти таблетки три раза в день, после еды. И пейте горячий чай с мёдом."],[1,"Grazie. E se non sto meglio?","Спасибо. А если не станет лучше?"],[0,"Se fra tre giorni sta ancora male, vada dal medico.","Если через три дня всё ещё будет плохо, идите к врачу."]],
+q:[["Che cosa ha il cliente? (Что у покупателя?)",["Mal di testa","Mal di gola e tosse","Mal di stomaco"],1,"«Ho mal di gola e un po' di tosse»."],
+["Quante volte al giorno deve prendere le pastiglie? (Сколько раз в день принимать таблетки?)",["Una","Due","Tre"],2,"«tre volte al giorno»."],
+["Che cosa deve fare se non sta meglio? (Что делать, если не станет лучше?)",["Andare dal medico","Prendere più pastiglie","Andare al pronto soccorso subito"],0,"«vada dal medico»."]]},
+write:[{k:"order",ru:"У меня болит голова.",it:"Ho mal di testa"},{k:"order",ru:"Принимайте эти таблетки после еды.",it:"Prenda queste pastiglie dopo i pasti"},
+{k:"tr",ru:"Сегодня мне лучше, чем вчера.",ans:["Oggi sto meglio di ieri","Sto meglio di ieri oggi","Oggi sto meglio rispetto a ieri"]},
+{k:"tr",ru:"Слушаю вас! (врач пациенту)",ans:["Mi dica!","Mi dica"]},
+{k:"free",p:"Ты у врача. Напиши, что у тебя болит, как давно, есть ли температура. Потом напиши 2–3 совета врача на «Вы» (prenda, beva, riposi…). 5–6 фраз.",model:"Dottore, ho mal di testa e mal di gola da due giorni. Non ho la febbre, ma sono molto stanco. — Prenda questo sciroppo la sera. Beva molta acqua e riposi. Non vada al lavoro domani.",chk:[["ho mal di… / mi fa male…","mal di|fa male|fanno male"],["как давно: da due giorni…","da \\w+ (giorni|giorno|settimana|settimane|ore)|da ieri|da stamattina"],["советы на «Вы»: prenda, beva, riposi, vada…","\\b(prenda|beva|riposi|vada|faccia|stia|torni|mangi|dorma|eviti|chiami|esca)\\b"]]}],
+speak:[{k:"say",it:"Ho mal di testa e un po' di febbre.",ru:"У меня болит голова и небольшая температура."},{k:"say",it:"Scusi, ha qualcosa per il mal di gola?",ru:"Извините, у вас есть что-нибудь от боли в горле?"},
+{k:"ans",q:"Che cosa si sente?",ru:"Что вы чувствуете?",model:"Ho mal di stomaco da ieri sera."},{k:"ans",q:"Come sta oggi?",ru:"Как вы сегодня?",model:"Sto meglio, grazie."},{k:"ans",q:"Fa sport?",ru:"Вы занимаетесь спортом?",model:"Sì, vado in palestra due volte a settimana."}],
+test:[["Dottore, ___ ! (вежливо: скажите мне)",["mi dica","dimmi","mi dice"],0,"Lei → mi dica."],
+["___ questo sciroppo la sera. (prendere, Lei)",["Prenda","Prendi","Prende"],0,"-ere → -a."],
+["Non ___ alcol, signore. (bere, Lei)",["beva","bevi","bere"],0,"bere → beva."],
+["___ a destra e poi sempre dritto. (andare, Lei)",["Vada","Va'","Vai"],0,"andare → vada."],
+["Oggi sto ___ , grazie. (лучше)",["meglio","migliore","più bene"],0,"bene → meglio."],
+["Questa medicina è ___ di quella. (лучше)",["migliore","meglio","più buono"],0,"buono → migliore."],
+{k:"type",q:"Напиши по-итальянски: «У меня болит горло»",ans:["ho mal di gola","mi fa male la gola"],e:"Ho mal di gola."},
+{k:"type",q:"Вежливое повелительное: scusare (Lei) → ___",ans:["scusi"],e:"-are → -i: scusi."},
+["Что ты услышал?",["Есть ли у вас температура?","Где у вас болит?","Вы принимаете лекарства?"],0,"«Ha la febbre?»","Ha la febbre?"],
+["Что ты услышал?",["Отдыхайте два дня","Ходите на работу","Пейте холодное"],0,"«Riposi per due giorni».","Riposi per due giorni."]]},
+
+{id:"a8",em:"💼",t:"Уважаемый доктор…",ne:"Lezione 8 · Egregio Dottor…",goal:"Понять объявление о работе, написать короткое сопроводительное письмо, рассказать о планах на будущее.",
+words:["il colloquio","il curriculum","l'annuncio","il contratto","lo stipendio","l'azienda","l'esperienza","il capo","la riunione","a tempo pieno","le ferie","candidarsi","il futuro","bisogna","la laurea","il turno"],
+grammar:["g29"],
+read:{t:"Annuncio di lavoro",text:"Azienda di software di Messina cerca un data analyst per il nuovo ufficio in centro. Requisiti: laurea in informatica, statistica o economia; esperienza di almeno un anno; ottima conoscenza dell'inglese; conoscenza base dell'italiano. Offriamo: contratto a tempo pieno, stipendio adeguato all'esperienza, ventisei giorni di ferie, possibilità di lavorare da casa due giorni a settimana. Il candidato lavorerà in un piccolo team e parteciperà alle riunioni con i clienti. Se ti interessa, invia il curriculum e una lettera di presentazione entro il 30 novembre. I colloqui si faranno a dicembre, anche online.",
+ru:"Компания-разработчик ПО из Мессины ищет аналитика данных в новый офис в центре. Требования: диплом по информатике, статистике или экономике; опыт от одного года; отличное знание английского; базовое знание итальянского. Мы предлагаем: договор на полный рабочий день, зарплату в соответствии с опытом, двадцать шесть дней отпуска, возможность работать из дома два дня в неделю. Кандидат будет работать в небольшой команде и участвовать во встречах с клиентами. Если тебе интересно, отправь резюме и сопроводительное письмо до 30 ноября. Собеседования пройдут в декабре, в том числе онлайн.",
+gl:"azienda=компания|di=из, по|software=программное обеспечение|messina=Мессина|cerca=ищет|un=артикль м. р.|data=данные (data analyst)|analyst=аналитик|per=для, в|il=артикль м. р.|nuovo=новый|ufficio=офис|in=в|centro=центр|requisiti=требования|laurea=диплом|informatica=информатика|statistica=статистика|o=или|economia=экономика|esperienza=опыт|almeno=как минимум|anno=год|ottima=отличная|conoscenza=знание|dell'=(di + l')|inglese=английский|base=базовая|italiano=итальянский|offriamo=предлагаем|contratto=договор|a=на|tempo=время (a tempo pieno — полный день)|pieno=полный|stipendio=зарплата|adeguato=соответствующий|all'=(a + l')|ventisei=двадцать шесть|giorni=дней|ferie=отпуск|possibilità=возможность|lavorare=работать|da=из (da casa — из дома)|casa=дом|due=два|settimana=неделя|candidato=кандидат|lavorerà=будет работать (futuro)|piccolo=небольшой|team=команда|e=и|parteciperà=будет участвовать|alle=в (a + le)|riunioni=совещания|con=с|i=артикль мн. ч.|clienti=клиенты|se=если|ti=тебе|interessa=интересно|invia=отправь|curriculum=резюме|una=артикль ж. р.|lettera=письмо|presentazione=представление (lettera di presentazione — сопроводительное письмо)|entro=до|30=30|novembre=ноябрь|colloqui=собеседования|si=(безличное)|faranno=пройдут, будут проводиться|dicembre=декабрь|anche=также|online=онлайн",
+q:[["Che lavoro offre l'azienda? (Какую работу предлагает компания?)",["Programmatore","Data analyst","Commesso"],1,"«cerca un data analyst»."],
+["Quanta esperienza bisogna avere? (Какой нужен опыт?)",["Nessuna","Almeno un anno","Cinque anni"],1,"«esperienza di almeno un anno»."],
+["Quanti giorni si può lavorare da casa? (Сколько дней можно работать из дома?)",["Uno","Due","Cinque"],1,"«due giorni a settimana»."],
+["Quando ci saranno i colloqui? (Когда будут собеседования?)",["A novembre","A dicembre","A gennaio"],1,"«I colloqui si faranno a dicembre»."]]},
+listen:{t:"Il colloquio",lines:[[0,"Buongiorno, si accomodi. Mi parli un po' di Lei.","Добрый день, присаживайтесь. Расскажите немного о себе."],[1,"Buongiorno. Mi chiamo Yera, sono kazako e faccio un master in Data Science a Messina.","Добрый день. Меня зовут Ера, я казах, учусь в магистратуре по Data Science в Мессине."],[0,"Ha già esperienza di lavoro?","У вас уже есть опыт работы?"],[1,"Sì, ho lavorato due anni come project manager.","Да, два года работал проект-менеджером."],[0,"E fra cinque anni dove si vede?","А где вы видите себя через пять лет?"],[1,"Spero di lavorare come analista. Se troverò lavoro qui, resterò in Italia.","Надеюсь работать аналитиком. Если найду работу здесь, останусь в Италии."],[0,"Bene. Le faremo sapere entro una settimana.","Хорошо. Мы дадим вам ответ в течение недели."]],
+q:[["Che cosa studia Yera? (Что изучает Ера?)",["Economia","Un master in Data Science","Ingegneria"],1,"«faccio un master in Data Science»."],
+["Che esperienza ha? (Какой у него опыт?)",["Nessuna","Due anni come project manager","Cinque anni come analista"],1,"«ho lavorato due anni come project manager»."],
+["Che cosa farà se trova lavoro in Italia? (Что он сделает, если найдёт работу в Италии?)",["Tornerà in Kazakistan","Resterà in Italia","Andrà in Germania"],1,"«resterò in Italia»."]]},
+write:[{k:"order",ru:"Через год я закончу магистратуру.",it:"Fra un anno finirò il master"},{k:"order",ru:"Если найду работу, останусь в Мессине.",it:"Se trovo lavoro resterò a Messina"},
+{k:"tr",ru:"Сколько у тебя уходит времени, чтобы добраться до работы?",ans:["Quanto ci metti per arrivare al lavoro?","Quanto tempo ci metti per arrivare al lavoro?"]},
+{k:"tr",ru:"Для этой работы нужно знать английский.",ans:["Per questo lavoro bisogna sapere l'inglese","Bisogna sapere l'inglese per questo lavoro","Per questo lavoro bisogna conoscere l'inglese"]},
+{k:"free",p:"Напиши короткое сопроводительное письмо на объявление о работе: обращение, кто ты, какой опыт, почему подходишь, вежливое завершение (5–6 фраз).",model:"Gentile dottoressa Rossi, mi chiamo Yera Alimkul e Le scrivo per l'annuncio di data analyst. Ho una laurea in informatica e due anni di esperienza come project manager. Parlo inglese, russo e un po' di italiano. Sarei felice di lavorare nella Sua azienda. In attesa di una Sua risposta, Le invio cordiali saluti.",chk:[["обращение: Gentile… / Egregio…","gentile|egregio|spettabile"],["представление: mi chiamo… / Le scrivo per…","mi chiamo|le scrivo|sono \\w+"],["опыт: esperienza / ho lavorato…","esperienza|ho lavorato|lavoro come"],["вежливое завершение: cordiali saluti / distinti saluti","cordiali saluti|distinti saluti|in attesa"]]}],
+speak:[{k:"say",it:"Ho due anni di esperienza come project manager.",ru:"У меня два года опыта проект-менеджером."},{k:"say",it:"Fra cinque anni spero di lavorare come analista.",ru:"Через пять лет надеюсь работать аналитиком."},
+{k:"ans",q:"Che lavoro fai?",ru:"Кем ты работаешь?",model:"Sono account manager in un'agenzia."},{k:"ans",q:"Che cosa farai l'anno prossimo?",ru:"Что ты будешь делать в следующем году?",model:"Finirò il master e cercherò lavoro."},{k:"ans",q:"Quanto ci metti per andare all'università?",ru:"Сколько ты добираешься до университета?",model:"Ci metto venti minuti a piedi."}],
+test:[["Domani ___ al lavoro alle otto. (andare, io)",["andrò","anderò","vado stato"],0,"andare → andr-ò."],
+["L'anno prossimo ___ la laurea. (prendere, noi)",["prenderemo","prendremo","prendiamo stati"],0,"noi → prender-emo."],
+["Se ___ tempo, ti chiamo. (avere, io)",["ho","avrei","avevo"],0,"se + настоящее."],
+["Il capo non c'è. ___ in riunione. (наверное)",["Sarà","Sarebbe","Era"],0,"Догадка → futuro."],
+["Per arrivare in ufficio ___ mezz'ora. (у меня уходит)",["ci metto","ci vuole io","mi metto"],0,"metterci → ci metto."],
+["Per questo lavoro ___ parlare inglese.",["bisogna","bisogno","bisognano"],0,"bisogna + инфинитив."],
+{k:"type",q:"Futuro: io (essere) → ___",ans:["sarò","saro"],e:"essere → sarò."},
+{k:"type",q:"Напиши по-итальянски: «собеседование»",ans:["il colloquio","colloquio","un colloquio"],e:"il colloquio."},
+["Что ты услышал?",["Мы дадим вам знать через неделю","Вы приняты на работу","Приходите завтра"],0,"«Le faremo sapere fra una settimana».","Le faremo sapere fra una settimana."],
+["Что ты услышал?",["Договор на полный день","Договор на неполный день","Работа без договора"],0,"«Un contratto a tempo pieno».","Un contratto a tempo pieno."]]},
+
+{id:"a9",em:"💘",t:"Любовь с первого взгляда",ne:"Lezione 9 · Colpo di fulmine",goal:"Рассказать историю знакомства по порядку, извиниться, проявить любопытство и сожаление.",
+words:["innamorarsi","il colpo di fulmine","il fidanzato","la fidanzata","sposarsi","conoscersi","lasciarsi","il bacio","geloso","il matrimonio","all'inizio","alla fine","finalmente","mentre","durante","però","quindi"],
+grammar:["g30"],
+read:{t:"Come ci siamo conosciuti",text:"Era una sera di maggio e pioveva. Io stavo per chiudere il computer quando la mia amica Aida mi ha chiamato: «Vieni alla festa di compleanno di Dina?» All'inizio non volevo andare, perché ero stanco, però alla fine ho detto di sì. Durante la festa ho visto una ragazza con un vestito verde che rideva con le amiche. È stato un colpo di fulmine! Mentre cercavo il coraggio di parlarle, lei mi ha chiesto: «Scusa, sai dov'è la cucina?» Abbiamo parlato tutta la sera. Purtroppo il giorno dopo lei è dovuta partire per Londra, quindi ci siamo scritti per tre mesi. Finalmente a settembre è tornata. Due anni dopo ci siamo sposati.",
+ru:"Был майский вечер, шёл дождь. Я как раз собирался закрыть компьютер, когда позвонила моя подруга Аида: «Придёшь на день рождения Дины?» Сначала я не хотел идти, потому что устал, но в конце концов согласился. На празднике я увидел девушку в зелёном платье, которая смеялась с подругами. Это была любовь с первого взгляда! Пока я набирался смелости заговорить с ней, она спросила меня: «Извини, не знаешь, где кухня?» Мы проговорили весь вечер. К сожалению, на следующий день ей пришлось уехать в Лондон, поэтому мы переписывались три месяца. Наконец в сентябре она вернулась. Через два года мы поженились.",
+gl:"era=был (essere, imperfetto)|una=артикль ж. р.|sera=вечер|di=из (di maggio — майский)|maggio=май|e=и|pioveva=шёл дождь|io=я|stavo=(stare per — собираться, вот-вот)|per=(stare per)|chiudere=закрыть|il=артикль м. р.|computer=компьютер|quando=когда|la=артикль ж. р.|mia=моя|amica=подруга|aida=Аида (имя)|mi=мне, меня|ha=(avere, вспомогательный)|chiamato=позвонила|vieni=придёшь|alla=на (a + la)|festa=праздник|compleanno=день рождения|dina=Дина (имя)|all'inizio=сначала|non=не|volevo=хотел|andare=идти|perché=потому что|ero=был|stanco=уставший|però=но|fine=конец (alla fine — в конце концов)|ho=я (avere, вспомогательный)|detto=сказал|sì=да|durante=во время|visto=увидел|ragazza=девушка|con=с|un=артикль м. р.|vestito=платье|verde=зелёный|che=которая|rideva=смеялась|le=артикль ж. р. мн. ч.|amiche=подруги|è=(essere, вспомогательный)|stato=было|colpo=удар (colpo di fulmine — любовь с первого взгляда)|fulmine=молния|mentre=пока|cercavo=искал|coraggio=смелость|parlarle=заговорить с ней|lei=она|chiesto=спросила|scusa=извини|sai=знаешь|dov'è=где находится|cucina=кухня|abbiamo=мы (avere)|parlato=говорили|tutta=весь|purtroppo=к сожалению|giorno=день|dopo=после, через|dovuta=пришлось (è dovuta partire)|partire=уехать|londra=Лондон|quindi=поэтому|ci=(ci siamo — мы друг другу)|siamo=мы (essere)|scritti=писали друг другу|tre=три|mesi=месяца|finalmente=наконец|a=в|settembre=сентябрь|tornata=вернулась|due=два|anni=года|sposati=поженились",
+q:[["Che tempo faceva quella sera? (Какая была погода в тот вечер?)",["C'era il sole","Pioveva","Nevicava"],1,"«Era una sera di maggio e pioveva»."],
+["Perché all'inizio non voleva andare alla festa? (Почему сначала не хотел идти?)",["Era stanco","Non conosceva Dina","Doveva lavorare"],0,"«perché ero stanco»."],
+["Che cosa gli ha chiesto la ragazza? (Что спросила девушка?)",["Come si chiamava","Dov'era la cucina","Che ore erano"],1,"«sai dov'è la cucina?»"],
+["Perché si sono scritti per tre mesi? (Почему они переписывались три месяца?)",["Lei è partita per Londra","Lui lavorava molto","Erano timidi"],0,"«lei è dovuta partire per Londra»."]]},
+listen:{t:"Scusa il ritardo!",lines:[[0,"Scusa il ritardo! Il treno è rimasto fermo mezz'ora.","Прости за опоздание! Поезд полчаса стоял."],[1,"Non fa niente. Allora, racconta! Com'è andata con Sara?","Ничего страшного. Ну, рассказывай! Как дела с Сарой?"],[0,"Benissimo! Ieri sera siamo andati a cena sul lungomare.","Прекрасно! Вчера вечером мы ужинали на набережной."],[1,"Davvero? E poi?","Правда? А потом?"],[0,"Poi mentre passeggiavamo ha cominciato a piovere e ci siamo riparati in un bar.","Потом, пока мы гуляли, начался дождь, и мы спрятались в баре."],[1,"Che romantico! Vi rivedrete?","Как романтично! Вы ещё увидитесь?"],[0,"Sì, sabato. Però sono un po' nervoso…","Да, в субботу. Но я немного нервничаю…"]],
+q:[["Perché è in ritardo? (Почему он опоздал?)",["Si è svegliato tardi","Il treno è rimasto fermo","Ha perso le chiavi"],1,"«Il treno è rimasto fermo mezz'ora»."],
+["Dove sono andati a cena? (Где они ужинали?)",["Sul lungomare","In centro","A casa di Sara"],0,"«siamo andati a cena sul lungomare»."],
+["Che cosa è successo mentre passeggiavano? (Что случилось, пока они гуляли?)",["Hanno incontrato amici","Ha cominciato a piovere","Si sono persi"],1,"«ha cominciato a piovere»."]]},
+write:[{k:"order",ru:"Пока я ждал автобус, я её увидел.",it:"Mentre aspettavo l'autobus l'ho vista"},{k:"order",ru:"Я как раз собирался уходить.",it:"Stavo per uscire"},
+{k:"tr",ru:"Прости за опоздание!",ans:["Scusa il ritardo!","Scusa per il ritardo!","Scusami per il ritardo!"]},
+{k:"tr",ru:"Нам пришлось уехать рано.",ans:["Siamo dovuti partire presto","Abbiamo dovuto partire presto"]},
+{k:"free",p:"Расскажи историю знакомства (свою или придуманную) по порядку: all'inizio, poi, mentre, alla fine. Фон — в imperfetto, события — в passato prossimo (6–7 фраз).",model:"Era l'estate del 2019 e faceva caldo. All'inizio non conoscevo nessuno in città. Poi un'amica mi ha invitato a una festa. Mentre ballavo, ho visto una ragazza bellissima. Le ho chiesto il numero di telefono. Alla fine ci siamo innamorati e ci siamo sposati.",chk:[["связки: all'inizio, poi, alla fine…","all inizio|poi|alla fine|dopo|finalmente"],["mentre + imperfetto","mentre \\w+(avo|evo|ivo|ava|eva|iva|avamo|evamo|ivamo)\\b"],["события в passato prossimo","(ho|ha|abbiamo|sono|e|siamo|ci siamo) \\w+(ato|ata|ati|uto|uta|ito|ita|iti|esto|isto|isto)\\b"],["фон в imperfetto: era, faceva…","\\b(era|faceva|c era|pioveva|avevo|ero)\\b"]]}],
+speak:[{k:"say",it:"All'inizio non volevo andare, però alla fine ho detto di sì.",ru:"Сначала я не хотел идти, но в конце концов согласился."},{k:"say",it:"Scusa il ritardo, il treno era fermo.",ru:"Прости за опоздание, поезд стоял."},
+{k:"ans",q:"Come vi siete conosciuti tu e tua moglie?",ru:"Как вы познакомились с женой?",model:"Ci siamo conosciuti all'università."},{k:"ans",q:"Che cosa facevi quando ti ho chiamato?",ru:"Что ты делал, когда я позвонил?",model:"Stavo per uscire."},{k:"ans",q:"Davvero? E poi?",ru:"Правда? А потом?",model:"Poi abbiamo parlato tutta la sera."}],
+test:[["___ la lezione ho dormito un po'. (во время)",["Durante","Mentre","Quando"],0,"Перед существительным → durante."],
+["___ guidavo, ascoltavo musica. (пока)",["Mentre","Durante","Dopo"],0,"Перед глаголом → mentre."],
+["Stavo ___ uscire quando è arrivato.",["per","a","di"],0,"stare per + инфинитив."],
+["Ieri ___ dovuto lavorare fino a tardi.",["ho","sono","sto"],0,"lavorare → avere: ho dovuto."],
+["Giulia ___ dovuta partire.",["è","ha","sta"],0,"partire → essere: è dovuta."],
+["Ero stanco, ___ sono rimasto a casa.",["quindi","però","mentre"],0,"поэтому → quindi."],
+{k:"type",q:"Напиши по-итальянски: «наконец»",ans:["finalmente"],e:"finalmente — наконец."},
+{k:"type",q:"Мы поженились: ci siamo ___ (sposarsi)",ans:["sposati"],e:"Возвратный глагол → essere, согласование: sposati."},
+["Что ты услышал?",["Это была любовь с первого взгляда","Это была плохая встреча","Мы были друзьями"],0,"«È stato un colpo di fulmine».","È stato un colpo di fulmine."],
+["Что ты услышал?",["Ничего страшного","Мне очень жаль","Как романтично"],0,"«Non fa niente».","Non fa niente."]]},
+
+{id:"a10",em:"🏡",t:"Дом, милый дом",ne:"Lezione 10 · Casa dolce casa",goal:"Описать квартиру и район, сравнить варианты, высказать мнение и пожелания (penso che, spero che).",
+words:["il monolocale","il bilocale","il balcone","il terrazzo","l'ascensore","il piano","il quartiere","luminoso","rumoroso","arredato","il riscaldamento","il condominio","il coinquilino","il trasloco","l'agenzia immobiliare","magari"],
+grammar:["g31"],
+read:{t:"Quale casa scegliamo?",text:"Yera e Julie cercano casa da un mese. Oggi l'agenzia immobiliare ha mandato due annunci. Il primo è un bilocale arredato in centro, al quarto piano senza ascensore, con un piccolo balcone. Costa 650 euro al mese. Il secondo è un trilocale non arredato vicino all'università: è più grande e luminoso, con un terrazzo e il riscaldamento autonomo, ma il quartiere è un po' rumoroso. Costa 700 euro. Julie pensa che il primo sia più comodo, perché in centro c'è tutto. Yera invece crede che sia meglio il secondo: «Penso che ci serva più spazio per studiare. E spero che il terrazzo abbia la vista sul mare!» «Magari!» ride Julie. Sabato andranno a vedere tutti e due.",
+ru:"Ера и Джули ищут жильё уже месяц. Сегодня агентство недвижимости прислало два объявления. Первое — меблированная двушка в центре, на четвёртом этаже без лифта, с маленьким балконом. Стоит 650 евро в месяц. Второе — немеблированная трёшка рядом с университетом: она больше и светлее, с террасой и автономным отоплением, но район немного шумный. Стоит 700 евро. Джули думает, что первая удобнее, потому что в центре всё есть. Ера же считает, что лучше вторая: «Думаю, нам нужно больше места для учёбы. И надеюсь, что с террасы будет вид на море!» «Если бы!» — смеётся Джули. В субботу они поедут смотреть обе.",
+gl:"yera=Ера (имя)|e=и|julie=Джули (имя)|cercano=ищут|casa=жильё, дом|da=уже, в течение (da un mese)|un=артикль м. р.|mese=месяц|oggi=сегодня|l'agenzia=агентство|immobiliare=недвижимости|ha=(avere, вспомогательный)|mandato=прислало|due=два|annunci=объявления|il=артикль м. р.|primo=первый|è=есть|bilocale=двухкомнатная квартира|arredato=меблированная|in=в|centro=центр|al=на (a + il)|quarto=четвёртый|piano=этаж|senza=без|ascensore=лифт|con=с|piccolo=маленький|balcone=балкон|costa=стоит|650=650|euro=евро|secondo=второй|trilocale=трёхкомнатная квартира|non=не|vicino=рядом|all'=(a + l')|università=университет|più=более|grande=большой|luminoso=светлый|terrazzo=терраса|riscaldamento=отопление|autonomo=автономный|ma=но|quartiere=район|po'=немного (un po')|rumoroso=шумный|700=700|pensa=думает|che=что|sia=есть (congiuntivo от essere)|comodo=удобный|perché=потому что|c'è=есть|tutto=всё|invece=же, напротив|crede=считает|meglio=лучше|penso=думаю|ci=нам|serva=нужно (congiuntivo от servire)|spazio=место|per=для|studiare=учиться|spero=надеюсь|abbia=имеет (congiuntivo от avere)|la=артикль ж. р.|vista=вид|sul=на (su + il)|mare=море|magari=если бы!|ride=смеётся|sabato=в субботу|andranno=пойдут (futuro)|a=(andare a + инфинитив)|vedere=смотреть|tutti=все (tutti e due — оба)",
+q:[["Quanto costa il bilocale? (Сколько стоит двушка?)",["600 euro","650 euro","700 euro"],1,"«Costa 650 euro al mese»."],
+["Che problema ha il bilocale? (Какой минус у двушки?)",["È rumoroso","È al quarto piano senza ascensore","Non è arredato"],1,"«al quarto piano senza ascensore»."],
+["Che cosa pensa Julie? (Что думает Джули?)",["Che il primo sia più comodo","Che il secondo sia più bello","Che siano troppo cari"],0,"«Julie pensa che il primo sia più comodo»."],
+["Che cosa spera Yera? (На что надеется Ера?)",["Che il terrazzo abbia la vista sul mare","Che l'affitto costi meno","Che ci sia l'ascensore"],0,"«spero che il terrazzo abbia la vista sul mare»."]]},
+listen:{t:"Al telefono con il proprietario",lines:[[0,"Buongiorno, chiamo per l'appartamento in via Cavour. È ancora libero?","Добрый день, я звоню насчёт квартиры на улице Кавура. Она ещё свободна?"],[1,"Sì, è libero da dicembre.","Да, свободна с декабря."],[0,"Le spese di condominio sono comprese nell'affitto?","Расходы на содержание дома входят в аренду?"],[1,"No, sono cinquanta euro a parte. Il riscaldamento è centralizzato.","Нет, это пятьдесят евро отдельно. Отопление центральное."],[0,"Capisco. Posso vederlo sabato mattina?","Понятно. Можно посмотреть в субботу утром?"],[1,"Certo. Va bene alle dieci?","Конечно. В десять подойдёт?"],[0,"Perfetto, a sabato!","Отлично, до субботы!"]],
+q:[["Da quando è libero l'appartamento? (С какого времени свободна квартира?)",["Da novembre","Da dicembre","Da gennaio"],1,"«è libero da dicembre»."],
+["Quanto sono le spese di condominio? (Сколько расходы на дом?)",["Sono comprese","Cinquanta euro a parte","Cento euro"],1,"«sono cinquanta euro a parte»."],
+["Quando va a vedere l'appartamento? (Когда пойдёт смотреть квартиру?)",["Sabato alle dieci","Domenica mattina","Oggi pomeriggio"],0,"«sabato mattina… alle dieci»."]]},
+write:[{k:"order",ru:"Думаю, что квартира слишком маленькая.",it:"Penso che l'appartamento sia troppo piccolo"},{k:"order",ru:"Надеюсь, что есть лифт.",it:"Spero che ci sia l'ascensore"},
+{k:"tr",ru:"Квартира светлая, но район шумный.",ans:["L'appartamento è luminoso, ma il quartiere è rumoroso","La casa è luminosa, ma il quartiere è rumoroso"]},
+{k:"tr",ru:"Мне кажется, это стоит слишком дорого.",ans:["Credo che costi troppo","Penso che costi troppo","Mi sembra che costi troppo"]},
+{k:"free",p:"Опиши квартиру мечты или сравни две квартиры, а потом выскажи мнение: penso che…, spero che…, è importante che… (5–6 фраз).",model:"Vorrei un bilocale luminoso con un balcone. È importante che sia vicino all'università. Penso che il centro sia troppo rumoroso. Spero che l'affitto non costi più di 600 euro. Magari con la vista sul mare!",chk:[["описание: luminoso, balcone, piano, quartiere…","luminos|balcon|terrazz|piano|quartier|ascensor|arredat|cucina|camera"],["penso che / credo che + congiuntivo","(penso|credo|mi sembra) che .*\\b(sia|siano|abbia|abbiano|costi|costino|stia|vada|faccia|possa)\\b"],["spero che / è importante che","spero che|importante che|bisogna che|voglio che"]]}],
+speak:[{k:"say",it:"Penso che il primo appartamento sia più comodo.",ru:"Думаю, первая квартира удобнее."},{k:"say",it:"È importante che ci sia il riscaldamento.",ru:"Важно, чтобы было отопление."},
+{k:"ans",q:"Com'è la tua casa?",ru:"Какая у тебя квартира?",model:"È un bilocale piccolo ma luminoso."},{k:"ans",q:"Che cosa pensi del quartiere?",ru:"Что ты думаешь о районе?",model:"Penso che sia tranquillo e comodo."},{k:"ans",q:"Ti piacerebbe una casa con la vista sul mare?",ru:"Хотел бы ты дом с видом на море?",model:"Magari!"}],
+test:[["Penso che l'affitto ___ troppo alto. (essere)",["sia","è","essere"],0,"penso che → sia."],
+["Spero che tu ___ bene. (stare)",["stia","stai","sta"],0,"stare → stia."],
+["Credo che la casa ___ un giardino. (avere)",["abbia","ha","avere"],0,"avere → abbia."],
+["So che l'appartamento ___ al terzo piano. (essere)",["è","sia","fosse"],0,"so che (факт) → è."],
+["Penso ___ cambiare casa. (я сам)",["di","che","a"],0,"Тот же субъект → di + инфинитив."],
+["È importante che la casa ___ vicino al lavoro.",["sia","è","essere"],0,"È importante che → sia."],
+{k:"type",q:"Congiuntivo: che lui (costare) → ___",ans:["costi"],e:"-are → -i: costi."},
+{k:"type",q:"Напиши по-итальянски: «лифт»",ans:["l'ascensore","ascensore","un ascensore"],e:"l'ascensore."},
+["Что ты услышал?",["Квартира на третьем этаже с балконом","Квартира на первом этаже с садом","Квартира без балкона"],0,"«L'appartamento è al terzo piano, con il balcone».","L'appartamento è al terzo piano, con il balcone."],
+["Что ты услышал?",["Коммунальные платежи включены","Коммунальные платежи отдельно","Отопления нет"],0,"«Le spese sono comprese».","Le spese sono comprese."]]}
+);
+
+/* ===== Порядок курса: A1 по Nuovo Espresso 1, затем A2 по Nuovo Espresso 2 ===== */
+(function(){
+  const by={};COURSE.forEach(m=>by[m.id]=m);by.m11=M11;
+  const A1=["m1","m2","m3","m5","m8","m7","m9","m11","m4","m6","m10"].map(id=>by[id]);
+  const NE=["Lezione 1 · Primi contatti","Lezione 2 · Io e gli altri","Lezione 3 · Buon appetito!","Lezione 4 · Tempo libero","Lezione 5 · In albergo","Lezione 6 · In giro per l'Italia","Lezione 7 · Andiamo in vacanza!","Lezione 8 · Sapori d'Italia","Lezione 9 · Vita quotidiana","Lezione 10 · La famiglia","Facciamo il punto · итог A1"];
+  A1.forEach((m,i)=>{m.lvl="A1";m.ne=NE[i]});COURSE_A2.forEach(m=>m.lvl="A2");
+  by.m3.grammar=["g3","g5","g6"];by.m5.grammar=["g9","g16"];by.m4.grammar=["g13"];
+  const CHK={
+    m1:[["Mi chiamo…","mi chiamo"],["Sono di… / Sono del…","sono (di|del|della|dell)"],["Ho … anni","ho \\w+ anni"],["Abito a… / in…","abito (a|in)"]],
+    m2:[["un / una / uno перед предметами","\\b(un|una|uno)\\b"],["несколько предметов: due, tre… во множественном","\\b(due|tre|quattro|cinque|sei|dei|delle|degli)\\b"]],
+    m3:[["Vorrei…","vorrei"],["per favore","per favore"],["Quanto pago? / Quanto costa?","quanto (pago|costa|costano|fa)"]],
+    m4:[["Mi sveglio alle…","mi sveglio"],["глаголы в форме «я»: prendo, studio, cucino…","\\b(prendo|studio|lavoro|cucino|vado|faccio|mangio|bevo|torno|leggo|esco|finisco|comincio|guardo|ceno|pranzo)\\b"],["время: alle + число","alle \\w+|all una|a mezzogiorno"]],
+    m5:[["mi piace + одна вещь или действие","mi piace\\b"],["mi piacciono + несколько вещей","piacciono"],["Non mi piace…","non mi piac"]],
+    m6:[["mio / mia перед родственником","\\b(mio|mia|miei|mie)\\b"],["прилагательные о людях","\\b(alto|alta|basso|bassa|simpatico|simpatica|giovane|gentile|bravo|brava|bello|bella|intelligente|tranquillo|tranquilla|allegro|allegra|piccola|piccolo|grande)\\b"]],
+    m7:[["c'è + одна вещь","\\bc e\\b"],["ci sono + несколько","ci sono"],["где: vicino a, a destra, davanti…","vicino|a destra|a sinistra|davanti|dietro|accanto|di fronte"]],
+    m8:[["Buongiorno / Salve","buongiorno|salve|gentile"],["cerco…","cerco"],["вопрос о цене: Quanto costa…?","quanto costa|quanto e|prezzo"],["коммунальные: le bollette / le spese","bollette|spese"]],
+    m9:[["с avere: ho mangiato, ho studiato…","\\b(ho|abbiamo|hai|ha) \\w+(ato|uto|ito|tto|sto|eso)\\b"],["с essere: sono andato, sono tornato…","\\b(sono|siamo|e|sei) (andat|tornat|uscit|arrivat|partit|stat|rimast|venut)\\w"],["когда: ieri, sabato, domenica…","ieri|sabato|domenica|weekend|fine settimana"]],
+    m10:[["Buongiorno / Gentile segreteria","buongiorno|gentile"],["представился: sono… / mi chiamo…","\\bsono \\w|mi chiamo"],["вопрос: come posso… / vorrei sapere…","come posso|vorrei sapere|potrebbe|posso"],["Grazie","grazie"]]
+  };
+  A1.forEach(m=>m.write.forEach(w=>{if(w.k==="free"&&!w.chk&&CHK[m.id])w.chk=CHK[m.id]}));
+  COURSE.length=0;COURSE.push(...A1,...COURSE_A2);
+})();
 
 /* ================== STATE ================== */
 const KEY="pianopiano.v1";
@@ -1946,9 +2795,9 @@ function vToday(){
   ${!("speechSynthesis" in window)?`<div class="card mt small" style="background:var(--terra-soft);border-color:transparent">В этом окне нет озвучки. Слушать произношение можно, если открыть приложение в браузере телефона.${TG&&TG.openLink?` <button class="link" id="openExt">Открыть в браузере</button>`:""}</div>`:""}
   ${syncMode==="local"&&!TG&&!window.claude?`<div class="card mt row" style="border-color:var(--sea)"><span style="font-size:24px">🔗</span><div class="grow"><b class="small">Войди через Telegram</b><div class="muted small">Прогресс будет общим с ботом @${BOT_NAME}</div></div><button class="btn sea" id="loginBtn" style="padding:10px 14px">Войти</button></div>`:""}
   <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
-  <h2>Курс A1</h2>
+  <h2>Курс ${COURSE[currentModIndex()].lvl}</h2>
   ${(()=>{const ci=currentModIndex(),m=COURSE[ci],pr=modProgress(m),allDone=COURSE.every(x=>modPassed(x.id));
-    return `<button class="card row" data-mod="${m.id}" style="width:100%;text-align:left;border-color:var(--terra);border-width:2px"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":"Модуль "+(ci+1)+" из "+COURSE.length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
+    return `<button class="card row" data-mod="${m.id}" style="width:100%;text-align:left;border-color:var(--terra);border-width:2px"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":m.lvl+" · модуль "+modNum(m)+" из "+lvlMods(m.lvl).length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
   <h2>Задания дня</h2>
   ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
 </div><div class="dashside">
@@ -2225,6 +3074,13 @@ function partDone(m,k){
   return (s[k]||0)>0;
 }
 function modProgress(m){const parts=MOD_PARTS.filter(p=>p[0]!=="grammar"||m.grammar.length);return{done:parts.filter(p=>partDone(m,p[0])).length,total:parts.length}}
+
+const CLEVELS=[{id:"A1",t:"Основы",book:"Nuovo Espresso 1",d:"С нуля до первых разговоров: знакомство, кафе, город, покупки, прошедшее время, семья. 10 уроков книги + итоговый модуль."},
+{id:"A2",t:"Элементарный",book:"Nuovo Espresso 2",d:"Рассказы о прошлом, характер, приглашения, поездки, кухня, здоровье, работа, отношения, квартира. Imperfetto, condizionale, будущее и congiuntivo."}];
+let clvl=null;
+const lvlMods=l=>COURSE.filter(m=>m.lvl===l);
+const modNum=m=>lvlMods(m.lvl).indexOf(m)+1;
+const lvlPassed=l=>lvlMods(l).every(m=>modPassed(m.id));
 function currentModIndex(){for(let i=0;i<COURSE.length;i++)if(!modPassed(COURSE[i].id))return i;return COURSE.length-1}
 function stopSeq(){seqOn=false;clearTimeout(seqT);try{speechSynthesis.cancel()}catch(e){}}
 
@@ -2233,28 +3089,33 @@ function vCourse(){
   if(cact==="glist")return `<button class="back" id="cBackList">${ICON.back} Курс</button>`+vGrammar();
   if(cmod&&cact){const m=COURSE.find(x=>x.id===cmod);return cact==="read"?vRead(m):cact==="listen"?vListen(m):cact==="write"?vWriteAct(m):cact==="speak"?vSpeak(m):vTest(m)}
   if(cmod)return vModule(COURSE.find(x=>x.id===cmod));
-  const cur=currentModIndex(),passedN=COURSE.filter(m=>modPassed(m.id)).length,mk=mistKeys().length;
-  return `<h1>Курс A1</h1>
-  <p class="muted">10 модулей по программе уровня A1 (силлабус Университета Брешии, формат экзамена CILS A1 Университета для иностранцев Сиены). В каждом модуле: слова, грамматика, чтение, аудирование, письмо, говорение и тест. Следующий модуль открывается, когда сдан тест предыдущего.</p>
-  <div class="card mt"><div class="row between"><b>Пройдено модулей</b><span class="muted">${passedN} из ${COURSE.length}</span></div><div class="bar mt"><i style="width:${Math.round(100*passedN/COURSE.length)}%"></i></div></div>
+  const cur=currentModIndex(),mk=mistKeys().length;
+  const L=clvl||COURSE[cur].lvl,LV=CLEVELS.find(x=>x.id===L),mods=lvlMods(L),passedN=mods.filter(m=>modPassed(m.id)).length;
+  const lvOpen=L==="A1"||modUnlocked(COURSE.indexOf(mods[0]));
+  return `<h1>Курс</h1>
+  <div class="lvtabs">${CLEVELS.map(x=>{const ms=lvlMods(x.id),pn=ms.filter(m=>modPassed(m.id)).length;return `<button class="lvtab ${x.id===L?"on":""}" data-lvl="${x.id}"><span class="lvbig">${x.id}</span><span class="lvsub">${x.t}</span><span class="lvbar"><i style="width:${Math.round(100*pn/ms.length)}%"></i></span></button>`}).join("")}</div>
+  <div class="card mt lvhero"><div class="row between"><div><div class="muted small">Уровень ${L} · по программе учебника ${LV.book}</div><b>${passedN} из ${mods.length} модулей сдано</b></div><span class="pill ${passedN===mods.length?"olive":"terra"}">${passedN===mods.length?"Уровень пройден":Math.round(100*passedN/mods.length)+"%"}</span></div>
+  <div class="bar mt"><i style="width:${Math.round(100*passedN/mods.length)}%"></i></div><p class="muted small" style="margin:10px 0 0">${LV.d} В каждом модуле: слова, грамматика, чтение, аудирование, письмо с проверкой, говорение и тест. Следующий модуль открывается после теста предыдущего.</p>
+  ${!lvOpen?`<div class="row mt" style="gap:8px;flex-wrap:wrap"><span class="muted small grow">A2 откроется после итогового модуля A1. Уже знаешь основы?</span><button class="btn sea" id="openLvl" data-l="${L}" style="padding:10px 14px">Начать ${L} сейчас</button></div>`:""}</div>
   ${mk?`<button class="card row mt" id="mistAll" style="width:100%;text-align:left;border-color:var(--terra)"><span style="font-size:24px">🔁</span><div class="grow"><b>Работа над ошибками</b><div class="muted small">${mk} ${plural(mk,"вопрос","вопроса","вопросов")} из уроков грамматики</div></div><span class="link">Начать</span></button>`:""}
-  <div class="mt modgrid">${COURSE.map((m,i)=>{const open=modUnlocked(i),pr=modProgress(m),pass=modPassed(m.id);
+  <div class="mt modgrid">${mods.map(m=>{const i=COURSE.indexOf(m),open=modUnlocked(i),pr=modProgress(m),pass=modPassed(m.id),n=modNum(m);
     return `<button class="card row mt" data-mod="${m.id}" style="width:100%;text-align:left;${i===cur&&open&&!pass?"border-color:var(--terra);border-width:2px":""}${open?"":"opacity:.6"}">
     <div style="font-size:28px;width:40px;text-align:center">${open?m.em:"🔒"}</div>
-    <div class="grow"><div class="muted small">Модуль ${i+1}${pass?` · <span style="color:var(--olive);font-weight:700">сдан, ${(state.mod[m.id]||{}).test}%</span>`:""}</div><b>${m.t}</b>
+    <div class="grow"><div class="muted small">Модуль ${n}${pass?` · <span style="color:var(--olive);font-weight:700">сдан, ${(state.mod[m.id]||{}).test}%</span>`:""}</div><b>${m.t}</b><div class="muted small ne">${esc(m.ne||"")}</div>
     <div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%;${pass?"background:var(--olive)":""}"></i></div></div>
     <span class="${open?"link":"muted small"}">${pass?"Повторить":open?(i===cur?"Продолжить":"Открыть"):"Закрыт"}</span></button>`}).join("")}</div>
-  <button class="btn ghost block mt" id="glistBtn">📐 Вся грамматика (${LESSONS.length} уроков)</button>`;
+  <button class="btn ghost block mt" id="glistBtn">📐 Вся грамматика (${LESSONS.length} уроков)</button>
+  <button class="btn ghost block mt" id="freeWrite">✍️ Свободное письмо с проверкой</button>`;
 }
 function vModule(m){
-  const i=COURSE.indexOf(m),open=modUnlocked(i),s=modState(m.id);
+  const i=COURSE.indexOf(m),open=modUnlocked(i),s=modState(m.id),pv=COURSE[i-1];
   if(!open)return `<button class="back" id="cBack">${ICON.back} Курс</button>
-  <div class="card center stack" style="padding:28px 16px"><div class="done-big">🔒</div><h1>${m.t}</h1><p class="muted">Модуль откроется после теста модуля ${i}. Уже знаешь эту тему? Сдай тест этого модуля сразу: от 70% модуль засчитается, и откроется следующий.</p>
-  <button class="btn block" data-part="test">Сдать тест экстерном</button><button class="btn ghost block" data-mod="${COURSE[i-1].id}">К модулю ${i}</button></div>`;
+  <div class="card center stack" style="padding:28px 16px"><div class="done-big">🔒</div><h1>${m.t}</h1><p class="muted">Модуль откроется после теста модуля «${pv.t}» (${pv.lvl}). Уже знаешь эту тему? Сдай тест этого модуля сразу: от 70% модуль засчитается, и откроется следующий.</p>
+  <button class="btn block" data-part="test">Сдать тест экстерном</button><button class="btn ghost block" data-mod="${pv.id}">К модулю «${pv.t}»</button></div>`;
   const parts=MOD_PARTS.filter(p=>p[0]!=="grammar"||m.grammar.length);
   const next=parts.findIndex(p=>!partDone(m,p[0]));
   return `<button class="back" id="cBack">${ICON.back} Курс</button>
-  <div class="muted small">Модуль ${i+1} из ${COURSE.length}</div><h1>${m.em} ${m.t}</h1>
+  <div class="muted small">${m.lvl} · Модуль ${modNum(m)} из ${lvlMods(m.lvl).length}${m.ne?" · "+esc(m.ne):""}</div><h1>${m.em} ${m.t}</h1>
   <div class="card mt small" style="background:var(--sea-soft);border-color:transparent"><b>Цель:</b> ${m.goal}</div>
   <div class="card list mt">${parts.map((p,j)=>{const d=partDone(m,p[0]);let sub=p[3];
     if(p[0]==="words"){const ids=modWordIds(m),l=ids.filter(id=>state.cards[id]&&state.cards[id].reps>0).length;sub=`${l} из ${ids.length} слов выучено`}
@@ -2327,9 +3188,30 @@ function vWriteAct(m){
     <input type="text" id="win" class="answer-in mt ${a?(a.ok?"right":"wrong"):""}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(a?a.val:act.input||"")}" ${a?"readonly":""} placeholder="по-итальянски">
     ${a?`<div class="explain">${a.ok?(a.near?"<b>Почти!</b> Небольшая опечатка, засчитано. ":"<b>Giusto!</b> "):"<b>Правильно так:</b> "}${esc(t.ans[0])}</div><div class="row mt">${playBtns(t.ans[0])}<button class="btn grow" id="wNext">Дальше</button></div>`:`<div class="row mt"><button class="btn ghost" id="wSkip">Не знаю</button><button class="btn grow" id="wCheck">Проверить</button></div>`}</div>`;
   }
-  return head+`<div class="card"><div class="muted small">Напиши сам</div><div class="q mt" style="font-size:18px">${esc(t.p)}</div>
-  <textarea id="wfree" class="mt" style="font:16px Manrope,system-ui;min-height:110px" placeholder="Scrivi qui… (пиши по-итальянски)">${esc(act.input||"")}</textarea>
-  ${a?`<div class="explain"><b>Пример ответа:</b><br>${esc(t.model)}<br><br><b>Проверь себя:</b><br>${t.check.map(c=>"☐ "+esc(c)).join("<br>")}</div><div class="row mt">${playBtns(t.model)}<button class="btn grow" id="wNext">Готово</button></div>`:`<button class="btn block mt" id="wShow">Показать пример и чек-лист</button>`}</div>`;
+  return head+freeWriteCard(t,a);
+}
+function freeWriteCard(t,a){
+  const res=a&&a.res;
+  return `<div class="card"><div class="muted small">Напиши сам · текст проверится автоматически</div><div class="q mt" style="font-size:18px">${esc(t.p)}</div>
+  ${!a?`<textarea id="wfree" class="mt" style="font:16px Manrope,system-ui;min-height:130px" placeholder="Scrivi qui… (пиши по-итальянски)">${esc(act.input||"")}</textarea>
+  <div class="row mt" style="gap:8px"><button class="btn ghost" id="wShowModel">Пример</button><button class="btn grow" id="wFreeCheck">Проверить текст</button></div>
+  ${act.showModel?`<div class="explain"><b>Пример ответа:</b><br>${esc(t.model)}</div>`:""}`:
+  a.busy?`<div class="card mt center muted">Проверяю текст…</div>`:
+  `<div class="card mt readtext small" style="font-size:17px">${markText(a.text,res.errs)}</div>
+  <div class="checkgrid mt"><div><h3 class="h3s">Ошибки ${res.errs.length?`<span class="pill terra">${res.errs.length}</span>`:""}</h3>${errListHTML(a.text,res.errs)}
+  ${res.online?"":`<div class="muted small mt">Орфография онлайн сейчас недоступна, проверены грамматика и ударения.</div>`}</div>
+  <div><h3 class="h3s">Задание</h3>${(a.req||[]).length?`<div class="reqs">${a.req.map(r=>`<div class="req ${r.ok?"ok":"no"}">${r.ok?"✅":"⬜"} ${esc(r.lab)}</div>`).join("")}</div>`:""}
+  <div class="muted small mt">Слов: ${a.words}</div>
+  <div class="verdict ${a.ok?"ok":"no"} mt">${a.ok?"Засчитано! Bravo!":"Пока не засчитано: исправь ошибки или добавь то, чего не хватает."}</div></div></div>
+  <div class="explain"><b>Пример ответа:</b><br>${esc(t.model)}</div>
+  <div class="row mt" style="gap:8px">${playBtns(t.model)}${a.ok?"":`<button class="btn ghost" id="wFreeEdit">Исправить</button>`}<button class="btn grow" id="wNext">${a.ok?"Дальше":"Пропустить"}</button></div>`}</div>`;
+}
+async function runFreeCheck(t,text,done){
+  const r=await ITC.check(text),req=reqResults(t,text),words=(text.match(/[A-Za-zÀ-ÿ']+/g)||[]).length;
+  const gram=r.errs.filter(e=>e.kind==="grammar").length,typo=r.errs.filter(e=>e.kind==="typo").length;
+  const met=req.filter(x=>x.ok).length,need=req.length?Math.ceil(req.length*0.67):0;
+  const ok=words>=5&&met>=need&&gram===0&&typo<=1;
+  done({text,res:r,req,words,ok});
 }
 function checkWrite(t,val){
   const n=norm(val);
@@ -2360,26 +3242,168 @@ function vTest(m){
     const pct=Math.round(100*act.correct/T.length),pass=pct>=70,i=COURSE.indexOf(m),nx=COURSE[i+1];
     return `<button class="back" id="cBack">${ICON.back} Модуль</button>
     <div class="card center stack" style="padding:24px 16px"><div class="done-big">${pass?"🏆":"💪"}</div><h1>${act.correct} из ${T.length} · ${pct}%</h1>
-    <p class="muted">${pass?(nx?"Модуль сдан! Открыт следующий модуль: «"+nx.t+"».":"Поздравляю! Ты прошёл весь курс уровня A1."):"Нужно от 70%. Посмотри ошибки, повтори части модуля и попробуй снова."}</p></div>
-    ${act.wrong.length?`<h2>Разбор ошибок</h2><div class="card list">${act.wrong.map(w=>{const q=T[w.i];return `<div class="item" style="display:block"><div class="q" style="font-size:16px">${esc(q[0])}</div>${q[4]?`<div class="muted small">Запись: «${esc(q[4])}»</div>`:""}<div class="small" style="margin-top:4px"><span style="color:var(--red)">Твой ответ: ${esc(w.given)}</span> · <span style="color:var(--olive);font-weight:700">Верно: ${esc(q[1][q[2]])}</span></div><div class="muted small">${esc(q[3])}</div></div>`}).join("")}</div>`:""}
+    <p class="muted">${pass?(nx?"Модуль сдан! Открыт следующий модуль: «"+nx.t+"».":(m.lvl==="A1"?"Поздравляю! Уровень A1 пройден, дальше — A2.":"Поздравляю! Ты прошёл весь курс A1–A2.")):"Нужно от 70%. Посмотри ошибки, повтори части модуля и попробуй снова."}</p></div>
+    ${act.wrong.length?`<h2>Разбор ошибок</h2><div class="card list">${act.wrong.map(w=>{const q=T[w.i],ty=q.k==="type";return `<div class="item" style="display:block"><div class="q" style="font-size:16px">${esc(ty?q.q:q[0])}</div>${!ty&&q[4]?`<div class="muted small">Запись: «${esc(q[4])}»</div>`:""}<div class="small" style="margin-top:4px"><span style="color:var(--red)">Твой ответ: ${esc(w.given||"—")}</span> · <span style="color:var(--olive);font-weight:700">Верно: ${esc(ty?q.ans[0]:q[1][q[2]])}</span></div><div class="muted small">${esc(ty?q.e:q[3])}</div></div>`}).join("")}</div>`:""}
     ${pass&&nx?`<button class="btn block mt" data-mod="${nx.id}">Следующий модуль →</button>`:""}
     <button class="btn ghost block mt" id="actRestart">Пересдать тест</button><button class="btn ghost block mt" id="cBack">К модулю</button>`;
   }
-  const q=T[act.i];if(!act.order)act.order=shuffle(q[1].map((_,j)=>j));const a=act.a;
+  const q=T[act.i];
+  if(q&&q.k==="type"){const a=act.a;return `<div><button class="back" id="cBack">${ICON.back} Модуль</button></div><div class="pill terra" style="margin-bottom:10px">🏁 Тест модуля · ${m.t}</div>
+  <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*act.i/T.length)}%"></i></div><span class="muted small">${act.i+1}/${T.length}</span></div>
+  <div class="card"><div class="muted small">✍️ Напиши ответ</div><div class="q mt">${esc(q.q)}</div>
+  <input type="text" id="tin" class="answer-in mt ${a?(a.ok?"right":"wrong"):""}" autocomplete="off" autocapitalize="off" spellcheck="false" value="${esc(a?a.val:"")}" ${a?"readonly":""} placeholder="по-итальянски">
+  ${a?`<div class="explain">${a.ok?(a.near?"<b>Почти!</b> Небольшая опечатка, засчитано. ":"<b>Giusto!</b> "):"<b>Правильно:</b> "+esc(q.ans[0])+". "}${esc(q.e)}</div><button class="btn block mt" id="tNext">${act.i+1<T.length?"Дальше":"Результат"}</button>`:`<button class="btn block mt" id="tType">Проверить</button>`}</div>`}
+  if(!act.order)act.order=shuffle(q[1].map((_,j)=>j));const a=act.a;
   return `<div><button class="back" id="cBack">${ICON.back} Модуль</button></div><div class="pill terra" style="margin-bottom:10px">🏁 Тест модуля · ${m.t}</div>
   <div class="row" style="margin-bottom:14px"><div class="bar grow"><i style="width:${Math.round(100*act.i/T.length)}%"></i></div><span class="muted small">${act.i+1}/${T.length}</span></div>
   <div class="card">${q[4]?`<div class="center"><button class="bigplay" data-say="${esc(q[4])}" aria-label="Слушать">${ICON.play}</button></div>`:""}<div class="q mt">${esc(q[0])}</div>
   <div class="opts">${act.order.map(j=>{let c="";if(a!==null){if(j===q[2])c="right";else if(j===a)c="wrong"}return `<button class="opt ${c}" data-tq="${j}" ${a!==null?"disabled":""}>${esc(q[1][j])}</button>`}).join("")}</div>
   ${a!==null?`<div class="explain">${a===q[2]?"<b>Giusto!</b> ":"<b>Не совсем.</b> "}${esc(q[3])}</div><button class="btn block mt" id="tNext">${act.i+1<T.length?"Дальше":"Результат"}</button>`:""}</div>`;
 }
-function sayTestAudio(){if(!act||act.k!=="test")return;const m=COURSE.find(x=>x.id===cmod);const q=m&&m.test[act.i];if(q&&q[4])speak(q[4])}
+function sayTestAudio(){if(!act||act.k!=="test")return;const m=COURSE.find(x=>x.id===cmod);const q=m&&m.test[act.i];if(q&&q[4])speak(q[4]);else if(q&&q.k==="type")setTimeout(()=>{const e=$("#tin");e&&!act.a&&e.focus()},50)}
 function finishTest(m){
   const pct=Math.round(100*act.correct/m.test.length),s=modState(m.id);
   const first=!(s.test>=70);
   s.test=Math.max(s.test||0,pct);
-  if(pct>=70&&first){addXP(10);const i=COURSE.indexOf(m);celebrate("🏆","Модуль "+(i+1)+" сдан!",COURSE[i+1]?"Открыт модуль «"+COURSE[i+1].t+"»":"Весь курс A1 пройден",true)}
+  if(pct>=70&&first){addXP(10);const i=COURSE.indexOf(m);celebrate("🏆",m.lvl+" · модуль "+modNum(m)+" сдан!",COURSE[i+1]?(COURSE[i+1].lvl!==m.lvl?"Уровень "+m.lvl+" пройден! Открыт "+COURSE[i+1].lvl:"Открыт модуль «"+COURSE[i+1].t+"»"):"Весь курс A1–A2 пройден",true)}
   save();if(srvReady){clearTimeout(srvTimer);srvPush()}
 }
+/* ================== ПРОВЕРКА ПИСЬМА ==================
+   Свои правила для типичных ошибок A1–A2 (артикли, согласование, essere/avere, piacere, ударения)
+   + орфография через LanguageTool (если сеть доступна). */
+const ITC=(()=>{
+  const low=s=>s.toLowerCase();
+  // род и число существительных из словаря приложения
+  const NOUN={};
+  const addN=(w,g,n)=>{if(w&&!NOUN[w])NOUN[w]={g,n}};
+  const plOf=(w,g)=>{if(/[àèéìòù]$/.test(w)||/[^aeiou]$/.test(w))return w;if(w.endsWith("ca"))return w.slice(0,-1)+"he";if(w.endsWith("ga"))return w.slice(0,-1)+"he";if(w.endsWith("a"))return g==="f"?w.slice(0,-1)+"e":w.slice(0,-1)+"i";if(w.endsWith("co")&&g==="m")return null;return w.slice(0,-1)+"i"};
+  WORDS.forEach(e=>{const m=low(e[0]).match(/^(il|lo|la|i|gli|le|l')\s?([a-zàèéìòù]+)$/);if(!m)return;
+    const a=m[1],w=m[2];
+    if(a==="il"||a==="lo"){addN(w,"m","s");const p=plOf(w,"m");if(p&&p!==w)addN(p,"m","p")}
+    else if(a==="la"){addN(w,"f","s");const p=plOf(w,"f");if(p&&p!==w)addN(p,"f","p")}
+    else if(a==="i"||a==="gli")addN(w,"m","p");else if(a==="le")addN(w,"f","p");
+    else if(a==="l'"&&/[aeiou]/.test(w[0])){/* род неизвестен */}});
+  Object.entries({problema:"m",mano:"f",foto:"f",radio:"f",moto:"f",auto:"f",città:"f",università:"f",caffè:"m",tè:"m",bar:"m",sport:"m",film:"m",computer:"m",lunedì:"m",virtù:"f",crisi:"f",tesi:"f",programma:"m",sistema:"m",tema:"m",clima:"m",pigiama:"m",cinema:"m",papà:"m",menù:"m",tram:"m",autobus:"m",casa:"f",mamma:"f",ragazza:"f",ragazzo:"m",libro:"m",pizza:"f",pasta:"f",vino:"m",acqua:"f",scuola:"f",strada:"f",piazza:"f",chiesa:"f",lezione:"f",stazione:"f",notte:"f",pane:"m",mare:"m",sale:"m",fiore:"m",nome:"m",giorno:"m",anno:"m",mese:"m",amico:"m",amica:"f",madre:"f",padre:"m",sorella:"f",fratello:"m",figlia:"f",figlio:"m",moglie:"f",marito:"m",donna:"f",uomo:"m",gente:"f",estate:"f",inverno:"m",primavera:"f",autunno:"m",settimana:"f",mattina:"f",sera:"f",ora:"f",volta:"f",lavoro:"m",ufficio:"m",negozio:"m",mercato:"m",treno:"m",aereo:"m",macchina:"f",bicicletta:"f",camera:"f",cucina:"f",bagno:"m",letto:"m",tavolo:"m",sedia:"f",porta:"f",finestra:"f",giacca:"f",gonna:"f",camicia:"f",maglietta:"f",cappotto:"m",vestito:"m",cane:"m",gatto:"m",città:"f"})
+    .forEach(([w,g])=>{const inv=["città","università","caffè","tè","bar","sport","film","computer","lunedì","virtù","crisi","tesi","foto","radio","moto","auto","cinema","papà","menù","tram","autobus"].includes(w);if(inv)NOUN[w]={g,n:"x"};else addN(w,g,"s")});
+  ["uomini:m","mani:f","problemi:m","programmi:m","amici:m","amiche:f","giorni:m","anni:m","mesi:m","libri:m","case:f","ragazzi:m","ragazze:f","fratelli:m","sorelle:f","figli:m","figlie:f","genitori:m","nonni:m","lezioni:f","stazioni:f","notti:f","persone:f","scarpe:f","pantaloni:m","occhi:m","capelli:m"].forEach(s=>{const [w,g]=s.split(":");addN(w,g,"p")});
+  const ART={il:["m","s"],lo:["m","s"],la:["f","s"],i:["m","p"],gli:["m","p"],le:["f","p"],un:["m","s"],uno:["m","s"],una:["f","s"]};
+  const sCons=w=>/^(s[bcdfghjklmnpqrstvwxyz]|z|gn|ps|pn|x|y)/.test(w);
+  const vow=w=>/^h?[aeiouàèéìòù]/.test(w);
+  const artFor=(g,num,w,indef)=>indef?(num==="p"?null:g==="m"?(sCons(w)?"uno":"un"):(vow(w)?"un'":"una")):g==="m"?(num==="p"?(vow(w)||sCons(w)?"gli":"i"):(vow(w)?"l'":sCons(w)?"lo":"il")):(num==="p"?"le":(vow(w)?"l'":"la"));
+  const PREP=["a","di","da","in","con","su","per","tra","fra","ad","come","che","senza","verso","dopo","prima","anche"];
+  // спряжения
+  const P=["io","tu","lui","noi","voi","loro"];
+  const IRR={essere:["sono","sei","è","siamo","siete","sono"],avere:["ho","hai","ha","abbiamo","avete","hanno"],andare:["vado","vai","va","andiamo","andate","vanno"],fare:["faccio","fai","fa","facciamo","fate","fanno"],stare:["sto","stai","sta","stiamo","state","stanno"],dare:["do","dai","dà","diamo","date","danno"],dire:["dico","dici","dice","diciamo","dite","dicono"],venire:["vengo","vieni","viene","veniamo","venite","vengono"],volere:["voglio","vuoi","vuole","vogliamo","volete","vogliono"],potere:["posso","puoi","può","possiamo","potete","possono"],dovere:["devo","devi","deve","dobbiamo","dovete","devono"],sapere:["so","sai","sa","sappiamo","sapete","sanno"],uscire:["esco","esci","esce","usciamo","uscite","escono"],bere:["bevo","bevi","beve","beviamo","bevete","bevono"],rimanere:["rimango","rimani","rimane","rimaniamo","rimanete","rimangono"],tenere:["tengo","tieni","tiene","teniamo","tenete","tengono"],scegliere:["scelgo","scegli","sceglie","scegliamo","scegliete","scelgono"],chiamarsi:["chiamo","chiami","chiama","chiamiamo","chiamate","chiamano"]};
+  const ISC=["capire","finire","preferire","pulire","spedire","costruire","restituire","suggerire"];
+  const REG=["parlare","abitare","lavorare","studiare","mangiare","guardare","ascoltare","comprare","cucinare","arrivare","tornare","entrare","aspettare","cercare","pagare","giocare","viaggiare","amare","pensare","chiedere","prendere","vedere","leggere","scrivere","vivere","vendere","credere","mettere","chiudere","rispondere","conoscere","correre","perdere","dormire","partire","sentire","aprire","offrire","seguire","servire","costare","ballare","cantare","nuotare","imparare","insegnare","prenotare","provare","cambiare","usare","trovare","incontrare","visitare","camminare","fumare","suonare","telefonare","cominciare","preparare","lavare","portare","ricordare","dimenticare","passare","restare","sperare"];
+  const CONJ={};
+  const add=(inf,forms)=>forms.forEach((f,i)=>{(CONJ[f]=CONJ[f]||[]).push([inf,i])});
+  Object.entries(IRR).forEach(([k,v])=>add(k,v));
+  REG.forEach(inf=>{if(IRR[inf])return;const st=inf.slice(0,-3),t=inf.slice(-3);let f;
+    const soft=/[cg]are$/.test(inf)?"h":"",iStem=/iare$/.test(inf)?st.replace(/i$/,""):st;
+    if(t==="are")f=[st+"o",iStem+(soft?"hi":"i"),st+"a",iStem+(soft?"hiamo":"iamo"),st+"ate",st+"ano"];
+    else if(t==="ere")f=[st+"o",st+"i",st+"e",st+"iamo",st+"ete",st+"ono"];
+    else f=[st+"o",st+"i",st+"e",st+"iamo",st+"ite",st+"ono"];
+    add(inf,f)});
+  ISC.forEach(inf=>{const st=inf.slice(0,-3);add(inf,[st+"isco",st+"isci",st+"isce",st+"iamo",st+"ite",st+"iscono"])});
+  const SUBJ={io:[0],tu:[1],lui:[2],lei:[2],noi:[3],voi:[4],loro:[5]};
+  // essere/avere в passato prossimo
+  const ESS_PP=["andat","venut","arrivat","partit","tornat","uscit","entrat","nat","mort","stat","rimast","restat","cadut","diventat","piaciut","salit","sces"];
+  const AVE_PP=["mangiat","bevut","vist","fatt","comprat","studiat","lett","pres","dett","scritt","dormit","parlat","lavorat","avut","guardat","ascoltat","cucinat","pagat","visitat","conosciut","chiest","apert","chius","pers","mess","pres","giocat","preparat","incontrat","trovat","provat","aspettat","cercat","telefonat","ricevut"];
+  const AV=["ho","hai","ha","abbiamo","avete","hanno"],ES=["sono","sei","è","siamo","siete"];
+  const ppBase=w=>w.replace(/[oaie]$/,"");
+  const isEssPP=w=>/[oaie]$/.test(w)&&ESS_PP.includes(ppBase(w));
+  const isAvePP=w=>/[oaie]$/.test(w)&&AVE_PP.includes(ppBase(w));
+  const ACC={perche:"perché",piu:"più",citta:"città",universita:"università",cosi:"così",pero:"però",puo:"può",gia:"già",caffe:"caffè",lunedi:"lunedì",martedi:"martedì",mercoledi:"mercoledì",giovedi:"giovedì",venerdi:"venerdì",verita:"verità",societa:"società",eta:"età",papa:null,te:null,li:null,la:null};
+  function tokens(text){const out=[];const re=/[A-Za-zÀ-ÿ]+(?:'(?=[A-Za-zÀ-ÿ]))?|'/g;let m;while((m=re.exec(text)))out.push({w:m[0],lw:low(m[0]),o:m.index,l:m[0].length});return out}
+  function local(text){
+    const T=tokens(text).filter(t=>t.w!=="'"),E=[];
+    const err=(a,b,rep,msg,kind)=>{E.push({o:T[a].o,l:T[b].o+T[b].l-T[a].o,rep:rep?[rep]:[],msg,kind:kind||"grammar",src:"pp"})};
+    const gapOk=i=>T[i+1]&&/^\s*$/.test(text.slice(T[i].o+T[i].l,T[i+1].o));
+    for(let i=0;i<T.length;i++){
+      const w=T[i].lw,n=gapOk(i)?T[i+1].lw:null,nn=n&&gapOk(i+1)?T[i+2].lw:null;
+      // повтор слова
+      if(n&&w===n&&w.length>1&&!["che","no","sì","si"].includes(w))err(i,i+1,T[i].w,"Слово повторяется два раза.","style");
+      // артикли: фонетика
+      if(n&&/^[a-zàèéìòù]/.test(n)){
+        if(w==="il"&&vow(n))err(i,i+1,"l'"+T[i+1].w,"Перед гласной вместо il пишется l': l'amico, l'albero.");
+        else if(w==="il"&&sCons(n))err(i,i+1,"lo "+T[i+1].w,"Перед s + согласная, z, gn, ps вместо il ставится lo: lo studente, lo zaino.");
+        else if(w==="lo"&&!sCons(n)&&!vow(n)&&NOUN[n]&&NOUN[n].g==="m")err(i,i+1,"il "+T[i+1].w,"lo ставится только перед s + согласная, z, gn, ps. Здесь нужен il.");
+        else if(w==="un"&&sCons(n)&&(NOUN[n]?NOUN[n].g!=="f":/o$/.test(n)))err(i,i+1,"uno "+T[i+1].w,"Перед s + согласная и z пишется uno: uno studente, uno zaino.");
+        else if(w==="una"&&vow(n))err(i,i+1,"un'"+T[i+1].w,"Перед гласной una сокращается до un': un'amica, un'ora.");
+        else if(w==="i"&&(vow(n)||sCons(n))&&NOUN[n]&&NOUN[n].g==="m")err(i,i+1,"gli "+T[i+1].w,"Перед гласной, s + согласная и z во множественном — gli: gli amici, gli studenti.");
+        else if(w==="la"&&vow(n)&&(NOUN[n]?NOUN[n].g==="f":/[aà]$/.test(n)))err(i,i+1,"l'"+T[i+1].w,"Перед гласной la сокращается до l': l'acqua, l'amica.");
+      }
+      // артикли: род и число
+      if(ART[w]&&n&&NOUN[n]){const [g,num]=ART[w],N=NOUN[n],indef=["un","uno","una"].includes(w);
+        const ng=N.g,nn2=N.n==="x"?num:N.n;
+        if(ng!==g||nn2!==num){const fix=artFor(ng,nn2,n,indef);
+          const why=ng!==g?`«${T[i+1].w}» — ${ng==="f"?"женского":"мужского"} рода`:`«${T[i+1].w}» — ${nn2==="p"?"множественное":"единственное"} число`;
+          err(i,i+1,fix?(fix.endsWith("'")?fix+T[i+1].w:fix+" "+T[i+1].w):null,why+(fix?`, нужен артикль ${fix}.`:`, артикль ${w} не подходит.`));}
+      }
+      // подлежащее + глагол
+      if(SUBJ[w]&&n&&!(T[i-1]&&PREP.includes(T[i-1].lw))){let j=i+1;if(T[j]&&T[j].lw==="non")j++;if(T[j]&&["mi","ti","si","ci","vi","lo","la","li","le","gli","ne"].includes(T[j].lw))j++;
+        const v=T[j]&&T[j].lw,c=v&&CONJ[v];
+        if(c&&!(w==="lei"&&c.some(x=>x[1]===2))){
+          const want=SUBJ[w][0],okForm=c.some(x=>x[1]===want);
+          if(!okForm&&!(w==="io"&&v==="sono")&&!(w==="loro"&&v==="sono")){
+            const inf=c[0][0],right=IRR[inf]?IRR[inf][want]:null;
+            const rep=right||(()=>{for(const f in CONJ)if(CONJ[f].some(x=>x[0]===inf&&x[1]===want))return f;return null})();
+            err(i,j,rep?T[i].w+" "+(j>i+1?T.slice(i+1,j).map(t=>t.w).join(" ")+" ":"")+rep:null,`С «${T[i].w}» глагол должен быть в форме ${["«я»","«ты»","«он/она»","«мы»","«вы»","«они»"][want]}${rep?": "+rep:""}.`);
+          }
+        }
+      }
+      // passato prossimo: не тот вспомогательный глагол
+      if(n&&AV.includes(w)&&isEssPP(n)&&!(nn&&isAvePP(nn))){
+        const p=["sono","sei","è","siamo","siete","sono"][AV.indexOf(w)];
+        err(i,i+1,p+" "+T[i+1].w,`Глаголы движения и состояния (andare, venire, arrivare, partire, tornare, uscire, stare…) в прошедшем идут с essere: ${p} ${T[i+1].w}.`);
+      }
+      if(n&&ES.includes(w)&&isAvePP(n)&&!(T[i-1]&&["stato","mi","ti","si","ci","vi"].includes(T[i-1].lw))&&!/^(chius|apert|pers|pres|lett|fatt)/.test(n)){
+        const p={sono:"ho",sei:"hai","è":"ha",siamo:"abbiamo",siete:"avete"}[w];
+        err(i,i+1,p+" "+ppBase(T[i+1].w)+"o",`Этот глагол в прошедшем идёт с avere: ${p} ${ppBase(T[i+1].w)}o.`);
+      }
+      // согласование причастия после essere с подлежащим
+      if(SUBJ[w]&&n&&ES.includes(n)&&nn&&isEssPP(nn)&&!(T[i-1]&&PREP.includes(T[i-1].lw))){const end=nn.slice(-1);
+        if(w==="lei"&&end!=="a"&&end!=="o")err(i,i+2,null,"Причастие с essere согласуется с подлежащим: lei è andata.");
+        if(w==="lei"&&end==="o")err(i+2,i+2,ppBase(T[i+2].w)+"a","С «lei» причастие в женском роде: andata, arrivata.");
+        if(w==="lui"&&end!=="o")err(i+2,i+2,ppBase(T[i+2].w)+"o","С «lui» причастие в мужском роде: andato.");
+        if(["noi","voi","loro"].includes(w)&&(end==="o"||end==="a"))err(i+2,i+2,ppBase(T[i+2].w)+"i",`С «${w}» причастие во множественном числе: andati (или andate для женщин).`);
+        if(["io","tu"].includes(w)&&(end==="i"||end==="e"))err(i+2,i+2,ppBase(T[i+2].w)+"o",`С «${w}» причастие в единственном числе: andato / andata.`);
+      }
+      // piacere
+      if(w==="piace"&&n&&["i","gli","le"].includes(n)&&T[i-1]&&["mi","ti","gli","le","ci","vi","non"].includes(T[i-1].lw))err(i,i,"piacciono","Если нравятся несколько вещей, нужен piacciono: mi piacciono i libri.");
+      if(w==="piacciono"&&n&&(["il","lo","la","un","una","uno"].includes(n)||/(are|ere|ire)$/.test(n)))err(i,i,"piace","Если нравится одна вещь или действие, нужен piace: mi piace il mare, mi piace leggere.");
+      if(w==="io"&&n==="piace")err(i,i+1,"mi piace","«Мне нравится» — mi piace (а не io piace).");
+      // ударения
+      if(Object.prototype.hasOwnProperty.call(ACC,w)&&ACC[w]&&T[i].w.indexOf("'")<0){const r=ACC[w];err(i,i,T[i].w[0]===T[i].w[0].toUpperCase()?r[0].toUpperCase()+r.slice(1):r,`Не хватает ударения: ${r}.`,"typo")}
+      if(w==="po"&&T[i-1]&&T[i-1].lw==="un"&&text[T[i].o+2]!=="'")err(i,i,"po'","Пишется с апострофом: un po'.","typo");
+      if(w==="e"&&text[T[i].o+1]==="'")err(i,i,"è","«Есть» пишется è (с ударением), а не e'.","typo");
+    }
+    // заглавная в начале предложения
+    const sre=/(^|[.!?]\s+)([a-zàèéìòù])/g;let m;while((m=sre.exec(text))){const o=m.index+m[1].length;E.push({o,l:1,rep:[m[2].toUpperCase()],msg:"Предложение начинается с заглавной буквы.",kind:"style",src:"pp"})}
+    // дубликаты
+    const seen={};return E.filter(e=>{const k=e.o+":"+e.l;if(seen[k])return false;seen[k]=1;return true});
+  }
+  const CAT={TYPOS:["typo","Возможна опечатка"],GRAMMAR:["grammar","Грамматика"],PUNCTUATION:["style","Пунктуация"],CASING:["style","Заглавные буквы"],TYPOGRAPHY:["style","Оформление"],STYLE:["style","Стиль"],CONFUSED_WORDS:["grammar","Похоже на другое слово"],REDUNDANCY:["style","Лишнее слово"]};
+  async function remote(text){try{const r=await api("check",{text});if(!r||!r.ok)return null;
+    return r.matches.map(m=>({o:m.o,l:m.l,rep:(m.rep||[]).slice().sort((a,b)=>(GLOSS_W[norm(b)]?1:0)-(GLOSS_W[norm(a)]?1:0)),msg:(CAT[m.cat]||["grammar","Замечание"])[1]+(m.cat==="TYPOS"?"":": "+m.msg),kind:(CAT[m.cat]||["grammar"])[0],src:"lt"}))}catch(e){return null}}
+  async function check(text){
+    const L=local(text);const R=await Promise.race([remote(text),new Promise(r=>setTimeout(()=>r(null),6000))]);
+    let all=L.slice();if(R)R.forEach(x=>{if(!all.some(y=>x.o<y.o+y.l&&y.o<x.o+x.l))all.push(x)});
+    all.sort((a,b)=>a.o-b.o);return{errs:all,online:!!R};
+  }
+  return{local,check};
+})();
+function markText(text,errs){
+  let out="",p=0;errs.forEach((e,i)=>{if(e.o<p)return;out+=esc(text.slice(p,e.o))+`<mark class="err ${e.kind}" title="${esc(e.msg)}">${esc(text.slice(e.o,e.o+e.l))}<sup>${i+1}</sup></mark>`;p=e.o+e.l});
+  return out+esc(text.slice(p));
+}
+function errListHTML(text,errs){
+  if(!errs.length)return `<div class="okline">✅ Ошибок не нашёл</div>`;
+  return `<ol class="errlist">${errs.map(e=>`<li><span class="frag">${esc(text.slice(e.o,e.o+e.l))}</span>${e.rep&&e.rep.length?` → <b>${esc(e.rep.join(" / "))}</b>`:""}<div class="muted small">${esc(e.msg)}</div></li>`).join("")}</ol>`;
+}
+function reqResults(t,text){const n=norm(text);return (t.chk||[]).map(([lab,rx])=>{let ok=false;try{ok=new RegExp(rx).test(n)}catch(e){}return{lab,ok}})}
+
 /* ---- перевод слов и переводчик ---- */
 const GLOSS_W={};WORDS.forEach(w=>{[norm(w[0]),norm(stripArt(w[0]))].forEach(k=>{if(k&&!GLOSS_W[k])GLOSS_W[k]=w})});
 const trCache={};
@@ -2413,9 +3437,19 @@ function addGlossCard(word){
   const tr=$("#gloss").dataset.tr;if(!tr){toast("Подожди перевод");return}
   if(!state.custom)state.custom={};state.custom[w]=tr;state.cards["c:"+w]={ease:2.5,iv:0,reps:0,due:Date.now(),lapses:0};save();toast("Добавлено в «Мои слова»");
 }
-let trDir="it";
+let trDir="it",trMode="tr";
+function openFreeWrite(){trMode="check";openTranslator()}
 function openTranslator(){
+  if(trMode==="check"){
+    $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Проверка текста</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
+    <div class="seg"><button data-trmode="tr">🔤 Перевод</button><button class="on" data-trmode="check">✍️ Проверка</button></div>
+    <p class="muted small" style="margin:4px 0 8px">Напиши что угодно по-итальянски: сообщение, рассказ о дне, письмо. Подсвечу ошибки в артиклях, согласовании, essere/avere, piacere, ударениях и опечатки.</p>
+    <textarea id="fwIn" style="font:16px Manrope,system-ui;min-height:140px" placeholder="Scrivi in italiano…"></textarea>
+    <button class="btn block mt" id="fwCheck">Проверить</button><div id="fwOut"></div>`;
+    $("#modal").classList.add("on");setTimeout(()=>{const t=$("#fwIn");t&&t.focus()},100);return;
+  }
   $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Переводчик</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
+  <div class="seg"><button class="on" data-trmode="tr">🔤 Перевод</button><button data-trmode="check">✍️ Проверка</button></div>
   <div class="seg"><button class="${trDir==="it"?"on":""}" data-trd="it">Итальянский → русский</button><button class="${trDir==="ru"?"on":""}" data-trd="ru">Русский → итальянский</button></div>
   <textarea id="trIn" style="font:16px Manrope,system-ui;min-height:90px" placeholder="${trDir==="it"?"Scrivi in italiano…":"Напиши по-русски…"}"></textarea>
   <button class="btn block mt" id="trGo">Перевести</button>
@@ -2615,6 +3649,8 @@ document.addEventListener("click",e=>{
     if(mcDoneAll(qs,act.ans)){modState(m.id)[k]=Math.max(modState(m.id)[k]||0,mcScore(qs,act.ans));save()}render()}return}
   if(d.tq!==undefined&&act&&act.k==="test"&&act.a===null){const m=COURSE.find(x=>x.id===cmod),q=m.test[act.i];act.a=+d.tq;if(+d.tq===q[2]){act.correct++;bump("correct");addXP(2);tgHaptic("success")}else{act.wrong.push({i:act.i,given:q[1][+d.tq]});tgHaptic("error")}
     if(act.i===m.test.length-1)finishTest(m);render();return}
+  if(d.lvl){clvl=d.lvl;render();return}
+  if(d.trmode){trMode=d.trmode;openTranslator();return}
   if(d.pl!==undefined&&act&&act.k==="write"&&!act.a){act.picked.push(act.pool.splice(+d.pl,1)[0]);render();return}
   if(d.pk!==undefined&&act&&act.k==="write"&&!act.a){act.pool.push(act.picked.splice(+d.pk,1)[0]);render();return}
   if(d.trd){trDir=d.trd;openTranslator();return}
@@ -2687,14 +3723,24 @@ document.addEventListener("click",e=>{
       act.a=r;if(r.ok){act.right++;bump("correct");addXP(2);tgHaptic("success")}else tgHaptic("error");speak(tk.k==="order"?tk.it:tk.ans[0]);render();break}
     case "wSkip":{const m=COURSE.find(x=>x.id===cmod);act.a={ok:false,val:""};render();break}
     case "wShow":act.a={ok:true};act.right++;addXP(2);render();break;
+    case "wShowModel":act.showModel=!act.showModel;render();break;
+    case "wFreeEdit":act.input=act.a.text;act.a=null;render();break;
+    case "wFreeCheck":{const m=COURSE.find(x=>x.id===cmod),tk=m.write[act.i],v=(($("#wfree")||{}).value||"").trim();if(v.split(/\s+/).length<3){toast("Напиши хотя бы одно-два предложения");break}
+      act.input=v;act.a={busy:true};render();const me=act;runFreeCheck(tk,v,res=>{if(act!==me)return;act.a=res;if(res.ok){if(!me.freeOk)me.freeOk={};if(!me.freeOk[me.i]){me.freeOk[me.i]=1;act.right++;bump("correct");addXP(5)}tgHaptic("success")}else tgHaptic("error");render()});break}
+    case "freeWrite":openFreeWrite();break;
+    case "fwCheck":{const v=(($("#fwIn")||{}).value||"").trim();if(!v){toast("Сначала напиши текст");break}const o=$("#fwOut");o.innerHTML=`<div class="muted small mt">Проверяю…</div>`;ITC.check(v).then(r=>{o.innerHTML=`<div class="card mt readtext" style="font-size:17px">${markText(v,r.errs)}</div>${errListHTML(v,r.errs)}${r.online?"":`<div class="muted small mt">Орфография онлайн недоступна, проверены грамматика и ударения.</div>`}`});break}
+    case "openLvl":{const l=t.dataset.l,first=lvlMods(l)[0];modState(first.id).open=true;save();if(srvReady){clearTimeout(srvTimer);srvPush()}cmod=first.id;render();window.scrollTo(0,0);break}
     case "wNext":{const m=COURSE.find(x=>x.id===cmod);act.i++;act.a=null;act.pool=null;act.picked=null;act.input="";if(act.i>=m.write.length){modState(m.id).write=Math.max(modState(m.id).write||0,Math.round(100*act.right/m.write.length));save()}render();window.scrollTo(0,0);break}
     case "sShow":act.show=true;render();break;
     case "sNext":{const m=COURSE.find(x=>x.id===cmod);act.i++;act.show=false;addXP(1);if(act.i>=m.speak.length){modState(m.id).speak=100;save()}render();break}
+    case "tType":{const m=COURSE.find(x=>x.id===cmod),q=m.test[act.i],v=(($("#tin")||{}).value||"").trim();if(!v){toast("Сначала напиши ответ");break}
+      const r=checkWrite({k:"tr",ans:q.ans},v);act.a=r;if(r.ok){act.correct++;bump("correct");addXP(2);tgHaptic("success")}else{act.wrong.push({i:act.i,given:v});tgHaptic("error")}
+      if(act.i===m.test.length-1)finishTest(m);render();break}
     case "tNext":{act.i++;act.a=null;act.order=null;render();window.scrollTo(0,0);setTimeout(sayTestAudio,300);break}
     case "actRestart":act=null;render();window.scrollTo(0,0);break;
     case "glossClose":hideGloss();break;
     case "glossAdd":addGlossCard(t.dataset.gw);break;
-    case "trBtn":openTranslator();break;
+    case "trBtn":trMode="tr";openTranslator();break;
     case "trGo":doTranslate();break;
     case "trAdd":addTrCard();break;
     case "gear":openSettings();break;
@@ -2726,6 +3772,7 @@ document.addEventListener("input",e=>{
 document.addEventListener("change",e=>{if(["rate","npd","goal"].includes(e.target.id))save()});
 $("#modal").addEventListener("click",e=>{if(e.target.id==="modal"&&!window._claimPending){$("#modal").classList.remove("on");render()}});
 document.addEventListener("keydown",e=>{
+  if(e.target.id==="tin"&&e.key==="Enter"&&act){e.preventDefault();const b=$("#tType")||$("#tNext");b&&b.click();return}
   if(e.target.id==="win"&&e.key==="Enter"&&act){e.preventDefault();const b=$("#wCheck")||$("#wNext");b&&b.click();return}
   if(e.target.id==="trIn"&&e.key==="Enter"&&!e.shiftKey){e.preventDefault();doTranslate();return}
   if(e.target.id==="pin"&&e.key==="Enter"&&prac){e.preventDefault();if(!prac.answered){const v=e.target.value;if(v.trim())answerPractice(v)}else $("#pnext")&&$("#pnext").click();return}
