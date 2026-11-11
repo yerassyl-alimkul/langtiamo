@@ -369,6 +369,17 @@ nav.tabs button.on{background:var(--dock-on);color:var(--dock-on-ink);font-weigh
   h1{font-size:32px}
   .wrap{padding-bottom:56px}
 }
+
+/* Unbounded очень широкий: размеры подобраны под телефон */
+.logo{font-size:17px;white-space:nowrap}
+.pill,.pill.sea{white-space:nowrap}
+header.top .row{flex-wrap:nowrap}
+h1{font-size:25px;line-height:1.2}
+.hero h1{font-size:23px}
+h2{font-size:17px}
+.q{font-family:var(--font-text)!important;font-size:19px;font-weight:600;line-height:1.35;letter-spacing:0}
+.mrow .link{padding:6px 12px;font-size:13px}
+@media (min-width:900px){h1{font-size:30px}.hero h1{font-size:28px}.q{font-size:21px}}
 </style>
 </head>
 <body>
@@ -2917,7 +2928,7 @@ function vToday(){
     </div>
   </section>
   ${!("speechSynthesis" in window)?`<div class="card mt small" style="background:var(--terra-soft);border-color:transparent">В этом окне нет озвучки. Слушать произношение можно, если открыть приложение в браузере телефона.${TG&&TG.openLink?` <button class="link" id="openExt">Открыть в браузере</button>`:""}</div>`:""}
-  ${syncMode==="local"&&!TG&&!window.claude?`<div class="card mt row" style="border-color:var(--sea)"><span style="font-size:24px">🔗</span><div class="grow"><b class="small">Войди через Telegram</b><div class="muted small">Прогресс будет общим с ботом @${BOT_NAME}</div></div><button class="btn sea" id="loginBtn" style="padding:10px 14px">Войти</button></div>`:""}
+  ${syncMode==="local"&&!TG&&!window.claude?`<div class="card mt row"><span style="font-size:24px">🔗</span><div class="grow"><b class="small">Войди через Telegram</b><div class="muted small">Прогресс будет общим с ботом @${BOT_NAME}</div></div><button class="btn sea" id="loginBtn" style="padding:10px 14px">Войти</button></div>`:""}
   <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
   <h2>Курс ${COURSE[currentModIndex()].lvl}</h2>
   ${(()=>{const ci=currentModIndex(),m=COURSE[ci],pr=modProgress(m),allDone=COURSE.every(x=>modPassed(x.id));
