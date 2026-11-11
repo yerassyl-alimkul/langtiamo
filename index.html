@@ -7,7 +7,7 @@
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Onest:wght@400;500;600&family=Unbounded:wght@500;600&display=swap" rel="stylesheet">
 <style>
 :root{
   --bg:#FBF6EE; --card:#FFFFFF; --ink:#2A2522; --muted:#7A6F66; --line:#EADFD0;
@@ -32,11 +32,11 @@ button{font:inherit;color:inherit;cursor:pointer;border:0;background:none}
 :root{--sat:max(env(safe-area-inset-top),var(--tg-st,0px));--sab:max(env(safe-area-inset-bottom),var(--tg-sb,0px));--sal:env(safe-area-inset-left);--sar:env(safe-area-inset-right)}
 .wrap{max-width:560px;margin:0 auto;padding:calc(16px + var(--sat)) calc(16px + var(--sar)) calc(100px + var(--sab)) calc(16px + var(--sal))}
 header.top{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px}
-.logo{font-family:Fraunces,serif;font-weight:700;font-size:22px;letter-spacing:-.01em}
+.logo{font-family:var(--font-display);font-weight:700;font-size:22px;letter-spacing:-.01em}
 .logo span{color:var(--terra)}
 .iconbtn{width:40px;height:40px;border-radius:12px;display:grid;place-items:center;color:var(--muted)}
 .iconbtn:hover{background:var(--line)}
-h1,h2,h3{font-family:Fraunces,serif;font-weight:700;letter-spacing:-.01em;margin:0}
+h1,h2,h3{font-family:var(--font-display);font-weight:700;letter-spacing:-.01em;margin:0}
 h1{font-size:28px;line-height:1.15}
 h2{font-size:21px;margin:22px 0 10px}
 h3{font-size:17px}
@@ -64,7 +64,7 @@ h3{font-size:17px}
 .ring .lbl small{display:block;font-weight:500;font-size:11px;color:var(--muted)}
 .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
 .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:12px;text-align:center}
-.stat b{display:block;font-size:22px;font-family:Fraunces,serif}
+.stat b{display:block;font-size:22px;font-family:var(--font-display)}
 .stat span{font-size:12px;color:var(--muted)}
 .path li{list-style:none;display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--line)}
 .path li:last-child{border-bottom:0}
@@ -92,7 +92,7 @@ h3{font-size:17px}
 .tile .em{font-size:22px;display:block;margin-bottom:6px}
 .back{display:inline-flex;align-items:center;gap:6px;color:var(--muted);font-weight:600;margin-bottom:10px;padding:6px 0}
 .flash{min-height:260px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:10px;cursor:pointer;user-select:none}
-.flash .big{font-family:Fraunces,serif;font-size:34px;font-weight:700;line-height:1.15}
+.flash .big{font-family:var(--font-display);font-size:34px;font-weight:700;line-height:1.15}
 .flash .hint{font-size:13px;color:var(--muted)}
 .grades{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}
 .grades button{padding:12px 4px;border-radius:12px;font-weight:700;font-size:14px;line-height:1.2}
@@ -116,7 +116,7 @@ h3{font-size:17px}
 .opt{padding:14px;border-radius:12px;border:1.5px solid var(--line);background:var(--card);text-align:left;font-weight:600;font-size:16px}
 .opt.right{border-color:var(--olive);background:var(--olive-soft);color:var(--olive)}
 .opt.wrong{border-color:var(--red);background:var(--red-soft);color:var(--red)}
-.q{font-family:Fraunces,serif;font-size:22px;font-weight:700;line-height:1.3}
+.q{font-family:var(--font-display);font-size:22px;font-weight:700;line-height:1.3}
 .explain{margin-top:12px;padding:12px;border-radius:12px;background:var(--sea-soft);color:var(--ink);font-size:14.5px}
 .hidden-it .it,.hidden-it .tr{filter:blur(6px);transition:filter .2s}
 .hidden-it .item.show .it,.hidden-it .item.show .tr{filter:none}
@@ -187,7 +187,7 @@ textarea{width:100%;min-height:90px;padding:10px;border-radius:12px;border:1px s
 .lvtabs{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:6px}
 .lvtab{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:14px 16px;border-radius:16px;border:1.5px solid var(--line);background:var(--card);text-align:left;color:var(--ink)}
 .lvtab.on{border-color:var(--terra);background:var(--terra-soft)}
-.lvbig{font-family:"DM Serif Display",Georgia,serif;font-size:30px;line-height:1}
+.lvbig{font-family:var(--font-display);font-size:30px;line-height:1}
 .lvsub{font-size:13px;color:var(--muted);font-weight:600}
 .lvbar{display:block;width:100%;height:5px;border-radius:9px;background:var(--line);margin-top:8px;overflow:hidden}.lvbar i{display:block;height:100%;background:var(--terra)}
 .lvtab.on .lvbar{background:rgba(0,0,0,.08)}
@@ -207,7 +207,7 @@ mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
 @media (min-width:900px){
   body{padding-left:236px}
   nav.tabs{top:0;bottom:0;left:0;right:auto;width:236px;flex-direction:column;justify-content:flex-start;align-items:stretch;border-top:0;border-right:1px solid var(--line);padding:26px 14px}
-  .side-logo{display:block;font-family:Fraunces,serif;font-weight:700;font-size:25px;padding:2px 14px 24px;letter-spacing:-.01em}
+  .side-logo{display:block;font-family:var(--font-display);font-weight:700;font-size:25px;padding:2px 14px 24px;letter-spacing:-.01em}
   .side-logo span{color:var(--terra)}
   nav.tabs .in{flex-direction:column;gap:4px;max-width:none}
   nav.tabs button{flex:none;flex-direction:row;justify-content:flex-start;gap:12px;padding:11px 14px;font-size:15px;border-radius:12px}
@@ -245,6 +245,130 @@ mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
 .gloss{position:fixed;left:50%;bottom:calc(74px + var(--sab));transform:translate(-50%,140%);width:min(540px,94vw);background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 12px 12px 16px;box-shadow:0 10px 30px rgba(0,0,0,.18);z-index:25;transition:transform .25s,visibility .25s;visibility:hidden;pointer-events:none}
 .gloss.on{transform:translate(-50%,0);visibility:visible;pointer-events:auto}
 .orderline{min-height:48px;padding:8px;border:1.5px dashed var(--line);border-radius:12px;display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+/* ================== Стиль JulYera ==================
+   Токены и компоненты по design/DESIGN.md JulYera Agent: Onest + Unbounded, тёмная «таблетка» внизу,
+   пастельные карточки, акцент #557546. Старые имена переменных (terra, sea, olive) переназначены. */
+:root{
+  --bg:#FBFBFA;--card:#FFFFFF;--ink:#17181C;--muted:#5D5F69;--line:#E6E6E1;--hairline:#EFEFEA;--dashed:#D9D9D3;
+  --terra:#557546;--terra-soft:#E3ECDD;--sea:#17181C;--sea-soft:#DCE5FB;
+  --olive:#557546;--olive-soft:#DDE9D6;--red:#B3261E;--red-soft:#F6DEDB;
+  --cat-yellow:#E2D47E;--cat-blue:#DCE5FB;--cat-sky:#85AACB;--cat-green:#A9C89D;
+  --on-ink:#FFFFFF;--dock-bg:#17181C;--dock-text:#D5D6DC;--dock-on:#FFFFFF;--dock-on-ink:#17181C;
+  --accent-text:#557546;--shadow:none;--r:22px;
+  --font-display:'Unbounded',system-ui,sans-serif;--font-text:'Onest',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme:dark){:root:not(.light){
+  --bg:#111214;--card:#1B1C20;--ink:#ECEDF0;--muted:#9A9CA6;--line:#2C2E34;--hairline:#24262B;--dashed:#3A3D44;
+  --terra:#557546;--terra-soft:#24301F;--sea:#ECEDF0;--sea-soft:#232A3A;--olive:#A9C89D;--olive-soft:#24301F;--red:#F28B82;--red-soft:#3A2220;
+  --on-ink:#17181C;--dock-bg:#26272C;--dock-text:#A6A8B1;--dock-on:#ECEDF0;--dock-on-ink:#17181C;--accent-text:#A9C89D}}
+:root.dark{
+  --bg:#111214;--card:#1B1C20;--ink:#ECEDF0;--muted:#9A9CA6;--line:#2C2E34;--hairline:#24262B;--dashed:#3A3D44;
+  --terra:#557546;--terra-soft:#24301F;--sea:#ECEDF0;--sea-soft:#232A3A;--olive:#A9C89D;--olive-soft:#24301F;--red:#F28B82;--red-soft:#3A2220;
+  --on-ink:#17181C;--dock-bg:#26272C;--dock-text:#A6A8B1;--dock-on:#ECEDF0;--dock-on-ink:#17181C;--accent-text:#A9C89D}
+html,body{font-family:var(--font-text);font-size:16px;line-height:1.4}
+h1,h2,h3,.logo,.side-logo,.q,.flash .big,.stat b,.lvbig,.done-big+h1{font-family:var(--font-display);font-weight:600;letter-spacing:-.01em}
+h1{font-size:28px;line-height:1.15}
+h2{font-size:18px;margin:28px 0 12px}
+h3{font-size:16px}
+.q{font-size:19px;line-height:1.35}
+.flash .big{font-size:30px}
+.logo{font-size:19px}.logo span,.side-logo span{color:var(--accent-text)}
+.small{font-size:13.5px}
+.card,.tile,.stat{border-radius:var(--r);border:1px solid var(--line);box-shadow:none;background:var(--card)}
+.card{padding:18px}
+.iconbtn{width:44px;height:44px;border-radius:14px;border:1px solid var(--line);background:var(--card);color:var(--ink)}
+.iconbtn:hover{background:var(--card);border-color:var(--ink)}
+#trBtn{width:auto;padding:0 12px;white-space:nowrap}
+header.top>.row{gap:8px!important}
+header.top{margin-bottom:18px}
+.pill{border-radius:999px;font-weight:600}
+.pill.sea{background:var(--card);border:1px solid var(--line);color:var(--ink);height:44px;padding:0 14px;font-size:14px}
+.pill.terra{background:var(--terra-soft);color:var(--accent-text)}
+.pill.ok,.pill.olive{background:var(--olive-soft);color:var(--accent-text)}
+.btn{min-height:52px;border-radius:16px;font-weight:600;background:var(--terra);color:#fff;padding:14px 20px}
+.btn.sea{background:var(--ink);color:var(--on-ink)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.btn.ghost:hover{border-color:var(--ink)}
+.link{color:var(--accent-text);font-weight:600}
+.play{width:44px;height:44px;background:var(--ink);color:var(--on-ink)}
+.play.slow{background:var(--card);border:1px solid var(--line);color:var(--ink)}
+.play.mic{background:var(--cat-yellow);color:#17181C}.play.mic.on{background:var(--red);color:#fff}
+.bigplay{background:var(--ink)!important;color:var(--on-ink)!important}
+.tr{color:var(--accent-text)}
+.chk{border-color:var(--ink);border-width:2px}
+.chk.done{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.chk.next{border-color:var(--terra);color:var(--accent-text)}
+.chip{border-radius:999px;min-height:44px;padding:10px 16px;font-weight:500;border:1px solid var(--line);background:var(--card)}
+.chip.on{background:var(--ink);color:var(--on-ink);border-color:var(--ink)}
+.bar{height:6px;background:var(--hairline)}
+.bar i{background:var(--ink)}
+.opt{border-radius:18px;border:1px solid var(--line);font-weight:500;min-height:52px;padding:14px 16px}
+.opt:hover:not([disabled]){border-color:var(--ink)}
+.opt.right{background:var(--cat-green);border-color:var(--cat-green);color:#17181C}
+.opt.wrong{background:var(--red-soft);border-color:var(--red);color:var(--red)}
+.explain{border-radius:18px;background:var(--cat-blue);color:#17181C}
+:root.dark .explain{color:#17181C}
+@media (prefers-color-scheme:dark){:root:not(.light) .explain{color:#17181C}}
+.explain b{color:#17181C}
+.rule b{color:var(--accent-text)}
+.g0{background:var(--red-soft);color:var(--red)}.g1{background:var(--cat-yellow);color:#17181C}.g2{background:var(--cat-green);color:#17181C}.g3{background:var(--cat-blue);color:#17181C}
+.grades button{border-radius:16px;min-height:56px}
+input[type=search],input[type=text],textarea{border-radius:16px;border:1px solid var(--line);background:var(--card);min-height:52px;padding:14px 16px}
+textarea{width:100%;color:var(--ink);font-family:var(--font-text)!important}
+input:focus,textarea:focus{outline:none;border-color:var(--ink)}
+.answer-in.right{background:var(--cat-green)!important;border-color:var(--cat-green)!important;color:#17181C}
+.answer-in.wrong{background:var(--red-soft)!important;border-color:var(--red)!important}
+.seg{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:4px;display:flex;gap:4px}
+.seg button{flex:1;min-height:44px;border-radius:12px;font-weight:500;color:var(--muted);background:transparent}
+.seg button.on{background:var(--ink);color:var(--on-ink);font-weight:600}
+.toast{background:var(--ink);color:var(--on-ink);border-radius:18px;padding:13px 18px;bottom:calc(104px + var(--sab))}
+.sheet{border-radius:22px 22px 0 0;background:var(--bg)}
+.modal{background:rgba(23,24,28,.45)}
+.gloss{border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(23,24,28,.18)}
+.ex{border-radius:999px}.ex span{color:var(--accent-text)}.ex .play{width:34px;height:34px}
+mark.err{border-bottom-color:var(--red)}
+.verdict{border-radius:16px}.verdict.ok{background:var(--cat-green);color:#17181C}.verdict.no{background:var(--cat-yellow);color:#17181C}
+/* Нижняя панель как у JulYera: тёмная «таблетка», активный пункт — светлая */
+nav.tabs{background:var(--bg);border-top:1px solid var(--hairline);padding:12px calc(20px + var(--sar)) calc(16px + var(--sab)) calc(20px + var(--sal))}
+nav.tabs .in{background:var(--dock-bg);border-radius:30px;padding:6px;gap:4px;height:60px;max-width:520px}
+nav.tabs button{flex:1 1 0;border-radius:24px;color:var(--dock-text);font-size:13.5px;font-weight:500;padding:0 4px;justify-content:center;gap:0;transition:background-color .15s,color .15s}
+nav.tabs button svg{display:none}
+nav.tabs button.on{background:var(--dock-on);color:var(--dock-on-ink);font-weight:600}
+@media (max-width:400px){nav.tabs button{font-size:12px;padding:0 2px}nav.tabs .in{gap:2px;padding:6px 4px}}
+.wrap{padding-bottom:calc(112px + var(--sab))}
+/* Уровни: как чипы дней — выбранный залит ink */
+.lvtab{border-radius:22px;border:1px solid var(--line);background:var(--card);padding:16px 18px}
+.lvtab.on{background:var(--ink);border-color:var(--ink);color:var(--on-ink)}
+.lvtab.on .lvsub{color:var(--on-ink);opacity:.75}
+.lvbig{font-size:30px}
+.lvbar{background:var(--hairline);height:4px}.lvbar i{background:var(--terra)}
+.lvtab.on .lvbar{background:rgba(255,255,255,.22)}.lvtab.on .lvbar i{background:var(--cat-green)}
+/* Модули — пастельные строки, как задачи в JulYera */
+.mrow{border:0!important;color:#17181C;min-height:84px}
+.mrow .muted{color:#33353D}
+.mrow .link{color:#17181C;font-weight:600;white-space:nowrap;border:1.5px solid #17181C;border-radius:999px;padding:8px 14px;font-size:14px}
+.mrow .bar{background:rgba(23,24,28,.12)}.mrow .bar i{background:#17181C!important}
+.mrow.cur{background:var(--cat-yellow)}
+.mrow.pass{background:var(--cat-green)}
+.mrow.open{background:var(--cat-blue)}
+.mrow.lock{background:transparent;border:1.5px dashed var(--dashed)!important;color:var(--muted)}
+.mrow.lock .muted,.mrow.lock b{color:var(--muted)}
+.mrow.lock .link{border:0;padding:0;color:var(--muted);font-weight:500}
+.mrow .ne{color:#33353D}
+.lvhero{background:var(--card)}
+/* Ноутбук: боковое меню в стиле JulYera */
+@media (min-width:900px){
+  nav.tabs{background:var(--bg);border-right:1px solid var(--hairline);padding:26px 16px}
+  nav.tabs .in{background:transparent;height:auto;border-radius:0;padding:0;gap:6px}
+  nav.tabs button{flex:none;justify-content:flex-start;gap:12px;color:var(--muted);min-height:48px;padding:0 16px;border-radius:16px;font-size:15px}
+  nav.tabs button svg{display:block}
+  nav.tabs button.on{background:var(--ink);color:var(--on-ink)}
+  nav.tabs button:not(.on):hover{background:var(--card);color:var(--ink)}
+  .side-logo{font-family:var(--font-display);font-weight:600;font-size:20px;display:block;padding:4px 16px 26px}
+  .toast{bottom:32px}
+  h1{font-size:32px}
+  .wrap{padding-bottom:56px}
+}
 </style>
 </head>
 <body>
@@ -2530,7 +2654,7 @@ function listen(target,btn){
 /* ================== TELEGRAM ================== */
 const TG=(window.Telegram&&window.Telegram.WebApp&&window.Telegram.WebApp.initData)?window.Telegram.WebApp:null;
 if(TG){try{TG.ready();TG.expand();document.documentElement.classList.add(TG.colorScheme==="dark"?"dark":"light");
-  const bg=TG.colorScheme==="dark"?"#1B1816":"#FBF6EE";TG.setHeaderColor&&TG.setHeaderColor(bg);TG.setBackgroundColor&&TG.setBackgroundColor(bg);
+  const bg=TG.colorScheme==="dark"?"#111214":"#FBFBFA";TG.setHeaderColor&&TG.setHeaderColor(bg);TG.setBackgroundColor&&TG.setBackgroundColor(bg);
   const setSafe=()=>{try{const a=TG.safeAreaInset||{},c=TG.contentSafeAreaInset||{},r=document.documentElement.style;r.setProperty("--tg-st",((a.top||0)+(c.top||0))+"px");r.setProperty("--tg-sb",((a.bottom||0)+(c.bottom||0))+"px")}catch(e){}};
   setSafe();TG.onEvent&&(TG.onEvent("safeAreaChanged",setSafe),TG.onEvent("contentSafeAreaChanged",setSafe),TG.onEvent("viewportChanged",setSafe));
   TG.onEvent&&TG.onEvent("themeChanged",()=>{const h=document.documentElement;h.classList.remove("dark","light");h.classList.add(TG.colorScheme==="dark"?"dark":"light")});
@@ -2797,7 +2921,7 @@ function vToday(){
   <button class="btn block mt" id="startCards" ${due+nl===0?"disabled":""}>${due+nl===0?"Карточки на сегодня закончились":"Учить слова · "+due+" повторить, "+nl+" новых"}</button>
   <h2>Курс ${COURSE[currentModIndex()].lvl}</h2>
   ${(()=>{const ci=currentModIndex(),m=COURSE[ci],pr=modProgress(m),allDone=COURSE.every(x=>modPassed(x.id));
-    return `<button class="card row" data-mod="${m.id}" style="width:100%;text-align:left;border-color:var(--terra);border-width:2px"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":m.lvl+" · модуль "+modNum(m)+" из "+lvlMods(m.lvl).length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
+    return `<button class="card row mrow ${allDone?"pass":"cur"}" data-mod="${m.id}" style="width:100%;text-align:left"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":m.lvl+" · модуль "+modNum(m)+" из "+lvlMods(m.lvl).length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
   <h2>Задания дня</h2>
   ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
 </div><div class="dashside">
@@ -3099,9 +3223,9 @@ function vCourse(){
   ${!lvOpen?`<div class="row mt" style="gap:8px;flex-wrap:wrap"><span class="muted small grow">A2 откроется после итогового модуля A1. Уже знаешь основы?</span><button class="btn sea" id="openLvl" data-l="${L}" style="padding:10px 14px">Начать ${L} сейчас</button></div>`:""}</div>
   ${mk?`<button class="card row mt" id="mistAll" style="width:100%;text-align:left;border-color:var(--terra)"><span style="font-size:24px">🔁</span><div class="grow"><b>Работа над ошибками</b><div class="muted small">${mk} ${plural(mk,"вопрос","вопроса","вопросов")} из уроков грамматики</div></div><span class="link">Начать</span></button>`:""}
   <div class="mt modgrid">${mods.map(m=>{const i=COURSE.indexOf(m),open=modUnlocked(i),pr=modProgress(m),pass=modPassed(m.id),n=modNum(m);
-    return `<button class="card row mt" data-mod="${m.id}" style="width:100%;text-align:left;${i===cur&&open&&!pass?"border-color:var(--terra);border-width:2px":""}${open?"":"opacity:.6"}">
+    return `<button class="card row mt mrow ${!open?"lock":pass?"pass":i===cur?"cur":"open"}" data-mod="${m.id}" style="width:100%;text-align:left">
     <div style="font-size:28px;width:40px;text-align:center">${open?m.em:"🔒"}</div>
-    <div class="grow"><div class="muted small">Модуль ${n}${pass?` · <span style="color:var(--olive);font-weight:700">сдан, ${(state.mod[m.id]||{}).test}%</span>`:""}</div><b>${m.t}</b><div class="muted small ne">${esc(m.ne||"")}</div>
+    <div class="grow"><div class="muted small">Модуль ${n}${pass?` · <b>сдан, ${(state.mod[m.id]||{}).test}%</b>`:""}</div><b>${m.t}</b><div class="muted small ne">${esc(m.ne||"")}</div>
     <div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%;${pass?"background:var(--olive)":""}"></i></div></div>
     <span class="${open?"link":"muted small"}">${pass?"Повторить":open?(i===cur?"Продолжить":"Открыть"):"Закрыт"}</span></button>`}).join("")}</div>
   <button class="btn ghost block mt" id="glistBtn">📐 Вся грамматика (${LESSONS.length} уроков)</button>
@@ -3193,7 +3317,7 @@ function vWriteAct(m){
 function freeWriteCard(t,a){
   const res=a&&a.res;
   return `<div class="card"><div class="muted small">Напиши сам · текст проверится автоматически</div><div class="q mt" style="font-size:18px">${esc(t.p)}</div>
-  ${!a?`<textarea id="wfree" class="mt" style="font:16px Manrope,system-ui;min-height:130px" placeholder="Scrivi qui… (пиши по-итальянски)">${esc(act.input||"")}</textarea>
+  ${!a?`<textarea id="wfree" class="mt" style="font:16px Onest,system-ui;min-height:130px" placeholder="Scrivi qui… (пиши по-итальянски)">${esc(act.input||"")}</textarea>
   <div class="row mt" style="gap:8px"><button class="btn ghost" id="wShowModel">Пример</button><button class="btn grow" id="wFreeCheck">Проверить текст</button></div>
   ${act.showModel?`<div class="explain"><b>Пример ответа:</b><br>${esc(t.model)}</div>`:""}`:
   a.busy?`<div class="card mt center muted">Проверяю текст…</div>`:
@@ -3444,14 +3568,14 @@ function openTranslator(){
     $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Проверка текста</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
     <div class="seg"><button data-trmode="tr">🔤 Перевод</button><button class="on" data-trmode="check">✍️ Проверка</button></div>
     <p class="muted small" style="margin:4px 0 8px">Напиши что угодно по-итальянски: сообщение, рассказ о дне, письмо. Подсвечу ошибки в артиклях, согласовании, essere/avere, piacere, ударениях и опечатки.</p>
-    <textarea id="fwIn" style="font:16px Manrope,system-ui;min-height:140px" placeholder="Scrivi in italiano…"></textarea>
+    <textarea id="fwIn" style="font:16px Onest,system-ui;min-height:140px" placeholder="Scrivi in italiano…"></textarea>
     <button class="btn block mt" id="fwCheck">Проверить</button><div id="fwOut"></div>`;
     $("#modal").classList.add("on");setTimeout(()=>{const t=$("#fwIn");t&&t.focus()},100);return;
   }
   $("#sheet").innerHTML=`<div class="row between"><h2 style="margin:0">Переводчик</h2><button class="iconbtn" id="closeM" aria-label="Закрыть">✕</button></div>
   <div class="seg"><button class="on" data-trmode="tr">🔤 Перевод</button><button data-trmode="check">✍️ Проверка</button></div>
   <div class="seg"><button class="${trDir==="it"?"on":""}" data-trd="it">Итальянский → русский</button><button class="${trDir==="ru"?"on":""}" data-trd="ru">Русский → итальянский</button></div>
-  <textarea id="trIn" style="font:16px Manrope,system-ui;min-height:90px" placeholder="${trDir==="it"?"Scrivi in italiano…":"Напиши по-русски…"}"></textarea>
+  <textarea id="trIn" style="font:16px Onest,system-ui;min-height:90px" placeholder="${trDir==="it"?"Scrivi in italiano…":"Напиши по-русски…"}"></textarea>
   <button class="btn block mt" id="trGo">Перевести</button>
   <div id="trOut" class="mt"></div>`;
   $("#modal").classList.add("on");setTimeout(()=>{const t=$("#trIn");t&&t.focus()},100);
