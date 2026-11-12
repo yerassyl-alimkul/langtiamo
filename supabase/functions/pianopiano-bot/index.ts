@@ -1,4 +1,4 @@
-// Piano Piano — Telegram-бот: вебхук команд, синхронизация статистики из Mini App и ежедневные напоминания.
+// Langtiamo — Telegram-бот: вебхук команд, синхронизация статистики из Mini App и ежедневные напоминания.
 // Маршруты (один URL функции):
 //   POST /                — вебхук Telegram (проверка секретного заголовка)
 //   POST ?a=sync          — Mini App присылает статистику (проверка initData подписью бота)
@@ -12,7 +12,8 @@
 import { createClient } from "npm:@supabase/supabase-js@2";
 
 const TOKEN = Deno.env.get("PP_BOT_TOKEN") ?? "";
-const APP_URL = Deno.env.get("PP_APP_URL") ?? "https://yerassyl-alimkul.github.io/pianopiano/";
+// адрес сайта задан в коде: после переименования в Langtiamo старое значение PP_APP_URL не должно мешать
+const APP_URL = "https://yerassyl-alimkul.github.io/langtiamo/";
 const SB_URL = Deno.env.get("SUPABASE_URL")!;
 const sb = createClient(SB_URL, Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!);
 const API = `https://api.telegram.org/bot${TOKEN}`;
@@ -43,7 +44,7 @@ const PHRASES: [string, string][] = [
 ];
 
 const esc = (s: string) => s.replace(/[&<>]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]!));
-const appButton = (text = "▶ Открыть Piano Piano") => ({ inline_keyboard: [[{ text, web_app: { url: APP_URL } }]] });
+const appButton = (text = "▶ Открыть Langtiamo") => ({ inline_keyboard: [[{ text, web_app: { url: APP_URL } }]] });
 const plural = (n: number, a: string, b: string, c: string) => {
   const m = Math.abs(n) % 100, k = m % 10;
   if (m > 10 && m < 20) return c;
@@ -224,7 +225,7 @@ async function onUpdate(u: any) {
     const nonce = text.slice("/start login_".length).trim();
     await tg("sendMessage", {
       chat_id: chat, parse_mode: "HTML",
-      text: "🔐 <b>Вход на сайт Piano Piano</b>\n\nНажми кнопку, чтобы открыть свой прогресс в браузере.\nЕсли ты не начинал вход сам, ничего не нажимай.",
+      text: "🔐 <b>Вход на сайт Langtiamo</b>\n\nНажми кнопку, чтобы открыть свой прогресс в браузере.\nЕсли ты не начинал вход сам, ничего не нажимай.",
       reply_markup: { inline_keyboard: [[{ text: "✅ Подтвердить вход", callback_data: "login:" + nonce }]] },
     });
     return;
@@ -233,7 +234,7 @@ async function onUpdate(u: any) {
     await sb.from("pp_users").upsert({ tg_id: from.id, chat_id: chat, first_name: from.first_name || null }, { onConflict: "tg_id" });
     await tg("sendMessage", {
       chat_id: chat, parse_mode: "HTML", reply_markup: appButton(),
-      text: `Ciao${name ? ", " + name : ""}! 👋\n\n<b>Piano Piano</b> — итальянский с нуля: карточки слов, фразы для жизни в Италии, грамматика, диалоги и тренировки на слух.\n\n⏰ Каждый день в <b>${row?.remind_hour ?? 19}:00</b> я напомню позаниматься, если ты ещё не занимался.\n\n/site — ссылка на сайт (с твоим прогрессом)\n/time 9 — поменять час напоминания\n/remind — включить или выключить напоминания\n\nНажми кнопку, чтобы начать 👇`,
+      text: `Ciao${name ? ", " + name : ""}! 👋\n\n<b>Langtiamo</b> — итальянский с нуля: карточки слов, фразы для жизни в Италии, грамматика, диалоги и тренировки на слух.\n\n⏰ Каждый день в <b>${row?.remind_hour ?? 19}:00</b> я напомню позаниматься, если ты ещё не занимался.\n\n/site — ссылка на сайт (с твоим прогрессом)\n/time 9 — поменять час напоминания\n/remind — включить или выключить напоминания\n\nНажми кнопку, чтобы начать 👇`,
     });
     return;
   }
@@ -241,7 +242,7 @@ async function onUpdate(u: any) {
     const token = await makeToken(from.id, from.first_name || "");
     await tg("sendMessage", {
       chat_id: chat, parse_mode: "HTML", disable_web_page_preview: true,
-      text: `🌐 <b>Piano Piano на сайте</b>\n\nКнопка ниже откроет сайт сразу с твоим прогрессом, входить не нужно. Удобно на ноутбуке: перешли себе это сообщение или открой бота в Telegram Desktop.\n\nОбычная ссылка: ${APP_URL}\n\n⚠️ Кнопку не пересылай другим людям: по ней открывается твой аккаунт.`,
+      text: `🌐 <b>Langtiamo на сайте</b>\n\nКнопка ниже откроет сайт сразу с твоим прогрессом, входить не нужно. Удобно на ноутбуке: перешли себе это сообщение или открой бота в Telegram Desktop.\n\nОбычная ссылка: ${APP_URL}\n\n⚠️ Кнопку не пересылай другим людям: по ней открывается твой аккаунт.`,
       reply_markup: { inline_keyboard: [[{ text: "🌐 Открыть сайт с моим прогрессом", url: `${APP_URL}#login=${token}` }]] },
     });
     return;
@@ -318,7 +319,7 @@ async function onSetup() {
   const out: Record<string, unknown> = {};
   out.webhook = await tg("setWebhook", { url: SELF_URL, secret_token: await webhookSecret(), allowed_updates: ["message", "callback_query"], drop_pending_updates: true });
   out.commands = await tg("setMyCommands", { commands: [
-    { command: "start", description: "Открыть Piano Piano" },
+    { command: "start", description: "Открыть Langtiamo" },
     { command: "site", description: "Ссылка на сайт с моим прогрессом" },
     { command: "time", description: "Час напоминания, например /time 9" },
     { command: "remind", description: "Включить или выключить напоминания" },

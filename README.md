@@ -1,4 +1,4 @@
-# Piano Piano — итальянский с нуля
+# Langtiamo — итальянский с нуля
 
 Приложение для изучения итальянского с нуля.
 
@@ -8,7 +8,7 @@
 - Переводчик IT⇄RU (свой словарь + MyMemory через сервер, с кэшем).
 - Уровни, награды, задания дня, напоминания в Telegram.
 
-Работает как Telegram Mini App в боте **@langtiamo_bot** и как обычная страница: https://yerassyl-alimkul.github.io/pianopiano/
+Работает как Telegram Mini App в боте **@langtiamo_bot** и как обычная страница: https://yerassyl-alimkul.github.io/langtiamo/
 
 ## Как устроено
 
