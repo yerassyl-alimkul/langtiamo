@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Langtiamo — итальянский с нуля</title>
+<link rel="icon" type="image/svg+xml" href="icons/mark.svg">
+<link rel="apple-touch-icon" href="icons/icon-180.png">
+<meta name="theme-color" content="#FBFBFA">
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -364,7 +367,7 @@ nav.tabs button.on{background:var(--dock-on);color:var(--dock-on-ink);font-weigh
   nav.tabs button svg{display:block}
   nav.tabs button.on{background:var(--ink);color:var(--on-ink)}
   nav.tabs button:not(.on):hover{background:var(--card);color:var(--ink)}
-  .side-logo{font-family:var(--font-display);font-weight:600;font-size:20px;display:block;padding:4px 16px 26px}
+  .side-logo{font-family:var(--font-display);font-weight:600;font-size:20px;display:flex;padding:4px 16px 26px}
   .toast{bottom:32px}
   h1{font-size:32px}
   .wrap{padding-bottom:56px}
@@ -380,12 +383,16 @@ h2{font-size:17px}
 .q{font-family:var(--font-text)!important;font-size:19px;font-weight:600;line-height:1.35;letter-spacing:0}
 .mrow .link{padding:6px 12px;font-size:13px}
 @media (min-width:900px){h1{font-size:30px}.hero h1{font-size:28px}.q{font-size:21px}}
+
+.logo{display:flex}.logo,.side-logo{align-items:center;gap:8px}
+.logo b,.side-logo b{font:inherit;font-weight:inherit}
+.lmark{width:30px;height:30px;flex:none}.side-logo .lmark{width:34px;height:34px}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
-    <div class="logo">Lang<span>tiamo</span></div>
+    <div class="logo"><svg class="lmark" viewBox="0 0 100 100" aria-hidden="true"><rect x="6" y="8" width="52" height="44" rx="15" fill="#17181C"/><path d="M14 46 L 10 60 L 26 50 Z" fill="#17181C"/><path d="M25 21 H29.2 V35.2 H38.5 V39 H25 Z" fill="#fff"/><rect x="42" y="44" width="52" height="44" rx="15" fill="#557546"/><path d="M86 82 L 90 96 L 74 86 Z" fill="#557546"/><path transform="translate(55 53.52) scale(0.26)" d="M50 86 C 22 68 8 52 8 35 C 8 21 19 11 31 11 C 40 11 46 16 50 23 C 54 16 60 11 69 11 C 81 11 92 21 92 35 C 92 52 78 68 50 86 Z" fill="#fff"/></svg><b>Lang<span>tiamo</span></b></div>
     <div class="row" style="gap:6px"><button class="pill sea" id="lvchip" aria-label="Награды"></button><button class="iconbtn" id="trBtn" aria-label="Переводчик" style="font-weight:800;font-size:14px;color:var(--sea)">IT⇄RU</button><button class="iconbtn" id="gear" aria-label="Настройки">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
     </button></div>
@@ -393,7 +400,7 @@ h2{font-size:17px}
   <main id="app"></main>
 </div>
 
-<nav class="tabs"><div class="side-logo">Lang<span>tiamo</span></div><div class="in" id="tabs"></div></nav>
+<nav class="tabs"><div class="side-logo"><svg class="lmark" viewBox="0 0 100 100" aria-hidden="true"><rect x="6" y="8" width="52" height="44" rx="15" fill="#17181C"/><path d="M14 46 L 10 60 L 26 50 Z" fill="#17181C"/><path d="M25 21 H29.2 V35.2 H38.5 V39 H25 Z" fill="#fff"/><rect x="42" y="44" width="52" height="44" rx="15" fill="#557546"/><path d="M86 82 L 90 96 L 74 86 Z" fill="#557546"/><path transform="translate(55 53.52) scale(0.26)" d="M50 86 C 22 68 8 52 8 35 C 8 21 19 11 31 11 C 40 11 46 16 50 23 C 54 16 60 11 69 11 C 81 11 92 21 92 35 C 92 52 78 68 50 86 Z" fill="#fff"/></svg><b>Lang<span>tiamo</span></b></div><div class="in" id="tabs"></div></nav>
 <div class="toast" id="toast"></div>
 <div class="celeb" id="celeb"></div>
 <div class="gloss" id="gloss"></div>
