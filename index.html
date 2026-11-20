@@ -463,6 +463,24 @@ h2{font-size:17px}
 .gmt.lock svg{filter:grayscale(1);opacity:.25}
 .gmt.lock b{color:var(--muted)}
 @media (hover:hover){.gmt:not(.lock):hover{border-color:var(--ink)}}
+
+.gmsc{position:relative;border-radius:18px;overflow:hidden;height:calc(min(30vh,230px) + 14px);display:flex;align-items:flex-end;justify-content:center}
+.gmbg{position:absolute;inset:0;width:100%;height:100%;z-index:0}
+.gmsc .gmbtn{position:relative;z-index:1;margin-bottom:4px}
+.gmstage::after{display:none}
+nav.tabs .gmside .gmbg{width:100%;height:100%;position:absolute;inset:0;max-width:none}nav.tabs .gmside .gmbig{width:auto;height:min(30vh,230px)}
+.gmed{display:flex;flex-direction:column;gap:6px;margin-bottom:6px}
+.gmlab{font-size:12px;font-weight:700;color:var(--muted);margin-top:8px}
+.gmin{width:100%;font:inherit;font-size:16px;padding:11px 14px;border-radius:12px;border:1.5px solid var(--line);background:var(--bg);color:var(--ink)}
+.gmsws{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gmsw{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);padding:0;flex:none}
+.gmsw.on{box-shadow:0 0 0 2px var(--bg),0 0 0 4px var(--ink)}
+.gmchip{padding:8px 13px;border-radius:999px;border:1.5px solid var(--line);background:var(--card);font-size:13px;font-weight:600;color:var(--ink)}
+.gmchip.on{background:var(--ink);color:var(--on-ink,#fff);border-color:var(--ink)}
+.gmgrid-sc{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
+.gmt .gmprev{width:100%;height:auto;border-radius:10px;display:block}
+.gmt.scn{padding:6px 6px 10px;min-height:0}
+.learnseg{margin-top:0;max-width:440px}
 .gmpick{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;max-width:520px}
 .gmpickc{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px}
 .gmpicks{height:210px;width:auto}
@@ -2538,7 +2556,7 @@ function mergeStates(a,b){
   out.custom=Object.assign({},o.custom||{},n.custom||{});
   out.mod=JSON.parse(JSON.stringify(o.mod||{}));for(const[id,v]of Object.entries(n.mod||{})){const r=out.mod[id]||(out.mod[id]={});for(const[k,x]of Object.entries(v||{}))r[k]=Math.max(Number(x)||0,Number(r[k])||0)}
   out.daily=Object.assign({},o.daily||{});for(const[d,v]of Object.entries(n.daily||{})){const r=Object.assign({},out.daily[d]||{});for(const[x,y]of Object.entries(v||{}))r[x]=Math.max(Number(y)||0,Number(r[x])||0);out.daily[d]=r}
-  if(a.gm||b.gm){const nn=n.gm||{},oo=o.gm||{};out.gm={char:nn.char||oo.char||null,got:Object.assign({},oo.got||{}),wear:Object.assign({},oo.wear||{},nn.wear||{})};for(const[x,v]of Object.entries(nn.got||{}))out.gm.got[x]=out.gm.got[x]?Math.min(out.gm.got[x],v):v}
+  if(a.gm||b.gm){const nn=n.gm||{},oo=o.gm||{};out.gm={char:nn.char||oo.char||null,name:nn.name||oo.name||"",scene:nn.scene||oo.scene||"",look:Object.assign({},oo.look||{},nn.look||{}),got:Object.assign({},oo.got||{}),wear:Object.assign({},oo.wear||{},nn.wear||{})};for(const[x,v]of Object.entries(nn.got||{}))out.gm.got[x]=out.gm.got[x]?Math.min(out.gm.got[x],v):v}
   out.maxCombo=Math.max(n.maxCombo||0,o.maxCombo||0);out.level=Math.max(n.level||1,o.level||1);
   if((o.lastDay||"")>(n.lastDay||"")){out.lastDay=o.lastDay;out.streak=o.streak;out.freezes=o.freezes}
   out.updatedAt=Math.max(a.updatedAt||0,b.updatedAt||0);
@@ -2633,7 +2651,7 @@ function todayQuests(){
 
 /* ================== ПУТЕШЕСТВЕННИК: персонаж, вещи, чемодан ================== */
 const GM_SK="#F1C7A3",GM_SKD="#E3B08A";
-const GM_CHARS={a:{n:"Марко",hair:"#2B2220",long:false,skin:"#F1C7A3"},b:{n:"Джулия",hair:"#4A2C1E",long:true,skin:"#F4CDB0"}};
+const GM_CHARS={a:{n:"Марко",hc:"#2B2220",hs:"short",skin:"#F1C7A3",eye:"#2A1F2B",fr:0},b:{n:"Джулия",hc:"#4A2C1E",hs:"long",skin:"#F4CDB0",eye:"#6B4226",fr:0}};
 const GM_SLOTS={hat:"Голова",face:"Лицо",neck:"Шея",chest:"Грудь",top:"Верх",bottom:"Низ",shoes:"Обувь",back:"Спина",hand:"В руке"};
 const gmHeart=(x,y,s,f)=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 5 C-9 -4 -13 5 0 14 C13 5 9 -4 0 5Z" fill="${f}"/>`;
 const gmTop=(c,long,extra)=>`<rect x="52" y="88" width="56" height="70" rx="14" fill="${c}"/><rect x="37" y="90" width="17" height="${long?56:28}" rx="8.5" fill="${c}"/><rect x="106" y="90" width="17" height="${long?56:28}" rx="8.5" fill="${c}"/>${extra||""}`;
@@ -2673,29 +2691,102 @@ const GM_ITEMS=[
 {id:"lemon",n:"Сицилийский лимон",s:"case",lvl:10,ic:`<ellipse cx="20" cy="22" rx="14" ry="10.5" transform="rotate(-20 20 22)" fill="#F1E15B"/><path d="M7.5 27l-3 2.5M32 16l3-2.5" stroke="#E4CE3F" stroke-width="3" stroke-linecap="round"/><path d="M22 11q6-6 12-3-3 7-12 3z" fill="#5F9A4A"/>`},
 {id:"laurel",n:"Лавровый венок",s:"hat",lvl:11,vb:"40 8 80 80",w:gmLaurel}
 ];
+/* ---- внешность: опции ---- */
+const GM_SKINS=["#FBDDC5","#F4CDB0","#F1C7A3","#E0A878","#C98A5E","#9A6340","#6B4128"];
+const GM_HC=["#2B2220","#4A2C1E","#7A4A2A","#C8873A","#E0B96A","#B5472F","#A3A3A8","#3E6FA8","#D26BA0"];
+const GM_EYES=["#2A1F2B","#6B4226","#3F7F4F","#3C74B8","#7A8088"];
+const GM_HS=[["short","Короткая"],["buzz","Ёжик"],["curly","Кудри"],["bob","Каре"],["long","Длинные"],["ponytail","Хвост"],["bun","Пучок"]];
+const gmShade=(h,k)=>{const n=parseInt(h.slice(1),16);return "#"+[(n>>16)&255,(n>>8)&255,n&255].map(c=>Math.round(c*(1-k)).toString(16).padStart(2,"0")).join("")};
+function gmHairBack(hs,H){
+  if(hs==="long")return `<path d="M52 50C50 24 66 22 80 22C96 22 110 26 108 50L113 102Q80 114 47 102Z" fill="${H}"/>`;
+  if(hs==="bob")return `<path d="M51 52C49 25 66 21 80 21C96 21 111 25 109 52L111 86Q80 96 49 86Z" fill="${H}"/>`;
+  if(hs==="ponytail")return `<path d="M102 40Q134 36 130 76Q128 98 114 104Q124 78 106 60Z" fill="${H}"/>`;
+  if(hs==="curly")return [[58,42,9],[68,31,10],[80,27,10],[92,31,10],[102,42,9],[53,55,7.5],[107,55,7.5],[50,66,6],[110,66,6]].map(([x,y,r])=>`<circle cx="${x}" cy="${y}" r="${r}" fill="${H}"/>`).join("");
+  return "";
+}
+function gmHairFront(hs,H){
+  if(hs==="buzz")return `<path d="M55 50C53 36 66 31 80 31C94 31 107 36 105 50C99 43 91 40 80 40C69 40 61 43 55 50Z" fill="${H}"/>`;
+  let s=`<path d="M54 54C50 30 64 24 80 24C98 24 110 32 106 54C101 44 92 38 80 38C69 38 60 44 54 54Z" fill="${H}"/>`;
+  if(hs==="bun")s+=`<circle cx="80" cy="19" r="11" fill="${H}"/><path d="M71 24q9 5 18 0" stroke="${gmShade(H,.25)}" stroke-width="2" fill="none"/>`;
+  if(hs==="ponytail")s+=`<rect x="101" y="40" width="7" height="9" rx="3" fill="#D6456B" transform="rotate(20 104 44)"/>`;
+  return s;
+}
+/* ---- новые вещи: за серии, уроки и награды ---- */
+const GM_X=[
+{id:"bandana",n:"Бандана",s:"hat",ach:"s3",vb:"40 8 80 80",w:`<path d="M54 47Q80 33 106 47L106 55Q80 41 54 55Z" fill="#D6454B"/><circle cx="68" cy="45" r="1.7" fill="#fff"/><circle cx="80" cy="42" r="1.7" fill="#fff"/><circle cx="92" cy="45" r="1.7" fill="#fff"/><path d="M105 49l11-6 1 13z" fill="#C13A40"/>`},
+{id:"mandolin",n:"Мандолина",s:"back",ach:"s7",vb:"30 40 110 130",b:`<g transform="rotate(-18 112 118)"><rect x="108" y="50" width="8" height="52" rx="3" fill="#7A4A24"/><rect x="105" y="42" width="14" height="14" rx="4" fill="#5C3519"/><ellipse cx="112" cy="124" rx="21" ry="28" fill="#D18A44"/><circle cx="112" cy="124" r="7" fill="#4A2A14"/><path d="M96 144q16 10 32 0" fill="none" stroke="#B26F2E" stroke-width="2"/></g>`,w:`<path d="M60 92L104 152" stroke="#6B3E26" stroke-width="4" stroke-linecap="round"/>`},
+{id:"gelato",n:"Мороженое",s:"hand",ach:"s14",vb:"92 118 46 62",w:`<path d="M106 150l8 24 8-24z" fill="#E4B87A"/><path d="M108 156h12M110 163h8" stroke="#C9953E" stroke-width="1.2"/><circle cx="109" cy="146" r="6.5" fill="#F9E3A8"/><circle cx="120" cy="146" r="6.5" fill="#9AD4B5"/><circle cx="114" cy="139" r="8" fill="#F4A6B8"/>`},
+{id:"aviators",n:"Авиаторы",s:"face",ach:"s30",vb:"48 28 64 64",w:`<path d="M58 54h20q1 13-9 15-11-1-11-15z" fill="#2E4A66" stroke="#C9A24A" stroke-width="1.8"/><path d="M82 54h20q0 14-11 15-10-2-9-15z" fill="#2E4A66" stroke="#C9A24A" stroke-width="1.8"/><path d="M78 56q2-2 4 0M58 54l-6 1M102 54l6 1" fill="none" stroke="#C9A24A" stroke-width="2.2" stroke-linecap="round"/><path d="M62 58l5-1M86 58l5-1" stroke="#fff" stroke-width="1.6" stroke-linecap="round" opacity=".6"/>`},
+{id:"etnatee",n:"Футболка «Etna»",s:"top",ach:"s60",vb:"30 70 100 100",w:gmTop("#D96B4B",false,`<path d="M62 134L80 104L98 134Z" fill="#2F2A33"/><path d="M80 104l-3.5 9h7z" fill="#F0702E"/><path d="M78 100q-4-6 2-10" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" opacity=".8"/>`)},
+{id:"crown",n:"Корона серии",s:"hat",ach:"s100",vb:"40 0 80 60",w:`<path d="M56 38L60 14L70 28L80 10L90 28L100 14L104 38Z" fill="#E9C95A" stroke="#C9A24A" stroke-width="1.6" stroke-linejoin="round"/><circle cx="60" cy="14" r="3" fill="#D6454B"/><circle cx="80" cy="10" r="3" fill="#2F7FC1"/><circle cx="100" cy="14" r="3" fill="#D6454B"/>`},
+{id:"gradcap",n:"Шапочка Laurea",s:"hat",ach:"lall",vb:"36 -4 88 88",w:`<path d="M80 8L122 24L80 40L38 24Z" fill="#24262E"/><path d="M62 33v9q18 9 36 0v-9L80 40Z" fill="#33363F"/><path d="M116 26v17" stroke="#E9C95A" stroke-width="2"/><circle cx="116" cy="45" r="3.2" fill="#E9C95A"/>`},
+{id:"phones",n:"Наушники",s:"hat",ach:"lis10",vb:"40 8 80 80",w:`<path d="M52 56C48 22 112 22 108 56" fill="none" stroke="#2A2D36" stroke-width="5" stroke-linecap="round"/><rect x="46" y="50" width="11" height="20" rx="5" fill="#E8913A"/><rect x="103" y="50" width="11" height="20" rx="5" fill="#E8913A"/>`},
+{id:"book",n:"Книга",s:"hand",ach:"w150",vb:"89 120 50 50",w:`<path d="M98 138l16-4 16 4v22l-16-4-16 4z" fill="#F6F1E3" stroke="#B8AE92" stroke-width="1.4"/><path d="M114 134v22" stroke="#B8AE92" stroke-width="1.4"/><path d="M103 142h8M103 147h8M118 142h8M118 147h8" stroke="#9CA3AF" stroke-width="1.2"/><rect x="97" y="157" width="34" height="4" rx="2" fill="#2F5D8A"/>`},
+{id:"medal",n:"Медаль Полиглота",s:"chest",ach:"w300",vb:"50 84 60 60",w:`<path d="M70 92l8 22M90 92l-8 22" stroke="#D6454B" stroke-width="5"/><circle cx="80" cy="122" r="9" fill="#E9C95A"/><circle cx="80" cy="122" r="5.5" fill="none" stroke="#C9A24A" stroke-width="1.6"/><path d="M80 118l1.6 3.3 3.6.5-2.6 2.5.6 3.6-3.2-1.7-3.2 1.7.6-3.6-2.6-2.5 3.6-.5z" fill="#C9A24A"/>`},
+{id:"sneakers",n:"Кроссовки",s:"shoes",ach:"combo10",vb:"50 196 60 60",w:`<ellipse cx="67" cy="226" rx="14" ry="7" fill="#E8453C"/><ellipse cx="93" cy="226" rx="14" ry="7" fill="#E8453C"/><path d="M54 230h26M80 230h26" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M68 219l-3 6h4l-2 5M94 219l-3 6h4l-2 5" fill="none" stroke="#fff" stroke-width="1.8" stroke-linejoin="round"/>`},
+{id:"gift",n:"Подарок",s:"hand",ach:"quests",vb:"89 120 50 50",w:`<rect x="100" y="134" width="30" height="24" rx="3" fill="#D6456B"/><rect x="113" y="134" width="4" height="24" fill="#F4F1E8"/><rect x="100" y="143" width="30" height="4" fill="#F4F1E8"/><path d="M115 134q-9-9-12-2t12 2q9-9 12-2t-12 2z" fill="#F4F1E8"/>`},
+{id:"stripes",n:"Тельняшка",s:"top",ach:"mod5",vb:"30 70 100 100",w:gmTop("#F4F1E8",false,[98,110,122,134,146].map(y=>`<rect x="52" y="${y}" width="56" height="5" fill="#2F5D8A"/>`).join("")+`<rect x="37" y="101" width="17" height="5" fill="#2F5D8A"/><rect x="106" y="101" width="17" height="5" fill="#2F5D8A"/>`)},
+{id:"bowtie",n:"Галстук-бабочка",s:"neck",ach:"strong50",vb:"50 72 60 60",w:`<path d="M80 93l-13-7v14z M80 93l13-7v14z" fill="#2F5D8A"/><circle cx="80" cy="93" r="3.2" fill="#24486B"/>`},
+{id:"quill",n:"Перо",s:"hand",ach:"wr10",vb:"92 98 56 56",w:`<path d="M112 152L128 112Q136 118 134 130Q124 134 120 140z" fill="#F4F1E8" stroke="#C9C3B0" stroke-width="1.2"/><path d="M112 152L130 114" stroke="#8B6B3E" stroke-width="2"/><rect x="104" y="150" width="12" height="9" rx="2.5" fill="#24262E"/>`},
+{id:"vocab",n:"Словарик",s:"case",ach:"w50",ic:`<rect x="8" y="5" width="24" height="30" rx="3" fill="#E8913A"/><rect x="8" y="5" width="5" height="30" fill="#C9742A"/><path d="M17 14h11M17 20h11M17 26h7" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`},
+{id:"target",n:"Мишень",s:"case",ach:"perfect",ic:`<circle cx="18" cy="22" r="15" fill="#D6454B"/><circle cx="18" cy="22" r="10" fill="#fff"/><circle cx="18" cy="22" r="5" fill="#D6454B"/><path d="M18 22L33 7" stroke="#3A3A44" stroke-width="2.4" stroke-linecap="round"/><path d="M30 5l5 0 0 5z" fill="#3A3A44"/>`},
+{id:"mask",n:"Театральная маска",s:"case",ach:"dall",ic:`<path d="M6 8h28v12q0 14-14 16Q6 34 6 20z" fill="#F1D98A"/><ellipse cx="14" cy="17" rx="3.4" ry="2.2" fill="#24262E"/><ellipse cx="26" cy="17" rx="3.4" ry="2.2" fill="#24262E"/><path d="M13 26q7 7 14 0" fill="none" stroke="#24262E" stroke-width="2" stroke-linecap="round"/>`},
+{id:"note",n:"Чистый звук",s:"case",ach:"snd",ic:`<circle cx="14" cy="30" r="6" fill="#2F5D8A"/><circle cx="29" cy="26" r="6" fill="#2F5D8A"/><path d="M20 30V9l15-4v21" fill="none" stroke="#2F5D8A" stroke-width="3"/>`},
+{id:"sun",n:"Ранняя пташка",s:"case",ach:"early",ic:`<circle cx="20" cy="20" r="9" fill="#F7C948"/><path d="M20 3v6M20 31v6M3 20h6M31 20h6M8 8l4 4M28 28l4 4M32 8l-4 4M12 28l-4 4" stroke="#F7C948" stroke-width="3" stroke-linecap="round"/>`},
+{id:"moon",n:"Ночная сова",s:"case",ach:"owl",ic:`<path d="M26 6a15 15 0 1 0 8 24A13 13 0 0 1 26 6z" fill="#F1D98A"/><circle cx="30" cy="10" r="1.6" fill="#8A93A6"/><circle cx="35" cy="17" r="1.2" fill="#8A93A6"/>`},
+{id:"euro",n:"Монета €",s:"case",ach:"num10",ic:`<circle cx="20" cy="20" r="15" fill="#E9C95A" stroke="#C9A24A" stroke-width="2.4"/><text x="20" y="27" text-anchor="middle" font-size="20" font-weight="700" fill="#8A6A1C" font-family="sans-serif">€</text>`},
+{id:"pencil",n:"Карандаш",s:"case",ach:"l1",ic:`<path d="M8 32L10 26 28 8l6 6-18 18z" fill="#E9C95A"/><path d="M8 32l2-6 4 4z" fill="#F1D3B3"/><path d="M28 8l3-3 6 6-3 3z" fill="#D6456B"/>`},
+{id:"compass",n:"Компас",s:"case",ach:"l8",ic:`<circle cx="20" cy="20" r="15" fill="#F4EFE0" stroke="#9A9CA6" stroke-width="3"/><path d="M20 8L24 20H16Z" fill="#D6454B"/><path d="M20 32L24 20H16Z" fill="#9A9CA6"/><circle cx="20" cy="20" r="2" fill="#24262E"/>`}
+];
+GM_ITEMS.push(...GM_X);
+
 const GM_BY=Object.fromEntries(GM_ITEMS.map(i=>[i.id,i]));
 const GM_CASE=GM_ITEMS.filter(i=>i.s==="case"),GM_WEAR=GM_ITEMS.filter(i=>i.s!=="case");
 const gmIcon=(it,cls)=>it.s==="case"?`<svg class="${cls||"gmic"}" viewBox="0 0 40 40" aria-hidden="true">${it.ic}</svg>`:`<svg class="${cls||"gmic"}" viewBox="${it.vb}" aria-hidden="true">${(it.b||"")+it.w}</svg>`;
 
-function gmFace(ex){
-  const ink="#2A1F2B";
+/* ---- фоны-места ---- */
+const gmR=(x,y,w,h,f,rx)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" fill="${f}"${rx?` rx="${rx}"`:""}/>`;
+const gmWins=(xs,y,w,h,f)=>xs.map(x=>gmR(x,y,w,h,f,2)).join("");
+const gmScn=(id,a,b,body,floor,fy)=>{fy=fy||226;return `<defs><linearGradient id="gs-${id}" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient></defs><rect width="400" height="260" fill="url(#gs-${id})"/>${body}<rect y="${fy}" width="400" height="${260-fy}" fill="${floor}"/>`};
+const gmCloud=(x,y,s)=>`<g transform="translate(${x} ${y}) scale(${s||1})" fill="#fff" opacity=".85"><ellipse cx="0" cy="0" rx="26" ry="9"/><ellipse cx="14" cy="-7" rx="16" ry="9"/><ellipse cx="-12" cy="-5" rx="12" ry="7"/></g>`;
+const GM_SC=[
+{id:"home",n:"Моя студия",art:gmScn("home","#F1E7D3","#F1E7D3",gmR(40,40,96,92,"#fff",6)+gmR(46,46,84,80,"#BFE0F3",3)+`<path d="M88 46v80M46 86h84" stroke="#fff" stroke-width="4"/><circle cx="108" cy="66" r="9" fill="#F7DC6F"/>`+gmR(230,78,110,7,"#B98B5A",3)+gmR(240,56,10,22,"#D6454B")+gmR(252,50,9,28,"#2F5D8A")+gmR(263,58,12,20,"#5F9A4A")+`<path d="M312 226l6-34h30l6 34z" fill="#C9744A"/><ellipse cx="333" cy="186" rx="20" ry="26" fill="#5F9A4A"/><ellipse cx="318" cy="196" rx="10" ry="18" fill="#7FB35E"/>`,"#D9C4A0")},
+{id:"piazza",n:"Площадь",mod:"m1",art:gmScn("piazza","#BFD9F2","#EAF3FB",gmCloud(90,40)+gmCloud(300,60,.8)+gmR(0,60,120,166,"#E6B98F")+gmR(0,60,120,10,"#C98F66")+gmWins([14,48,82],86,22,30,"#7FA6CC")+gmWins([14,48,82],140,22,30,"#7FA6CC")+gmR(280,86,120,140,"#EBD2A6")+gmR(280,80,120,10,"#B5694A")+gmWins([296,330,364],110,22,30,"#7FA6CC")+gmWins([296,330,364],165,22,30,"#7FA6CC")+gmR(176,30,36,196,"#DDA37C")+`<path d="M170 30l24-30 24 30z" fill="#A8553A"/><path d="M186 62q8-14 16 0v16h-16z" fill="#6B4A3A"/>`,"#D8CFC0")},
+{id:"airport",n:"Аэропорт",mod:"m2",art:gmScn("airport","#CDE3F6","#EBF3FB",`<g transform="translate(250 44) rotate(-8)"><ellipse rx="46" ry="10" fill="#fff"/><path d="M-6 0l-18-26h10l22 26zM-6 0l-18 26h10l22-26z" fill="#E4E9F0"/><path d="M38-4l10-14h6l-6 16z" fill="#2F7FC1"/></g>`+gmR(0,130,400,96,"#E8EDF3")+gmR(10,142,92,60,"#9CC4E4",4)+gmR(112,142,92,60,"#9CC4E4",4)+gmR(214,142,92,60,"#9CC4E4",4)+gmR(340,64,26,70,"#D5DCE5")+gmR(330,54,46,16,"#9CC4E4",4)+`<path d="M0 244h400" stroke="#fff" stroke-width="3" stroke-dasharray="22 16"/>`,"#B6BAC4")},
+{id:"cafe",n:"Кафе",mod:"m3",art:gmScn("cafe","#F2DFC2","#F2DFC2",gmR(0,0,400,226,"#F2DFC2")+Array.from({length:10},(_,i)=>gmR(i*40,0,40,34,i%2?"#fff":"#D6454B")+`<ellipse cx="${i*40+20}" cy="34" rx="20" ry="12" fill="${i%2?"#fff":"#D6454B"}"/>`).join("")+gmR(24,76,112,90,"#CDE6F2",6)+`<rect x="24" y="76" width="112" height="90" rx="6" fill="none" stroke="#8B5A3A" stroke-width="4"/><path d="M60 140h40v-18a20 14 0 0 1-40 0z" fill="#fff"/><path d="M100 126a8 8 0 0 1 0 14" fill="none" stroke="#fff" stroke-width="4"/>`+gmR(296,70,76,100,"#2F3A32",5)+`<path d="M308 92h52M308 110h40M308 128h48M308 146h30" stroke="#F4F1E8" stroke-width="3" stroke-linecap="round"/>`,"#C6AE8A")},
+{id:"beach",n:"Пляж",mod:"m5",art:gmScn("beach","#BDE3F5","#E9F7FB",`<circle cx="330" cy="52" r="22" fill="#FFE08A"/>`+gmCloud(110,46)+gmR(0,140,400,86,"#4F9CC8")+gmR(0,140,400,14,"#7DBBDB")+`<path d="M20 176q10-6 20 0t20 0M150 196q10-6 20 0t20 0M290 170q10-6 20 0t20 0" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" opacity=".7"/><path d="M60 226V120" stroke="#8B5A3A" stroke-width="4"/><path d="M20 126Q60 66 100 126Z" fill="#D6454B"/><path d="M60 126Q60 90 40 100M60 126Q70 90 90 108" fill="none" stroke="#fff" stroke-width="5"/><path d="M300 150l24-4v-30l-24 30z" fill="#fff"/>`,"#EAD6A6")},
+{id:"kitchen",n:"Кухня",mod:"m6",art:gmScn("kitchen","#F4E8D6","#F4E8D6",gmR(0,0,400,226,"#F4E8D6")+gmR(0,120,400,60,"#fff")+Array.from({length:20},(_,i)=>`<path d="M${i*20} 120v60" stroke="#E1D7C6" stroke-width="2"/>`).join("")+`<path d="M0 150h400" stroke="#E1D7C6" stroke-width="2"/>`+gmR(20,50,150,6,"#B98B5A",3)+gmR(34,26,24,24,"#C9744A",4)+gmR(70,22,28,28,"#8FA3B5",4)+gmR(110,30,24,20,"#D6454B",4)+gmR(280,30,90,80,"#BFE0F3",4)+`<path d="M325 30v80M280 70h90" stroke="#fff" stroke-width="4"/>`+gmR(230,182,170,10,"#B98B5A",3)+gmR(240,192,8,34,"#9C7447")+gmR(382,192,8,34,"#9C7447"),"#C9996B")},
+{id:"street",n:"Улочка",mod:"m7",art:gmScn("street","#C9E0F2","#EAF3FB",gmR(0,50,90,176,"#F0A9A0")+gmR(90,80,80,146,"#F4D78F")+gmR(240,60,70,166,"#9FCB9A")+gmR(310,90,90,136,"#E9B07F")+gmR(8,80,12,34,"#4F7F6B")+gmR(70,80,12,34,"#4F7F6B")+gmR(104,108,22,34,"#8B6B4A")+gmR(136,108,22,34,"#8B6B4A")+gmR(254,84,18,32,"#B5694A")+gmR(280,84,18,32,"#B5694A")+gmR(326,116,20,30,"#7B5A3E")+gmR(362,116,20,30,"#7B5A3E")+`<path d="M20 200q10-30 24 0z" fill="#6B4A3A"/><path d="M0 44h90M310 84h90" stroke="#B5694A" stroke-width="8"/>`,"#C9C2B8")},
+{id:"station",n:"Вокзал",mod:"m8",art:gmScn("station","#D4E2EF","#EEF3F8",gmR(0,60,400,10,"#9AA3B0")+gmR(30,70,6,156,"#9AA3B0")+gmR(364,70,6,156,"#9AA3B0")+gmR(0,140,400,72,"#EEF1F5",8)+gmR(0,172,400,10,"#2F5D8A")+[20,80,140,200,260,320].map(x=>gmR(x,150,44,24,"#7FA6CC",4)).join("")+`<circle cx="200" cy="36" r="16" fill="#fff" stroke="#5B6470" stroke-width="3"/><path d="M200 36v-9M200 36l7 4" stroke="#17181C" stroke-width="2"/>`+gmR(0,238,400,4,"#E9C95A"),"#B2B6BF")},
+{id:"rome",n:"Колизей",mod:"m9",art:gmScn("rome","#F7D9AE","#FCEBD2",`<circle cx="60" cy="50" r="20" fill="#FFF0C9"/>`+gmR(-10,78,420,148,"#D8B88A")+gmR(-10,78,420,6,"#C9A472")+[0,1,2].map(t=>Array.from({length:17},(_,i)=>`<path d="M${i*26+4} ${86+t*46+38}v-22q9-16 18 0v22z" fill="#B88F62"/>`).join("")).join("")+gmR(-10,150,420,3,"#C9A472")+gmR(-10,196,420,3,"#C9A472"),"#CFBE9B")},
+{id:"temples",n:"Храмы Сицилии",mod:"m10",art:gmScn("temples","#CFE4F2","#EEF5FA",gmCloud(320,40,.9)+`<path d="M84 66L200 24 316 66z" fill="#E6D9B8"/>`+Array.from({length:6},(_,i)=>gmR(100+i*42,70,16,80,"#EFE4C8")+gmR(96+i*42,66,24,8,"#DCCDA4")).join("")+gmR(80,150,250,10,"#EBDFC0")+gmR(70,160,270,12,"#E3D6B4"),"#D9C79F")},
+{id:"market",n:"Рынок",mod:"m11",art:gmScn("market","#DCEBF5","#EEF4F8",`<path d="M0 36h400" stroke="#8B6B4A" stroke-width="2"/>`+Array.from({length:12},(_,i)=>`<path d="M${i*34+4} 36l14 22 14-22z" fill="${["#D6454B","#F7C948","#5F9A4A","#2F7FC1"][i%4]}"/>`).join("")+`<path d="M0 78h140l-12 36H0z" fill="#5F9A4A"/><path d="M28 78l-4 36M60 78l-4 36M92 78l-4 36" stroke="#fff" stroke-width="10"/>`+gmR(0,150,140,76,"#B98B5A")+[16,44,72,100].map(x=>`<circle cx="${x}" cy="146" r="11" fill="#E9792E"/>`).join("")+`<path d="M260 78h140v36H272z" fill="#D6454B"/><path d="M286 78l8 36M324 78l8 36M362 78l8 36" stroke="#fff" stroke-width="10"/>`+gmR(260,150,140,76,"#B98B5A")+[276,304,332,360].map(x=>`<ellipse cx="${x}" cy="146" rx="12" ry="8" fill="#F1E15B"/>`).join(""),"#CDBFA3")},
+{id:"venice",n:"Венеция",lvl:6,art:gmScn("venice","#F2D6C8","#FBEAD9",gmR(0,70,120,120,"#E7A58F")+gmR(120,90,90,100,"#EBC889")+gmR(300,60,100,130,"#D78F7A")+[14,48,82].map(x=>`<path d="M${x} 130v-26q10-16 20 0v26z" fill="#fff" opacity=".85"/>`).join("")+[136,170].map(x=>`<path d="M${x} 150v-22q9-14 18 0v22z" fill="#fff" opacity=".85"/>`).join("")+[314,348,380].map(x=>`<path d="M${x} 130v-26q8-14 16 0v26z" fill="#fff" opacity=".85"/>`).join("")+gmR(0,190,400,36,"#5497AE")+`<path d="M20 205q10-5 20 0t20 0M140 215q10-5 20 0t20 0" fill="none" stroke="#fff" stroke-width="2" opacity=".5"/><path d="M240 196q40 14 90 0l-8 10q-40 8-74 0z" fill="#24262E"/><path d="M330 196q8-8 14-18" stroke="#24262E" stroke-width="4" fill="none" stroke-linecap="round"/>`,"#BDAB92")},
+{id:"pisa",n:"Пиза",lvl:8,art:gmScn("pisa","#BFDDF0","#E8F3FA",gmCloud(90,50)+`<g transform="rotate(6 300 226)">${gmR(276,40,48,186,"#F2EEE4",4)}${[66,92,118,144,170,196].map(y=>gmR(276,y,48,3,"#CFC8B6")).join("")}${[72,98,124,150,176].map(y=>[282,296,310].map(x=>gmR(x,y,8,18,"#B9B2A0",3)).join("")).join("")}${gmR(282,28,36,14,"#E4DED0",3)}</g>`+`<ellipse cx="60" cy="216" rx="34" ry="14" fill="#6FA055"/>`,"#8DB86C")},
+{id:"etna",n:"Этна",lvl:9,art:gmScn("etna","#F6C9A0","#FBE6C8",`<ellipse cx="190" cy="36" rx="34" ry="14" fill="#9A9099" opacity=".7"/><ellipse cx="214" cy="20" rx="24" ry="10" fill="#B7AEB5" opacity=".7"/><path d="M-40 226L120 100L170 62L215 84L240 76L440 226z" fill="#6D5D66"/><path d="M170 64l-12 38 10 28" stroke="#F0702E" stroke-width="4" fill="none" stroke-linecap="round"/><path d="M215 86l8 36-6 24" stroke="#F0702E" stroke-width="3" fill="none" stroke-linecap="round"/><circle cx="348" cy="196" r="14" fill="#5F9A4A"/><circle cx="348" cy="196" r="3" fill="#F1E15B"/><circle cx="340" cy="204" r="3" fill="#F1E15B"/><circle cx="356" cy="204" r="3" fill="#F1E15B"/>`,"#8C7B5A")}
+];
+const GM_SCBY=Object.fromEntries(GM_SC.map(s=>[s.id,s]));
+const gmSceneSvg=(id,cls)=>{const s=GM_SCBY[id]||GM_SC[0];return `<svg class="${cls||"gmbg"}" viewBox="0 0 400 260" preserveAspectRatio="xMidYMax slice" aria-hidden="true">${s.art}</svg>`};
+
+function gmFace(ex,L){
+  const ink="#2A1F2B",E=(L&&L.eye)||ink;
   const eyes=ex==="happy"?`<path d="M66 60q5-6 10 0M84 60q5-6 10 0" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>`
-    :`<g class="gm-eyes"><ellipse cx="71" cy="60" rx="2.5" ry="3.1" fill="${ink}"/><ellipse cx="89" cy="60" rx="2.5" ry="3.1" fill="${ink}"/></g>`;
+    :`<g class="gm-eyes"><ellipse cx="71" cy="60" rx="2.6" ry="3.2" fill="${E}"/><ellipse cx="89" cy="60" rx="2.6" ry="3.2" fill="${E}"/><circle cx="71.9" cy="58.9" r=".9" fill="#fff"/><circle cx="89.9" cy="58.9" r=".9" fill="#fff"/></g>`;
   const brows=ex==="sad"?`<path d="M65 52l9 3M95 52l-9 3" stroke="${ink}" stroke-width="2.2" stroke-linecap="round"/>`:"";
   const mouth=ex==="happy"?`<path d="M71 69q9 11 18 0z" fill="${ink}"/><path d="M75 74q5 3 10 0" fill="#E87E83" stroke="none"/>`
     :ex==="talk"?`<ellipse cx="80" cy="73" rx="5.2" ry="4.4" fill="${ink}"/><path d="M76 75q4 2.6 8 0" fill="#E87E83"/>`
     :ex==="sad"?`<path d="M73 74q7-6 14 0" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>`
     :`<path d="M73 70q7 7 14 0" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>`;
-  return eyes+brows+mouth+`<circle cx="64" cy="68" r="4.2" fill="#F08C84" opacity=".38"/><circle cx="96" cy="68" r="4.2" fill="#F08C84" opacity=".38"/>`;
+  return eyes+brows+mouth+((L&&L.fr)?`<g fill="#B9764E" opacity=".55"><circle cx="61" cy="65" r="1"/><circle cx="65" cy="63.6" r="1"/><circle cx="67" cy="66.4" r="1"/><circle cx="93" cy="63.6" r="1"/><circle cx="97" cy="65" r="1"/><circle cx="93" cy="66.4" r="1"/></g>`:"")+`<circle cx="64" cy="68" r="4.2" fill="#F08C84" opacity=".38"/><circle cx="96" cy="68" r="4.2" fill="#F08C84" opacity=".38"/>`;
 }
 // wear: {slot:itemId}; ex: idle|happy|sad|talk
 function gmAvatar(ch,wear,ex,cls,vb){
-  const C=GM_CHARS[ch]||GM_CHARS.a,W=s=>{const it=GM_BY[(wear||{})[s]];return it&&it.s===s?it:null};
+  const C=(ch&&typeof ch==="object"&&ch)||GM_CHARS[ch]||GM_CHARS.a,W=s=>{const it=GM_BY[(wear||{})[s]];return it&&it.s===s?it:null};
   const bot=W("bottom"),sh=W("shoes"),top=W("top"),bk=W("back"),nk=W("neck"),ct=W("chest"),fc=W("face"),ht=W("hat"),hd=W("hand");
-  const sk=C.skin,H=C.hair;
+  const sk=C.skin,H=C.hc,hs=C.hs||"short";
   let s=`<ellipse cx="80" cy="238" rx="36" ry="6" fill="#000" opacity=".09"/>`;
   if(bk&&bk.b)s+=bk.b;
-  if(C.long)s+=`<path d="M52 50C50 24 66 22 80 22C96 22 110 26 108 50L113 102Q80 114 47 102Z" fill="${H}"/>`;
+  s+=gmHairBack(hs,H);
   s+=`<rect x="58" y="150" width="20" height="74" rx="9" fill="${sk}"/><rect x="82" y="150" width="20" height="74" rx="9" fill="${sk}"/>`;
   s+=bot?bot.w:`<rect x="56" y="148" width="22" height="76" rx="9" fill="#4E73A6"/><rect x="82" y="148" width="22" height="76" rx="9" fill="#4E73A6"/><rect x="56" y="148" width="48" height="12" rx="5" fill="#44679A"/>`;
   s+=sh?sh.w:`<ellipse cx="67" cy="227" rx="13" ry="6.4" fill="#F4F4F2"/><ellipse cx="93" cy="227" rx="13" ry="6.4" fill="#F4F4F2"/><path d="M55 230h24M81 230h24" stroke="#C9CDD6" stroke-width="2.4" stroke-linecap="round"/>`;
@@ -2704,11 +2795,11 @@ function gmAvatar(ch,wear,ex,cls,vb){
   s+=`<circle cx="45.5" cy="148" r="7.5" fill="${sk}"/><circle cx="114.5" cy="148" r="7.5" fill="${sk}"/>`;
   if(bk&&bk.w)s+=bk.w;
   if(ct)s+=ct.w;
-  s+=`<rect x="72" y="80" width="16" height="16" rx="5" fill="${GM_SKD}"/>`;
+  s+=`<rect x="72" y="80" width="16" height="16" rx="5" fill="${gmShade(sk,.06)}"/>`;
   if(nk)s+=nk.w;
   s+=`<circle cx="54" cy="60" r="5.5" fill="${sk}"/><circle cx="106" cy="60" r="5.5" fill="${sk}"/><circle cx="80" cy="58" r="26" fill="${sk}"/>`;
-  s+=`<path d="M54 54C50 30 64 24 80 24C98 24 110 32 106 54C101 44 92 38 80 38C69 38 60 44 54 54Z" fill="${H}"/>`;
-  s+=gmFace(ex||"idle");
+  s+=gmHairFront(hs,H);
+  s+=gmFace(ex||"idle",C);
   if(fc)s+=fc.w;
   if(ht)s+=ht.w;
   if(hd)s+=hd.w;
@@ -2720,29 +2811,33 @@ function gmSuitcase(got){
   s+=`<rect x="12" y="42" width="196" height="132" rx="18" fill="#2F5D8A"/><rect x="12" y="42" width="196" height="16" rx="10" fill="#3B6FA3"/>`;
   s+=`<rect x="34" y="40" width="8" height="136" fill="#24486B" opacity=".55"/><rect x="178" y="40" width="8" height="136" fill="#24486B" opacity=".55"/>`;
   s+=`<rect x="26" y="174" width="14" height="9" rx="4" fill="#17181C"/><rect x="180" y="174" width="14" height="9" rx="4" fill="#17181C"/>`;
-  GM_CASE.forEach((it,i)=>{const c=i%5,r=Math.floor(i/5),x=24+c*36,y=64+r*34,rot=((i*37)%13)-6;
-    if(got[it.id])s+=`<g transform="translate(${x} ${y}) rotate(${rot} 16 16)"><circle cx="16" cy="16" r="16.5" fill="#FBFBFA"/><g transform="translate(3 3) scale(.65)">${it.ic}</g></g>`;
-    else s+=`<circle cx="${x+16}" cy="${y+16}" r="15" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3 4" opacity=".4"/>`});
+  GM_CASE.forEach((it,i)=>{const c=i%6,r=Math.floor(i/6),x=29+c*27,y=60+r*28,rot=((i*37)%13)-6;
+    if(got[it.id])s+=`<g transform="translate(${x} ${y}) rotate(${rot} 12 12)"><circle cx="12" cy="12" r="12.5" fill="#FBFBFA"/><g transform="translate(2.4 2.4) scale(.49)">${it.ic}</g></g>`;
+    else s+=`<circle cx="${x+12}" cy="${y+12}" r="11" fill="none" stroke="#fff" stroke-width="1.5" stroke-dasharray="3 3.5" opacity=".4"/>`});
   return `<svg class="gmcase" viewBox="0 0 220 190" role="img" aria-label="Чемодан">${s}</svg>`;
 }
 
 /* ================== ПУТЕШЕСТВЕННИК: состояние, награды, интерактив ================== */
 const gmG=()=>state.gm||(state.gm={char:null,got:{},wear:{}});
 const gmChar=()=>(state.gm&&state.gm.char)||"a";
+const gmLook=()=>{const g=state.gm||{},b=GM_CHARS[g.char]||GM_CHARS.a,L=Object.assign({},b,g.look||{});L.n=((g.name||"").trim())||b.n;return L};
+const gmScene=()=>{const s=state.gm&&state.gm.scene;return GM_SCBY[s]&&gmOwned("sc:"+s)?s:"home"};
 const gmOwned=id=>!!(state.gm&&state.gm.got&&state.gm.got[id]);
-const gmHint=it=>it.mod?"Сдай модуль «"+((COURSE.find(m=>m.id===it.mod)||{}).t||"?")+"»":"Достигни уровня "+it.lvl+" · "+LEVEL_T[it.lvl-1][0];
-function gmEarned(it){try{return it.mod?modPassed(it.mod):levelOf(totalXP())>=it.lvl}catch(e){return false}}
+const gmHint=it=>it.mod?"Сдай модуль «"+((COURSE.find(m=>m.id===it.mod)||{}).t||"?")+"»":it.ach?"Получи награду «"+((ACH.find(a=>a[0]===it.ach)||[])[2]||"?")+"»":"Достигни уровня "+it.lvl+" · "+LEVEL_T[it.lvl-1][0];
+function gmEarned(it){try{return it.mod?modPassed(it.mod):it.ach?!!(state.ach&&state.ach[it.ach]):it.lvl?levelOf(totalXP())>=it.lvl:true}catch(e){return false}}
 function gmWear(){const g=gmG(),w={};for(const[s,id]of Object.entries(g.wear||{}))if(g.got[id]&&GM_BY[id]&&GM_BY[id].s===s)w[s]=id;return w}
 // выдача вещей за пройденные модули и уровни опыта; возвращает число новых вещей
 function gmCheck(){
-  const g=gmG(),fresh=[];
+  const g=gmG(),fresh=[],fsc=[];
+  if(!g.got["sc:home"])g.got["sc:home"]=1;
   for(const it of GM_ITEMS){if(!g.got[it.id]&&gmEarned(it)){g.got[it.id]=Date.now();fresh.push(it);if(it.s!=="case"&&!g.wear[it.s])g.wear[it.s]=it.id}}
-  if(fresh.length){
-    if(fresh.length>2)celebrate("🧳","Новые вещи: "+fresh.length,"Загляни в гардероб и чемодан",true);
-    else fresh.forEach(it=>celebrate(gmIcon(it),"Новая вещь: "+it.n,it.s==="case"?"Лежит в чемодане":"Уже на тебе",true));
-    gmReact("dance",null,1500);
-  }
-  return fresh.length;
+  for(const sc of GM_SC){const k="sc:"+sc.id;if(!g.got[k]&&gmEarned(sc)){g.got[k]=Date.now();fsc.push(sc)}}
+  if(fsc.length)g.scene=fsc[fsc.length-1].id;
+  const tot=fresh.length+fsc.length;
+  if(tot>2)celebrate("🧳","Новые вещи и места: "+tot,"Загляни в раздел «Герой»",true);
+  else{fresh.forEach(it=>celebrate(gmIcon(it),"Новая вещь: "+it.n,it.s==="case"?"Лежит в чемодане":"Уже на тебе",true));fsc.forEach(sc=>celebrate("🗺️","Новое место: "+sc.n,"Фон выбран, сменить можно в разделе «Герой»",true))}
+  if(tot)gmReact("dance",null,1500);
+  return tot;
 }
 function gmPost(){try{if(gmCheck())save()}catch(e){}}
 
@@ -2751,13 +2846,13 @@ let gmEx="idle",gmExUntil=0,gmAnimK="",gmExT=null,gmSig="",gmLastSay=0;
 const gmExpr=()=>Date.now()<gmExUntil?gmEx:"idle";
 function gmApplyAnim(){if(Date.now()<gmExUntil&&gmAnimK)document.querySelectorAll(".gmc").forEach(el=>el.classList.add(gmAnimK))}
 function gmRefresh(force){
-  const ch=gmChar(),w=gmWear(),ex=gmExpr(),L=levelOf(totalXP());
-  const sig=ch+"|"+JSON.stringify(w)+"|"+ex+"|"+gmAnimK+"|"+L+"|"+(gmExUntil>Date.now());
+  const L=gmLook(),w=gmWear(),ex=gmExpr(),lv=levelOf(totalXP()),sc=gmScene();
+  const sig=JSON.stringify(L)+"|"+JSON.stringify(w)+"|"+ex+"|"+gmAnimK+"|"+lv+"|"+sc+"|"+(gmExUntil>Date.now());
   const side=document.getElementById("gmSide"),hd=document.getElementById("gmHead");
   if(force||sig!==gmSig||(side&&!side.firstChild)){
     gmSig=sig;
-    if(side)side.innerHTML=`<div class="gmbtn" role="button" tabindex="0" data-gmtalk aria-label="Поговорить с ${GM_CHARS[ch].n}">${gmAvatar(ch,w,ex,"gmc gmbig")}</div><div class="gmname" role="button" tabindex="0" data-gmopen>${GM_CHARS[ch].n} · гардероб</div>`;
-    if(hd)hd.innerHTML=gmAvatar(ch,w,ex,"gmc gmmini","28 6 104 104")+`<i class="gmlv">${L}</i>`;
+    if(side)side.innerHTML=`<div class="gmsc">${gmSceneSvg(sc)}<div class="gmbtn" role="button" tabindex="0" data-gmtalk aria-label="Поговорить: ${esc(L.n)}">${gmAvatar(L,w,ex,"gmc gmbig")}</div></div><div class="gmname" role="button" tabindex="0" data-gmopen>${esc(L.n)} · герой</div>`;
+    if(hd)hd.innerHTML=gmAvatar(L,w,ex,"gmc gmmini","28 6 104 104")+`<i class="gmlv">${lv}</i>`;
   }
   gmApplyAnim();
 }
@@ -2808,40 +2903,63 @@ function gmGreet(){
 }
 
 /* ---- экраны ---- */
+const gmScCounts=()=>({n:GM_SC.filter(s=>gmOwned("sc:"+s.id)).length,tot:GM_SC.length});
 function gmCounts(){const n=GM_ITEMS.filter(i=>gmOwned(i.id)).length;return{n,tot:GM_ITEMS.length,pct:Math.round(100*n/GM_ITEMS.length)}}
 function gmHomeCard(){
-  const g=state.gm||{},ch=gmChar(),{n,tot,pct}=gmCounts();
-  return `<div class="card row gmhome" role="button" tabindex="0" data-gmopen style="margin-top:12px;cursor:pointer"><div class="gmhomeav" data-gmtalk>${gmAvatar(ch,gmWear(),"idle","gmc gmcard")}</div><div class="grow"><b>${g.char?"Мой путешественник · "+GM_CHARS[ch].n:"Выбери путешественника"}</b><div class="muted small">Собрано вещей: ${n} из ${tot}. Вещи — за модули и уровни.</div><div class="bar mt" style="height:6px"><i style="width:${pct}%"></i></div></div><span class="link">Открыть</span></div>`;
+  const g=state.gm||{},L=gmLook(),{n,tot}=gmCounts(),sc=gmScCounts();
+  return `<div class="card row gmhome" role="button" tabindex="0" data-gmopen style="margin-top:12px;cursor:pointer"><div class="gmhomeav" data-gmtalk>${gmAvatar(L,gmWear(),"idle","gmc gmcard")}</div><div class="grow"><b>${g.char?"Мой путешественник · "+esc(L.n):"Выбери путешественника"}</b><div class="muted small">Вещей: ${n} из ${tot} · мест: ${sc.n} из ${sc.tot}. Открываются за модули, серии и уровни.</div><div class="bar mt" style="height:6px"><i style="width:${Math.round(100*(n+sc.n)/(tot+sc.tot))}%"></i></div></div><span class="link">Открыть</span></div>`;
 }
 function gmChooser(){
   return `<button class="back" data-tab="today">${ICON.back} Сегодня</button><h1>Выбери путешественника</h1>
-  <p class="muted">Он будет с тобой на каждом экране и вместе с тобой поедет в Италию. За модули и уровни он получает вещи: одежду, аксессуары и сувениры для чемодана.</p>
+  <p class="muted">Он будет с тобой на каждом экране и вместе с тобой поедет в Италию. Потом можно изменить лицо, причёску, имя и фон. Вещи и места он получает за модули, серии и уровни.</p>
   <div class="gmpick">${Object.entries(GM_CHARS).map(([k,c])=>`<button class="card gmpickc" data-gmpick="${k}">${gmAvatar(k,{},"happy","gmc gmpicks")}<b>${c.n}</b></button>`).join("")}</div>`;
+}
+function gmEditor(L){
+  const sw=(key,list,cur)=>list.map(c=>`<button class="gmsw ${cur===c?"on":""}" style="background:${c}" data-gmlook="${key}:${c}" aria-label="Цвет ${c}"></button>`).join("");
+  const g=gmG();
+  return `<div class="card gmed"><label class="gmlab" for="gmName">Имя героя</label><input id="gmName" class="gmin" data-gmname maxlength="14" value="${esc(L.n)}" autocomplete="off" placeholder="Как его зовут?">
+  <div class="gmlab">Кто это</div><div class="gmsws"><button class="gmchip ${g.char==="b"?"":"on"}" data-gmsex="a">Он</button><button class="gmchip ${g.char==="b"?"on":""}" data-gmsex="b">Она</button></div>
+  <div class="gmlab">Цвет кожи</div><div class="gmsws">${sw("skin",GM_SKINS,L.skin)}</div>
+  <div class="gmlab">Причёска</div><div class="gmsws">${GM_HS.map(([k,n])=>`<button class="gmchip ${L.hs===k?"on":""}" data-gmlook="hs:${k}">${n}</button>`).join("")}</div>
+  <div class="gmlab">Цвет волос</div><div class="gmsws">${sw("hc",GM_HC,L.hc)}</div>
+  <div class="gmlab">Глаза</div><div class="gmsws">${sw("eye",GM_EYES,L.eye)}<button class="gmchip ${L.fr?"on":""}" data-gmlook="fr:${L.fr?0:1}">Веснушки</button></div></div>`;
 }
 function vMe(){
   const g=gmG();if(!g.char)return gmChooser();
-  const ch=g.char,C=GM_CHARS[ch],w=gmWear(),{n,tot,pct}=gmCounts();
+  const L=gmLook(),w=gmWear(),{n,tot,pct}=gmCounts(),sc=gmScCounts(),cur=gmScene();
   const tile=it=>{const own=gmOwned(it.id),on=it.s!=="case"&&w[it.s]===it.id;
     return `<button class="gmt ${own?"":"lock"} ${on?"on":""}" data-gmtile="${it.id}">${gmIcon(it)}<b>${own?esc(it.n):"???"}</b><span>${own?(it.s==="case"?"В чемодане":on?"Надето":"Надеть"):esc(gmHint(it))}</span></button>`};
+  const stile=s=>{const own=gmOwned("sc:"+s.id),on=cur===s.id;
+    return `<button class="gmt scn ${own?"":"lock"} ${on?"on":""}" data-gmscene="${s.id}">${gmSceneSvg(s.id,"gmprev")}<b>${own?esc(s.n):"???"}</b><span>${own?(on?"Выбрано":"Выбрать"):esc(gmHint(s))}</span></button>`};
   const wn=GM_WEAR.filter(i=>gmOwned(i.id)).length,cn=GM_CASE.filter(i=>gmOwned(i.id)).length;
+  const full=n===tot&&sc.n===sc.tot;
   return `<button class="back" data-tab="today">${ICON.back} Сегодня</button>
   <h1>Мой путешественник</h1>
   <div class="split">
    <div class="sticky"><div class="card gmscene">
-    <div class="gmstage"><div class="gmbtn gmherobtn" role="button" tabindex="0" data-gmtalk>${gmAvatar(ch,w,"idle","gmc gmhero")}</div>${gmSuitcase(g.got||{})}</div>
-    <div class="row between"><div><b>${C.n}</b><div class="muted small">Собрано ${n} из ${tot}</div></div><span class="pill">${pct}%</span></div>
+    <div class="gmstage">${gmSceneSvg(cur)}<div class="gmbtn gmherobtn" role="button" tabindex="0" data-gmtalk>${gmAvatar(L,w,"idle","gmc gmhero")}</div>${gmSuitcase(g.got||{})}</div>
+    <div class="row between"><div><b class="gmnm">${esc(L.n)}</b><div class="muted small">Вещей ${n} из ${tot} · мест ${sc.n} из ${sc.tot}</div></div><span class="pill">${pct}%</span></div>
     <div class="bar mt"><i style="width:${pct}%"></i></div>
-    <div class="gmact"><button class="btn sea" data-gmtalk>💬 Поговорить</button><button class="link" data-gmundress>Снять всё</button><button class="link" data-gmchange>Сменить героя</button></div>
-    ${n===tot?`<div class="verdict ok mt">Чемодан собран. Partenza! ✈️</div>`:`<div class="muted small mt">Нажми на вещь, чтобы надеть или снять. Серые вещи ещё не получены: на них написано, как их заработать.</div>`}
+    <div class="gmact"><button class="btn sea" data-gmtalk>💬 Поговорить</button><button class="link" data-gmundress>Снять всё</button><button class="link" data-gmchange>Другой герой</button></div>
+    ${full?`<div class="verdict ok mt">Чемодан собран, все места открыты. Partenza! ✈️</div>`:`<div class="muted small mt">Нажми на вещь, чтобы надеть или снять. Серые вещи ещё не получены: на них написано, как их заработать.</div>`}
    </div></div>
    <div>
-    <h2 class="h2top">Одежда и аксессуары <span class="muted small">${wn}/${GM_WEAR.length}</span></h2><div class="gmgrid">${GM_WEAR.map(tile).join("")}</div>
+    <h2 class="h2top">Внешность</h2>${gmEditor(L)}
+    <h2>Места <span class="muted small">${sc.n}/${sc.tot}</span></h2><div class="gmgrid gmgrid-sc">${GM_SC.map(stile).join("")}</div>
+    <h2>Одежда и аксессуары <span class="muted small">${wn}/${GM_WEAR.length}</span></h2><div class="gmgrid">${GM_WEAR.map(tile).join("")}</div>
     <h2>В чемодане <span class="muted small">${cn}/${GM_CASE.length}</span></h2><div class="gmgrid">${GM_CASE.map(tile).join("")}</div>
    </div>
   </div>`;
 }
+let gmNT=null;
+document.addEventListener("input",e=>{
+  const t=e.target;if(!t||!t.matches||!t.matches("[data-gmname]"))return;
+  const g=gmG();g.name=t.value.slice(0,14);gmRefresh(true);
+  document.querySelectorAll(".gmnm").forEach(el=>el.textContent=gmLook().n);
+  clearTimeout(gmNT);gmNT=setTimeout(()=>{try{save()}catch(_){}},600);
+});
 document.addEventListener("click",e=>{
-  const t=e.target.closest("[data-gmtalk],[data-gmopen],[data-gmpick],[data-gmtile],[data-gmundress],[data-gmchange]");if(!t)return;
+  const t=e.target.closest("[data-gmtalk],[data-gmopen],[data-gmpick],[data-gmtile],[data-gmundress],[data-gmchange],[data-gmscene],[data-gmlook],[data-gmsex]");if(!t)return;
   const d=t.dataset,g=gmG();
   if(d.gmtile){
     const it=GM_BY[d.gmtile];if(!it)return;
@@ -2849,7 +2967,10 @@ document.addEventListener("click",e=>{
     if(it.s==="case"){toast(it.n+" лежит в твоём чемодане");gmReact("hop");return}
     if(g.wear[it.s]===it.id)delete g.wear[it.s];else g.wear[it.s]=it.id;
     save();render();gmReact("hop");return}
-  if(d.gmpick){g.char=d.gmpick;save();render();gmReact("dance","happy",1500);gmSay("Ciao! Mi chiamo "+GM_CHARS[g.char].n+".","Привет! Меня зовут "+GM_CHARS[g.char].n+".",{ms:4500});return}
+  if(d.gmscene){const s=GM_SCBY[d.gmscene];if(!s)return;if(!gmOwned("sc:"+s.id)){toast(gmHint(s));return}g.scene=s.id;save();render();gmReact("hop");return}
+  if(d.gmlook){const i=d.gmlook.indexOf(":"),k=d.gmlook.slice(0,i),v=d.gmlook.slice(i+1);g.look=Object.assign({},gmLook(),g.look||{});delete g.look.n;g.look[k]=k==="fr"?+v:v;save();render();gmReact("hop","happy",900);return}
+  if(d.gmsex){g.char=d.gmsex;save();render();return}
+  if(d.gmpick){const c=GM_CHARS[d.gmpick];g.char=d.gmpick;g.look={skin:c.skin,hc:c.hc,hs:c.hs,eye:c.eye,fr:c.fr};g.name=c.n;save();render();gmReact("dance","happy",1500);gmSay("Ciao! Mi chiamo "+c.n+".","Привет! Меня зовут "+c.n+".",{ms:4500});return}
   if(d.gmundress!==undefined){g.wear={};save();render();return}
   if(d.gmchange!==undefined){g.char=null;save();render();return}
   if(d.gmopen!==undefined){go("me");return}
@@ -2865,7 +2986,10 @@ const ACH=[
 ["strong50","💎","Намертво","50 слов знаешь надёжно",()=>strongCount()>=50],
 ["s3","🔥","Три дня подряд","Серия 3 дня",()=>state.streak>=3],
 ["s7","🌋","Этна","Серия 7 дней",()=>state.streak>=7],
+["s14","🌶️","Две недели","Серия 14 дней",()=>state.streak>=14],
 ["s30","☀️","Сицилийское лето","Серия 30 дней",()=>state.streak>=30],
+["s60","🏖️","Два месяца","Серия 60 дней",()=>state.streak>=60],
+["s100","👑","Сто дней","Серия 100 дней",()=>state.streak>=100],
 ["l1","✏️","Первый урок","Пройди урок грамматики",()=>Object.keys(state.lessons).length>=1],
 ["l8","📐","Полпути","8 уроков грамматики",()=>Object.keys(state.lessons).length>=8],
 ["lall","🎓","Laurea","Все уроки грамматики",()=>Object.keys(state.lessons).length>=LESSONS.length],
@@ -2887,7 +3011,7 @@ const ACH=[
 ["mod5","🛵","Полкурса","Сдай 5 модулей",()=>COURSE.filter(m=>modPassed(m.id)).length>=5],
 ["a1","🏆","Уровень A1","Сдай все модули A1",()=>COURSE.filter(m=>m.lvl==="A1").every(m=>modPassed(m.id))],
 ["trip1","🧳","Чемодан A1","Получи все вещи за модули A1",()=>GM_ITEMS.filter(i=>i.mod&&((COURSE.find(m=>m.id===i.mod)||{}).lvl==="A1")).every(i=>gmOwned(i.id))],
-["trip2","✈️","Partenza!","Собери все вещи путешественника",()=>GM_ITEMS.every(i=>gmOwned(i.id))]
+["trip2","✈️","Partenza!","Собери все вещи и места героя",()=>GM_ITEMS.every(i=>gmOwned(i.id))&&GM_SC.every(s=>gmOwned("sc:"+s.id))]
 ];
 
 let gaming=false;
@@ -2899,6 +3023,7 @@ function checkGame(){
     for(const q of qs){if(!d["q:"+q.id]&&(d[q.k]||0)>=q.n){d["q:"+q.id]=1;state.xp[t]=(state.xp[t]||0)+10;celebrate("✅","Задание выполнено",q.t+" · +10 очков")}}
     if(qs.every(q=>d["q:"+q.id])&&!d.chest){d.chest=1;state.flags.chest=1;state.xp[t]=(state.xp[t]||0)+20;celebrate("🎁","Все задания дня!","Бонус +20 очков",true)}
     for(const a of ACH){if(!state.ach[a[0]]){let ok=false;try{ok=a[4]()}catch(e){}if(ok){state.ach[a[0]]=Date.now();celebrate(a[1],"Награда: "+a[2],a[3],true)}}}
+    try{gmCheck()}catch(e){}
     const L=levelOf(totalXP());
     if(L>(state.level||1)){state.level=L;const tt=levelTitle(L);celebrate("⭐","Уровень "+L+"!",tt[0]+" — "+tt[1],true)}
   }finally{gaming=false}
@@ -3184,16 +3309,15 @@ function addPhraseCard(it){
 }
 
 /* ================== ROUTER ================== */
-const TABS=[["today","Сегодня",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>'],
-["words","Слова",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>'],
-["phrases","Фразы",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M21 12a8 8 0 0 1-11.6 7.1L4 20l1-4.6A8 8 0 1 1 21 12z"/></svg>'],
-["course","Курс",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 7h6M9 11h4"/></svg>'],
-["practice","Практика",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 10v4M8 6v12M12 3v18M16 7v10M20 10v4"/></svg>']];
+const TABS=[["today","Сегодня",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>'],["course","Курс",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M4 5a2 2 0 0 1 2-2h13v16H6a2 2 0 0 0-2 2z"/><path d="M4 21V5"/><path d="M9 7h6M9 11h4"/></svg>'],["learn","Учить",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="14" height="14" rx="2"/><path d="M7 3h12a2 2 0 0 1 2 2v12"/></svg>'],["me","Герой",'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>']];
+const LEARN=[["words","Слова"],["phrases","Фразы"],["practice","Практика"]];let lastLearn="words";
+const isLearn=v=>LEARN.some(x=>x[0]===v);
+const learnBar=()=>`<div class="seg learnseg">${LEARN.map(x=>`<button class="${view===x[0]?"on":""}" data-tab="${x[0]}">${x[1]}</button>`).join("")}</div>`;
 (function(){const i=TABS.findIndex(t=>t[0]==="course");const c=TABS.splice(i,1)[0];TABS.splice(1,0,c)})();
 let view="today", sub=null, les=null, hideIt=false, wordsMode="home", search="", phMode="phrases", phSearch="", dlg=null, prac=null;
 function go(v){
   stopDialog();stopSeq();
-  view=v;sub=null;les=null;dlg=null;prac=null;cmod=null;cact=null;act=null;gramOpen=false;hideGloss();if(v!=="words"||!sess)wordsMode="home";
+  view=v;if(isLearn(v))lastLearn=v;sub=null;les=null;dlg=null;prac=null;cmod=null;cact=null;act=null;gramOpen=false;hideGloss();if(v!=="words"||!sess)wordsMode="home";
   try{if(location.hash!=="#"+v)history.replaceState(null,"","#"+v)}catch(e){}
   render();window.scrollTo(0,0);
 }
@@ -3203,7 +3327,8 @@ function fromHash(){
   if(h==="dialogs"){view="phrases";phMode="dialogs";return}
   if(h==="grammar"){view="course";cact="glist";return}
   if(h==="me"){view="me";return}
-  if(TABS.some(t=>t[0]===h))view=h;
+  if(h==="learn")view=lastLearn;
+  else if(TABS.some(t=>t[0]===h)||isLearn(h))view=h;
 }
 
 /* ================== VIEWS ================== */
@@ -4088,7 +4213,8 @@ function render(){
   app.innerHTML=view==="today"?vToday():view==="words"?vWords():view==="phrases"?vPhrases():view==="course"?vCourse():view==="me"?vMe():vPractice();
   {const L=levelOf(totalXP());$("#lvchip").textContent="⭐ Ур. "+L;}
   try{gmRefresh();gmApplyAnim()}catch(e){}
-  $("#tabs").innerHTML=TABS.map(t=>`<button class="${view===t[0]?"on":""}" data-tab="${t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("");
+  if(isLearn(view)&&app.className!=="narrow")app.insertAdjacentHTML("afterbegin",learnBar());
+  $("#tabs").innerHTML=TABS.map(t=>`<button class="${view===t[0]||(t[0]==="learn"&&isLearn(view))?"on":""}" data-tab="${t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("");
   if(view==="practice"&&prac&&prac.items&&!prac.answered&&(prac.mode==="write"||prac.mode==="numbers")){const p=$("#pin");if(p&&document.activeElement!==p)try{p.focus({preventScroll:true})}catch(e){}}
 }
 function refocus(id,val){const pos=val.length;render();const n=$("#"+id);if(n){n.focus();try{n.setSelectionRange(pos,pos)}catch(_){}}}
@@ -4097,7 +4223,7 @@ document.addEventListener("click",e=>{
   const d=t.dataset;
   if(d.say!==undefined){speak(d.say,!!d.slow);if(d.sound&&!state.sounds[d.sound]){state.sounds[d.sound]=1;addXP(1);setTimeout(render,50)}e.stopPropagation();return}
   if(d.listen!==undefined){listen(d.listen,t);e.stopPropagation();return}
-  if(d.tab){go(d.tab);return}
+  if(d.tab){go(d.tab==="learn"?lastLearn:d.tab);return}
   if(d.w!==undefined){showGloss(d.w);return}
   if(d.mod){stopSeq();if(view!=="course")go("course");cmod=d.mod;cact=null;act=null;les=null;gramOpen=false;render();window.scrollTo(0,0);return}
   if(d.part){const m=COURSE.find(x=>x.id===cmod);stopSeq();
