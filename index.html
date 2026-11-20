@@ -3573,7 +3573,7 @@ function finalizeLesson(){
   save();if(srvReady){clearTimeout(srvTimer);srvPush()}if(tgReady){clearTimeout(tgTimer);tgPush()}
 }
 function startQuiz(items,review){
-  Object.assign(les,{mode:"quiz",queue:items.slice(),total:items.length,fixed:0,correct:0,answered:null,order:null,wrong:[],review:!!review,combo:0});
+  Object.assign(les,{final:false,mode:"quiz",queue:items.slice(),total:items.length,fixed:0,correct:0,answered:null,order:null,wrong:[],review:!!review,combo:0});
   render();window.scrollTo(0,0);
 }
 function startMistakes(){les={id:"mist",mode:"steps"};startQuiz(shuffle(mistKeys().map(k=>{const p=k.split(":");return[p[0],+p[1]]})).slice(0,15),true)}
