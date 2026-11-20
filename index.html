@@ -209,10 +209,10 @@ mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
 .verdict{padding:10px 12px;border-radius:12px;font-weight:700;font-size:14px}.verdict.ok{background:var(--olive-soft);color:var(--olive)}.verdict.no{background:var(--terra-soft);color:var(--terra)}
 .h3s{font-size:16px;margin:4px 0}
 .checkgrid{display:grid;gap:14px}
-@media (min-width:900px){.checkgrid{grid-template-columns:1.3fr 1fr}.lvtab{padding:16px 20px}.lvbig{font-size:34px}}
+@media (min-width:1000px){.checkgrid{grid-template-columns:1.3fr 1fr}.lvtab{padding:16px 20px}.lvbig{font-size:34px}}
 
 .dash>div>*:first-child{margin-top:0}
-@media (min-width:900px){
+@media (min-width:720px){
   body{padding-left:236px}
   nav.tabs{top:0;bottom:0;left:0;right:auto;width:236px;flex-direction:column;justify-content:flex-start;align-items:stretch;border-top:0;border-right:1px solid var(--line);padding:26px 14px}
   .side-logo{display:block;font-family:var(--font-display);font-weight:700;font-size:25px;padding:2px 14px 24px;letter-spacing:-.01em}
@@ -226,13 +226,6 @@ mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
   .wrap{max-width:1120px;padding:24px 44px 56px}
   #app.narrow{max-width:760px;margin:0 auto}
   h1{font-size:32px}
-  .dash{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
-  .dash h2{margin-top:26px}
-  .modgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
-  .modgrid>.card{margin-top:0!important}
-  .grid2{grid-template-columns:repeat(3,minmax(0,1fr))}
-  .split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
-  .split .sticky{position:sticky;top:24px}
   .h2top{margin-top:4px}
   .readtext{font-size:19px;line-height:1.85;padding:22px}
   .toast{bottom:32px;left:calc(50% + 118px)}
@@ -246,6 +239,16 @@ mark.err sup{font-size:10px;color:var(--red);font-weight:800;margin-left:1px}
   .flash{min-height:320px}
   .flash .big{font-size:42px}
 }
+@media (min-width:1000px){
+  .dash{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:28px;align-items:start}
+  .dash h2{margin-top:26px}
+  .modgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+  .modgrid>.card{margin-top:0!important}
+  .grid2{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .split{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:28px;align-items:start}
+  .split .sticky{position:sticky;top:24px}
+}
+@media (min-width:720px) and (max-width:999px){.wrap{padding:20px 28px 56px}.grid2{grid-template-columns:repeat(2,minmax(0,1fr))}.dash h2{margin-top:22px}}
 @media (min-width:1320px){.grid2{grid-template-columns:repeat(4,minmax(0,1fr))}}
 .readtext{font-size:18px;line-height:1.75}
 .w{cursor:pointer;border-radius:4px;padding:0 1px}
@@ -365,7 +368,7 @@ nav.tabs button.on{background:var(--dock-on);color:var(--dock-on-ink);font-weigh
 .mrow .ne{color:#33353D}
 .lvhero{background:var(--card)}
 /* Ноутбук: боковое меню в стиле JulYera */
-@media (min-width:900px){
+@media (min-width:720px){
   nav.tabs{background:var(--bg);border-right:1px solid var(--hairline);padding:26px 16px}
   nav.tabs .in{background:transparent;height:auto;border-radius:0;padding:0;gap:6px}
   nav.tabs button{flex:none;justify-content:flex-start;gap:12px;color:var(--muted);min-height:48px;padding:0 16px;border-radius:16px;font-size:15px}
@@ -387,7 +390,7 @@ h1{font-size:25px;line-height:1.2}
 h2{font-size:17px}
 .q{font-family:var(--font-text)!important;font-size:19px;font-weight:600;line-height:1.35;letter-spacing:0}
 .mrow .link{padding:6px 12px;font-size:13px}
-@media (min-width:900px){h1{font-size:30px}.hero h1{font-size:28px}.q{font-size:21px}}
+@media (min-width:720px){h1{font-size:30px}.hero h1{font-size:28px}.q{font-size:21px}}
 
 .logo{display:flex}.logo,.side-logo{align-items:center;gap:8px}
 .logo b,.side-logo b{font:inherit;font-weight:inherit}
