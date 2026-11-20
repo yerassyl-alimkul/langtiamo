@@ -398,22 +398,91 @@ h2{font-size:17px}
 @media (prefers-color-scheme:dark){:root:not(.light) .lm-a{fill:#fff}:root:not(.light) .lm-l,:root:not(.light) .lm-h{fill:#17181C}:root:not(.light) .lm-b{fill:#A9C89D}}
 :root.dark .lm-a{fill:#fff}:root.dark .lm-l,:root.dark .lm-h{fill:#17181C}:root.dark .lm-b{fill:#A9C89D}
 .lmark{width:30px;height:30px;flex:none}.side-logo .lmark{width:34px;height:34px}
+/* ===== Путешественник ===== */
+:root{--gm1:#E6EEF9;--gm2:#F6F2E6;--gmfloor:#E3DCC8}
+@media (prefers-color-scheme:dark){:root:not(.light){--gm1:#27303D;--gm2:#2B2823;--gmfloor:#3A352C}}
+:root.dark{--gm1:#27303D;--gm2:#2B2823;--gmfloor:#3A352C}
+.gmc{display:block;overflow:visible;transform-origin:50% 100%}
+.gm-eyes{transform-box:fill-box;transform-origin:center;animation:gmblink 5.2s infinite}
+@keyframes gmblink{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.08)}}
+.gmbig,.gmhero{animation:gmfloat 4.2s ease-in-out infinite}
+@keyframes gmfloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.gmc.hop{animation:gmhop .7s ease}
+@keyframes gmhop{0%{transform:none}22%{transform:scale(1.06,.93)}50%{transform:translateY(-16px) scale(.97,1.04)}78%{transform:scale(1.05,.95)}100%{transform:none}}
+.gmc.shake{animation:gmshake .6s ease}
+@keyframes gmshake{0%,100%{transform:rotate(0)}20%{transform:rotate(-5deg)}40%{transform:rotate(5deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(3deg)}}
+.gmc.dance{animation:gmdance 1.5s ease}
+@keyframes gmdance{0%,100%{transform:none}12%{transform:translateY(-12px) rotate(-6deg)}25%{transform:none}37%{transform:translateY(-12px) rotate(6deg)}50%{transform:none}62%{transform:translateY(-18px) rotate(-6deg)}75%{transform:none}87%{transform:translateY(-10px) rotate(6deg)}}
+@media (prefers-reduced-motion:reduce){.gmc,.gmc.hop,.gmc.shake,.gmc.dance,.gm-eyes{animation:none!important}}
+.gmbtn,.gmname,.gmlink{cursor:pointer;-webkit-tap-highlight-color:transparent}
+/* шапка на телефоне */
+#gmHead{position:relative;width:44px;height:44px;flex:none;border-radius:50%;background:var(--cat-blue);border:1px solid var(--line);overflow:visible;padding:0;display:block}
+#gmHead .gmmini{width:100%;height:100%;border-radius:50%;overflow:hidden}
+.gmlv{position:absolute;right:-4px;bottom:-4px;min-width:19px;height:19px;padding:0 4px;border-radius:10px;background:var(--ink);color:var(--on-ink,#fff);font:700 11px/19px var(--font-text,sans-serif);text-align:center;font-style:normal;border:2px solid var(--bg)}
+.gmside{display:none}
+@media (max-width:719px){#lvchip{display:none}}
+@media (min-width:720px){
+  #gmHead{display:none}
+  .gmside{display:block;margin-top:auto;padding:10px 6px 4px;text-align:center}
+  .gmside .gmbig{height:min(30vh,230px);width:auto;margin:0 auto}
+  .gmside .gmname{margin-top:8px;font-size:13px;font-weight:600;color:var(--muted);padding:6px 8px;border-radius:12px}
+  .gmside .gmname:hover{background:var(--card);color:var(--ink)}
+}
+@media (min-width:720px) and (max-height:640px){.gmside .gmbig{height:150px}}
+/* реплика */
+.gmb{position:fixed;z-index:45;max-width:min(270px,80vw);background:var(--card);border:1px solid var(--line);border-radius:18px;padding:11px 15px;box-shadow:0 12px 32px rgba(23,24,28,.16);opacity:0;transform:translateY(6px) scale(.97);pointer-events:none;transition:opacity .2s,transform .2s;top:calc(64px + var(--sat,0px));right:12px}
+.gmb::after{content:"";position:absolute;top:-6px;right:20px;width:12px;height:12px;background:var(--card);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg)}
+.gmb.on{opacity:1;transform:none;pointer-events:auto}
+.gmit{font-weight:700;font-size:16px}
+.gmru{color:var(--muted);font-size:13px;margin-top:2px}
+.gmlink{margin-top:8px;font-size:13px;font-weight:700;color:var(--olive,#557546)}
+@media (min-width:720px){
+  .gmb{top:auto;right:auto;left:250px;bottom:calc(min(30vh,230px) - 10px)}
+  .gmb::after{top:auto;bottom:22px;left:-6px;right:auto;transform:rotate(-45deg)}
+}
+.celeb .e svg.gmic{width:42px;height:42px;display:block}
+/* карточка на главной */
+.gmhome{align-items:center}
+.gmhomeav{width:54px;flex:none}
+.gmhomeav .gmcard{width:54px;height:auto;margin-top:-6px}
+/* экран */
+.gmstage{display:flex;align-items:flex-end;justify-content:center;gap:4px;background:linear-gradient(var(--gm1),var(--gm2) 72%);border-radius:18px;padding:16px 10px 0;margin-bottom:14px;overflow:hidden;position:relative}
+.gmstage::after{content:"";position:absolute;left:0;right:0;bottom:0;height:16px;background:var(--gmfloor)}
+.gmherobtn{position:relative;z-index:1;flex:none}
+.gmhero{height:240px;width:auto;margin-bottom:6px}
+.gmcase{position:relative;z-index:1;height:150px;width:auto;margin-bottom:2px;flex:none}
+.gmact{display:flex;gap:10px;align-items:center;flex-wrap:wrap;margin-top:12px}
+.gmact .btn{min-height:44px;padding:10px 16px}
+.gmgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(100px,1fr));gap:10px;margin:8px 0 18px}
+.gmt{background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:12px 6px 10px;display:flex;flex-direction:column;align-items:center;gap:5px;text-align:center;min-height:128px;justify-content:flex-start}
+.gmt svg{width:54px;height:54px;flex:none}
+.gmt b{font-size:12px;line-height:1.2;font-weight:700}
+.gmt span{font-size:11px;color:var(--muted);line-height:1.25}
+.gmt.on{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.gmt.on span{color:var(--olive,#557546);font-weight:700}
+.gmt.lock svg{filter:grayscale(1);opacity:.25}
+.gmt.lock b{color:var(--muted)}
+@media (hover:hover){.gmt:not(.lock):hover{border-color:var(--ink)}}
+.gmpick{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;max-width:520px}
+.gmpickc{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px}
+.gmpicks{height:210px;width:auto}
 </style>
 </head>
 <body>
 <div class="wrap">
   <header class="top">
     <div class="logo"><svg class="lmark" viewBox="0 0 100 100" aria-hidden="true"><rect class="lm-a" x="6" y="8" width="52" height="44" rx="15"/><path class="lm-a" d="M14 46 L 10 60 L 26 50 Z"/><path class="lm-l" d="M25 21 H29.2 V35.2 H38.5 V39 H25 Z"/><rect class="lm-b" x="42" y="44" width="52" height="44" rx="15"/><path class="lm-b" d="M86 82 L 90 96 L 74 86 Z"/><path class="lm-h" transform="translate(55 53.52) scale(0.26)" d="M50 86 C 22 68 8 52 8 35 C 8 21 19 11 31 11 C 40 11 46 16 50 23 C 54 16 60 11 69 11 C 81 11 92 21 92 35 C 92 52 78 68 50 86 Z"/></svg><b>Lang<span>tiamo</span></b></div>
-    <div class="row" style="gap:6px"><button class="pill sea" id="lvchip" aria-label="Награды"></button><button class="iconbtn" id="trBtn" aria-label="Переводчик" style="font-weight:800;font-size:14px;color:var(--sea)">IT⇄RU</button><button class="iconbtn" id="gear" aria-label="Настройки">
+    <div class="row" style="gap:6px"><button id="gmHead" class="gmhead" data-gmtalk aria-label="Мой путешественник"></button><button class="pill sea" id="lvchip" aria-label="Награды"></button><button class="iconbtn" id="trBtn" aria-label="Переводчик" style="font-weight:800;font-size:14px;color:var(--sea)">IT⇄RU</button><button class="iconbtn" id="gear" aria-label="Настройки">
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>
     </button></div>
   </header>
   <main id="app"></main>
 </div>
 
-<nav class="tabs"><div class="side-logo"><svg class="lmark" viewBox="0 0 100 100" aria-hidden="true"><rect class="lm-a" x="6" y="8" width="52" height="44" rx="15"/><path class="lm-a" d="M14 46 L 10 60 L 26 50 Z"/><path class="lm-l" d="M25 21 H29.2 V35.2 H38.5 V39 H25 Z"/><rect class="lm-b" x="42" y="44" width="52" height="44" rx="15"/><path class="lm-b" d="M86 82 L 90 96 L 74 86 Z"/><path class="lm-h" transform="translate(55 53.52) scale(0.26)" d="M50 86 C 22 68 8 52 8 35 C 8 21 19 11 31 11 C 40 11 46 16 50 23 C 54 16 60 11 69 11 C 81 11 92 21 92 35 C 92 52 78 68 50 86 Z"/></svg><b>Lang<span>tiamo</span></b></div><div class="in" id="tabs"></div></nav>
+<nav class="tabs"><div class="side-logo"><svg class="lmark" viewBox="0 0 100 100" aria-hidden="true"><rect class="lm-a" x="6" y="8" width="52" height="44" rx="15"/><path class="lm-a" d="M14 46 L 10 60 L 26 50 Z"/><path class="lm-l" d="M25 21 H29.2 V35.2 H38.5 V39 H25 Z"/><rect class="lm-b" x="42" y="44" width="52" height="44" rx="15"/><path class="lm-b" d="M86 82 L 90 96 L 74 86 Z"/><path class="lm-h" transform="translate(55 53.52) scale(0.26)" d="M50 86 C 22 68 8 52 8 35 C 8 21 19 11 31 11 C 40 11 46 16 50 23 C 54 16 60 11 69 11 C 81 11 92 21 92 35 C 92 52 78 68 50 86 Z"/></svg><b>Lang<span>tiamo</span></b></div><div class="in" id="tabs"></div><div class="gmside" id="gmSide"></div></nav>
 <div class="toast" id="toast"></div>
 <div class="celeb" id="celeb"></div>
+<div class="gmb" id="gmb"></div>
 <div class="gloss" id="gloss"></div>
 <div class="modal" id="modal"><div class="sheet" id="sheet"></div></div>
 
@@ -2453,9 +2522,9 @@ async function pushRemote(){
   if(writeAgain){writeAgain=false;pushRemote()}
 }
 function progressSummary(o){const c=Object.values(o.cards||{}).filter(x=>x.reps>0).length;const x=Object.values(o.xp||{}).reduce((a,b)=>a+b,0);return c+" "+plural(c,"слово","слова","слов")+", "+x+" "+plural(x,"очко","очка","очков")}
-function useState(o,id){state=merge(o);state.owner=id;lsSet(KEY+":"+id,state);sess=null;les=null;prac=null;render()}
+function useState(o,id){state=merge(o);state.owner=id;lsSet(KEY+":"+id,state);sess=null;les=null;prac=null;render();gmPost()}
 // применить данные с другого устройства, не выкидывая из текущего урока или тренировки
-function applyState(o){state=merge(o);if(uid){state.owner=uid;lsSet(KEY+":"+uid,state)}render()}
+function applyState(o){state=merge(o);if(uid){state.owner=uid;lsSet(KEY+":"+uid,state)}render();gmPost()}
 // объединение прогресса с двух устройств: ничего пройденного не теряется
 function mergeStates(a,b){
   if(!a)return b;if(!b)return a;
@@ -2469,6 +2538,7 @@ function mergeStates(a,b){
   out.custom=Object.assign({},o.custom||{},n.custom||{});
   out.mod=JSON.parse(JSON.stringify(o.mod||{}));for(const[id,v]of Object.entries(n.mod||{})){const r=out.mod[id]||(out.mod[id]={});for(const[k,x]of Object.entries(v||{}))r[k]=Math.max(Number(x)||0,Number(r[k])||0)}
   out.daily=Object.assign({},o.daily||{});for(const[d,v]of Object.entries(n.daily||{})){const r=Object.assign({},out.daily[d]||{});for(const[x,y]of Object.entries(v||{}))r[x]=Math.max(Number(y)||0,Number(r[x])||0);out.daily[d]=r}
+  if(a.gm||b.gm){const nn=n.gm||{},oo=o.gm||{};out.gm={char:nn.char||oo.char||null,got:Object.assign({},oo.got||{}),wear:Object.assign({},oo.wear||{},nn.wear||{})};for(const[x,v]of Object.entries(nn.got||{}))out.gm.got[x]=out.gm.got[x]?Math.min(out.gm.got[x],v):v}
   out.maxCombo=Math.max(n.maxCombo||0,o.maxCombo||0);out.level=Math.max(n.level||1,o.level||1);
   if((o.lastDay||"")>(n.lastDay||"")){out.lastDay=o.lastDay;out.streak=o.streak;out.freezes=o.freezes}
   out.updatedAt=Math.max(a.updatedAt||0,b.updatedAt||0);
@@ -2561,6 +2631,232 @@ function todayQuests(){
   return out;
 }
 
+/* ================== ПУТЕШЕСТВЕННИК: персонаж, вещи, чемодан ================== */
+const GM_SK="#F1C7A3",GM_SKD="#E3B08A";
+const GM_CHARS={a:{n:"Марко",hair:"#2B2220",long:false,skin:"#F1C7A3"},b:{n:"Джулия",hair:"#4A2C1E",long:true,skin:"#F4CDB0"}};
+const GM_SLOTS={hat:"Голова",face:"Лицо",neck:"Шея",chest:"Грудь",top:"Верх",bottom:"Низ",shoes:"Обувь",back:"Спина",hand:"В руке"};
+const gmHeart=(x,y,s,f)=>`<path transform="translate(${x} ${y}) scale(${s})" d="M0 5 C-9 -4 -13 5 0 14 C13 5 9 -4 0 5Z" fill="${f}"/>`;
+const gmTop=(c,long,extra)=>`<rect x="52" y="88" width="56" height="70" rx="14" fill="${c}"/><rect x="37" y="90" width="17" height="${long?56:28}" rx="8.5" fill="${c}"/><rect x="106" y="90" width="17" height="${long?56:28}" rx="8.5" fill="${c}"/>${extra||""}`;
+const gmLaurel=(()=>{let s="";for(let i=0;i<7;i++){const a=(200+i*9)*Math.PI/180,x=80+31*Math.cos(a),y=57+31*Math.sin(a),r=(200+i*9)+90;s+=`<ellipse cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" rx="3.2" ry="6.5" transform="rotate(${r} ${x.toFixed(1)} ${y.toFixed(1)})" fill="${i%2?"#557546":"#7FA866"}"/>`;
+  const b=(340-i*9)*Math.PI/180,x2=80+31*Math.cos(b),y2=57+31*Math.sin(b),r2=(340-i*9)-90;s+=`<ellipse cx="${x2.toFixed(1)}" cy="${y2.toFixed(1)}" rx="3.2" ry="6.5" transform="rotate(${r2} ${x2.toFixed(1)} ${y2.toFixed(1)})" fill="${i%2?"#557546":"#7FA866"}"/>`}return s})();
+// s: слот (case — в чемодан); w/b — рисунок на персонаже (b — позади тела); ic — иконка для чемодана; vb — кадр иконки
+const GM_ITEMS=[
+{id:"passport",n:"Паспорт",s:"case",mod:"m1",ic:`<rect x="8" y="5" width="24" height="31" rx="3" fill="#234E8C"/><circle cx="20" cy="17" r="6" fill="none" stroke="#E9C95A" stroke-width="2"/><path d="M14 17h12M20 11v12" stroke="#E9C95A" stroke-width="1.4"/><rect x="13" y="28" width="14" height="2.4" rx="1" fill="#E9C95A"/>`},
+{id:"backpack",n:"Рюкзак",s:"back",mod:"m2",vb:"35 79 90 90",b:`<rect x="40" y="90" width="80" height="70" rx="20" fill="#E8913A"/><rect x="50" y="126" width="60" height="26" rx="9" fill="#D4772A"/>`,w:`<rect x="60" y="90" width="7" height="44" rx="3.5" fill="#C9742A"/><rect x="93" y="90" width="7" height="44" rx="3.5" fill="#C9742A"/>`},
+{id:"espresso",n:"Эспрессо",s:"hand",mod:"m3",vb:"97 120 42 42",w:`<path d="M108 136h18v9a9 9 0 0 1-9 9h0a9 9 0 0 1-9-9z" fill="#fff"/><path d="M126 139a5 5 0 0 1 0 10" fill="none" stroke="#fff" stroke-width="3"/><ellipse cx="117" cy="136" rx="9" ry="2.6" fill="#6B3E26"/><ellipse cx="117" cy="156" rx="13" ry="3" fill="#E9E7E1"/><path d="M113 130q-3-4 0-8M120 130q-3-4 0-8" fill="none" stroke="#C3C5CC" stroke-width="1.8" stroke-linecap="round"/>`},
+{id:"hearts",n:"Очки-сердечки",s:"face",mod:"m5",vb:"48 28 64 64",w:`<path d="M52 58 L60 60M108 58 L100 60" stroke="#2A1F2B" stroke-width="2.5" stroke-linecap="round"/><path d="M78 60 Q80 57 82 60" fill="none" stroke="#2A1F2B" stroke-width="2.5"/>${gmHeart(68,55,.78,"#2A1F2B")}${gmHeart(92,55,.78,"#2A1F2B")}<path d="M63 59q2-3 4-1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/><path d="M87 59q2-3 4-1" stroke="#fff" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".7"/>`},
+{id:"ticket",n:"Билет на поезд",s:"case",mod:"m8",ic:`<rect x="4" y="10" width="32" height="20" rx="3" fill="#F4EFE0"/><circle cx="4" cy="20" r="3" fill="#FBFBFA"/><circle cx="36" cy="20" r="3" fill="#FBFBFA"/><rect x="10" y="14" width="14" height="3.4" rx="1.5" fill="#C4532D"/><rect x="10" y="21" width="20" height="2" rx="1" fill="#9A9CA6"/><rect x="10" y="25" width="12" height="2" rx="1" fill="#9A9CA6"/>`},
+{id:"map",n:"Карта города",s:"case",mod:"m7",ic:`<path d="M5 10L15 6l10 4 10-4v24l-10 4-10-4-10 4z" fill="#CFE3C0"/><path d="M15 6v24M25 10v24" stroke="#9DBB8A" stroke-width="1.4"/><circle cx="24" cy="17" r="4.2" fill="#D6456B"/><circle cx="24" cy="17" r="1.6" fill="#fff"/>`},
+{id:"camera",n:"Фотоаппарат",s:"chest",mod:"m9",vb:"50 84 60 60",w:`<path d="M64 90L76 118M96 90L84 118" stroke="#3A3A44" stroke-width="3" stroke-linecap="round"/><rect x="68" y="116" width="24" height="17" rx="3.5" fill="#2C2C34"/><rect x="72" y="112.5" width="8" height="4.5" rx="1.5" fill="#2C2C34"/><circle cx="80" cy="125" r="5.8" fill="#7DA7C9"/><circle cx="80" cy="125" r="2.4" fill="#1E3A52"/><circle cx="87" cy="120" r="1.2" fill="#E9C95A"/>`},
+{id:"basket",n:"Корзина с продуктами",s:"hand",mod:"m11",vb:"89 120 50 50",w:`<path d="M100 150Q114 114 128 150" fill="none" stroke="#B07A3E" stroke-width="3.2" stroke-linecap="round"/><circle cx="108" cy="144" r="5.2" fill="#E9792E"/><path d="M118 146q4-14 9-6" fill="none" stroke="#5F9A4A" stroke-width="3" stroke-linecap="round"/><path d="M98 148h32l-4 24q-12 6-24 0z" fill="#C99556"/><path d="M100 157h28M102 165h24" stroke="#A97A3E" stroke-width="1.6"/>`},
+{id:"watch",n:"Часы",s:"case",mod:"m4",ic:`<rect x="15" y="3" width="10" height="34" rx="3" fill="#3A3A44"/><circle cx="20" cy="20" r="10.5" fill="#F4F4F2" stroke="#17181C" stroke-width="2"/><path d="M20 20V13.5M20 20l5 3" stroke="#17181C" stroke-width="2" stroke-linecap="round"/>`},
+{id:"famiglia",n:"Футболка «Famiglia»",s:"top",mod:"m6",vb:"30 70 100 100",w:gmTop("#A9C89D",false,gmHeart(80,106,1.15,"#fff"))},
+{id:"scarf",n:"Шарф Azzurri",s:"neck",mod:"m10",vb:"50 72 60 60",w:`<path d="M62 84Q80 100 98 84L99 94Q80 110 61 94Z" fill="#2F7FC1"/><rect x="82" y="96" width="14" height="30" rx="4" fill="#2F7FC1"/><rect x="82" y="108" width="14" height="4" fill="#fff"/><rect x="82" y="115" width="14" height="4" fill="#fff"/>`},
+{id:"jacket",n:"Джинсовая куртка",s:"top",mod:"a1",vb:"30 70 100 100",w:gmTop("#5C86B5",true,`<path d="M72 88L80 104L88 88L88 158L72 158Z" fill="#F4F4F2"/><path d="M72 88L66 98L78 106ZM88 88L94 98L82 106Z" fill="#46709D"/><path d="M72 158V108M88 158V108" stroke="#46709D" stroke-width="1.4"/><rect x="37" y="138" width="17" height="6" rx="3" fill="#46709D"/><rect x="106" y="138" width="17" height="6" rx="3" fill="#46709D"/><circle cx="62" cy="126" r="2" fill="#3D6489"/><circle cx="98" cy="126" r="2" fill="#3D6489"/>`)},
+{id:"teddy",n:"Плюшевый мишка",s:"case",mod:"a2",ic:`<circle cx="11" cy="11" r="5.5" fill="#B97B4B"/><circle cx="29" cy="11" r="5.5" fill="#B97B4B"/><circle cx="20" cy="21" r="13" fill="#C98B5B"/><ellipse cx="20" cy="25.5" rx="6.5" ry="5" fill="#EAC9A0"/><circle cx="15.5" cy="19" r="1.7" fill="#17181C"/><circle cx="24.5" cy="19" r="1.7" fill="#17181C"/><circle cx="20" cy="23.4" r="2.1" fill="#17181C"/><path d="M14 35l6-3 6 3-6 2.4z" fill="#D6456B"/>`},
+{id:"beret",n:"Берет художника",s:"hat",mod:"a3",vb:"41 0 70 70",w:`<ellipse cx="78" cy="35" rx="30" ry="12" transform="rotate(-8 78 35)" fill="#B5472F"/><rect x="76" y="19" width="4.5" height="7" rx="2" fill="#8E3623"/>`},
+{id:"theatre",n:"Билеты в театр",s:"case",mod:"a4",ic:`<g transform="rotate(-12 20 20)"><rect x="5" y="9" width="24" height="17" rx="3" fill="#C4532D"/><path d="M12 17.5h10" stroke="#fff" stroke-width="2" stroke-linecap="round"/></g><g transform="rotate(10 20 22)"><rect x="11" y="16" width="24" height="17" rx="3" fill="#E9C95A"/><path d="M23 20l1.6 3.4 3.6.4-2.7 2.4.8 3.6-3.3-1.9-3.3 1.9.8-3.6-2.7-2.4 3.6-.4z" fill="#C4532D"/></g>`},
+{id:"boarding",n:"Посадочный талон",s:"case",mod:"a5",ic:`<rect x="5" y="8" width="30" height="24" rx="3" fill="#fff" stroke="#C9CDD6" stroke-width="1.5"/><path d="M5 11a3 3 0 0 1 3-3h24a3 3 0 0 1 3 3v4H5z" fill="#2F7FC1"/><path d="M13 24l4-1.2 5-5.8 2 .5-2.6 6 5-.6 1.4 1.6-6 1.6-2.4 4-1.4-.3.6-4-4.4.8z" fill="#2F7FC1"/>`},
+{id:"pasta",n:"Тарелка пасты",s:"case",mod:"a6",ic:`<path d="M5 21h30q-1 13-15 14Q6 34 5 21z" fill="#E8E4DA"/><path d="M9 21q3-9 7-7t5-3 6 1 6 8z" fill="#EBCB62"/><path d="M11 18q4 3 8 0t8 1M13 15q3 2 6 0" fill="none" stroke="#D6B13E" stroke-width="1.4"/><circle cx="16" cy="14" r="2.6" fill="#D6454B"/><circle cx="26" cy="13" r="2.2" fill="#5F9A4A"/>`},
+{id:"firstaid",n:"Аптечка",s:"case",mod:"a7",ic:`<rect x="6" y="11" width="28" height="22" rx="4" fill="#fff" stroke="#C9CDD6" stroke-width="2"/><rect x="14" y="6" width="12" height="5" rx="2.5" fill="none" stroke="#9A9CA6" stroke-width="2"/><rect x="17" y="16" width="6" height="12" fill="#D6454B"/><rect x="14" y="19" width="12" height="6" fill="#D6454B"/>`},
+{id:"glasses",n:"Очки в оправе",s:"face",mod:"a8",vb:"48 28 64 64",w:`<circle cx="68" cy="60" r="9" fill="rgba(255,255,255,.35)" stroke="#2A1F2B" stroke-width="2.6"/><circle cx="92" cy="60" r="9" fill="rgba(255,255,255,.35)" stroke="#2A1F2B" stroke-width="2.6"/><path d="M77 60h6M59 59l-6-1M101 59l6-1" stroke="#2A1F2B" stroke-width="2.4" stroke-linecap="round"/>`},
+{id:"rose",n:"Красная роза",s:"hand",mod:"a9",vb:"92 98 56 56",w:`<path d="M114 152Q116 134 121 116" fill="none" stroke="#4F7F3A" stroke-width="3" stroke-linecap="round"/><ellipse cx="118" cy="134" rx="7" ry="3.4" transform="rotate(-30 118 134)" fill="#5F9A4A"/><circle cx="122" cy="113" r="9" fill="#D6456B"/><path d="M117 112q5-6 10 0q-3 6-9 4" fill="none" stroke="#A82E50" stroke-width="1.8" stroke-linecap="round"/>`},
+{id:"keys",n:"Ключи от дома",s:"case",mod:"a10",ic:`<circle cx="13" cy="13" r="7" fill="none" stroke="#9A9CA6" stroke-width="3"/><path d="M18 18l14 14M26 26l4-4M30 30l4-4" fill="none" stroke="#9A9CA6" stroke-width="3" stroke-linecap="round"/><rect x="22" y="6" width="12" height="9" rx="2.5" fill="#D6454B"/><circle cx="26" cy="10.5" r="1.4" fill="#fff"/>`},
+{id:"cap",n:"Кепка",s:"hat",lvl:2,vb:"47 -7 80 80",w:`<path d="M56 41C56 18 104 18 104 41Z" fill="#2F5D8A"/><path d="M76 41Q100 36 118 45Q100 50 76 47Z" fill="#24486B"/><circle cx="80" cy="22" r="2.6" fill="#24486B"/>`},
+{id:"shorts",n:"Шорты",s:"bottom",lvl:3,vb:"50 140 60 60",w:`<rect x="56" y="148" width="22" height="34" rx="8" fill="#D96B4B"/><rect x="82" y="148" width="22" height="34" rx="8" fill="#D96B4B"/><rect x="56" y="148" width="48" height="12" rx="5" fill="#C65B3D"/>`},
+{id:"notebook",n:"Блокнот с фразами",s:"case",lvl:4,ic:`<rect x="9" y="5" width="23" height="30" rx="3" fill="#5C86B5"/><rect x="9" y="5" width="6" height="30" rx="3" fill="#46709D"/><rect x="19" y="11" width="9" height="2" rx="1" fill="#DCE5FB"/><rect x="19" y="16" width="9" height="2" rx="1" fill="#DCE5FB"/><rect x="19" y="21" width="6" height="2" rx="1" fill="#DCE5FB"/>`},
+{id:"sandals",n:"Сандалии",s:"shoes",lvl:5,vb:"50 196 60 60",w:`<ellipse cx="68" cy="227" rx="12" ry="5.5" fill="#B07A3E"/><ellipse cx="92" cy="227" rx="12" ry="5.5" fill="#B07A3E"/><path d="M60 224h16M84 224h16" stroke="#7D5527" stroke-width="2.6" stroke-linecap="round"/>`},
+{id:"straw",n:"Соломенная шляпа",s:"hat",lvl:6,vb:"36 -12 88 88",w:`<ellipse cx="80" cy="38" rx="41" ry="9.5" fill="#E7C873"/><path d="M58 38C58 14 102 14 102 38Z" fill="#F0D88F"/><rect x="58" y="29" width="44" height="7" fill="#C4532D"/>`},
+{id:"linen",n:"Льняные брюки",s:"bottom",lvl:7,vb:"35 145 90 90",w:`<rect x="54" y="148" width="25" height="76" rx="10" fill="#D9C7A3"/><rect x="81" y="148" width="25" height="76" rx="10" fill="#D9C7A3"/><rect x="54" y="148" width="52" height="12" rx="5" fill="#C9B58E"/>`},
+{id:"parlo",n:"Значок «Parlo italiano»",s:"case",lvl:8,ic:`<clipPath id="gmcp"><path d="M5 8h30a3 3 0 0 1 3 3v15a3 3 0 0 1-3 3H19l-8 7v-7H5a3 3 0 0 1-3-3V11a3 3 0 0 1 3-3z"/></clipPath><g clip-path="url(#gmcp)"><rect x="2" y="8" width="12.7" height="30" fill="#5F9A4A"/><rect x="14.7" y="8" width="12.7" height="30" fill="#fff"/><rect x="27.4" y="8" width="12.7" height="30" fill="#D6454B"/></g>`},
+{id:"loafers",n:"Лоферы",s:"shoes",lvl:9,vb:"50 196 60 60",w:`<path d="M56 224q0-9 12-9h8q4 0 4 5v6q0 5-8 5H60q-4 0-4-7z" fill="#6B3E26"/><path d="M104 224q0-9-12-9h-8q-4 0-4 5v6q0 5 8 5h12q4 0 4-7z" fill="#6B3E26"/><rect x="62" y="219" width="8" height="2.4" rx="1.2" fill="#E9C95A"/><rect x="90" y="219" width="8" height="2.4" rx="1.2" fill="#E9C95A"/>`},
+{id:"lemon",n:"Сицилийский лимон",s:"case",lvl:10,ic:`<ellipse cx="20" cy="22" rx="14" ry="10.5" transform="rotate(-20 20 22)" fill="#F1E15B"/><path d="M7.5 27l-3 2.5M32 16l3-2.5" stroke="#E4CE3F" stroke-width="3" stroke-linecap="round"/><path d="M22 11q6-6 12-3-3 7-12 3z" fill="#5F9A4A"/>`},
+{id:"laurel",n:"Лавровый венок",s:"hat",lvl:11,vb:"40 8 80 80",w:gmLaurel}
+];
+const GM_BY=Object.fromEntries(GM_ITEMS.map(i=>[i.id,i]));
+const GM_CASE=GM_ITEMS.filter(i=>i.s==="case"),GM_WEAR=GM_ITEMS.filter(i=>i.s!=="case");
+const gmIcon=(it,cls)=>it.s==="case"?`<svg class="${cls||"gmic"}" viewBox="0 0 40 40" aria-hidden="true">${it.ic}</svg>`:`<svg class="${cls||"gmic"}" viewBox="${it.vb}" aria-hidden="true">${(it.b||"")+it.w}</svg>`;
+
+function gmFace(ex){
+  const ink="#2A1F2B";
+  const eyes=ex==="happy"?`<path d="M66 60q5-6 10 0M84 60q5-6 10 0" fill="none" stroke="${ink}" stroke-width="2.6" stroke-linecap="round"/>`
+    :`<g class="gm-eyes"><ellipse cx="71" cy="60" rx="2.5" ry="3.1" fill="${ink}"/><ellipse cx="89" cy="60" rx="2.5" ry="3.1" fill="${ink}"/></g>`;
+  const brows=ex==="sad"?`<path d="M65 52l9 3M95 52l-9 3" stroke="${ink}" stroke-width="2.2" stroke-linecap="round"/>`:"";
+  const mouth=ex==="happy"?`<path d="M71 69q9 11 18 0z" fill="${ink}"/><path d="M75 74q5 3 10 0" fill="#E87E83" stroke="none"/>`
+    :ex==="talk"?`<ellipse cx="80" cy="73" rx="5.2" ry="4.4" fill="${ink}"/><path d="M76 75q4 2.6 8 0" fill="#E87E83"/>`
+    :ex==="sad"?`<path d="M73 74q7-6 14 0" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>`
+    :`<path d="M73 70q7 7 14 0" fill="none" stroke="${ink}" stroke-width="2.4" stroke-linecap="round"/>`;
+  return eyes+brows+mouth+`<circle cx="64" cy="68" r="4.2" fill="#F08C84" opacity=".38"/><circle cx="96" cy="68" r="4.2" fill="#F08C84" opacity=".38"/>`;
+}
+// wear: {slot:itemId}; ex: idle|happy|sad|talk
+function gmAvatar(ch,wear,ex,cls,vb){
+  const C=GM_CHARS[ch]||GM_CHARS.a,W=s=>{const it=GM_BY[(wear||{})[s]];return it&&it.s===s?it:null};
+  const bot=W("bottom"),sh=W("shoes"),top=W("top"),bk=W("back"),nk=W("neck"),ct=W("chest"),fc=W("face"),ht=W("hat"),hd=W("hand");
+  const sk=C.skin,H=C.hair;
+  let s=`<ellipse cx="80" cy="238" rx="36" ry="6" fill="#000" opacity=".09"/>`;
+  if(bk&&bk.b)s+=bk.b;
+  if(C.long)s+=`<path d="M52 50C50 24 66 22 80 22C96 22 110 26 108 50L113 102Q80 114 47 102Z" fill="${H}"/>`;
+  s+=`<rect x="58" y="150" width="20" height="74" rx="9" fill="${sk}"/><rect x="82" y="150" width="20" height="74" rx="9" fill="${sk}"/>`;
+  s+=bot?bot.w:`<rect x="56" y="148" width="22" height="76" rx="9" fill="#4E73A6"/><rect x="82" y="148" width="22" height="76" rx="9" fill="#4E73A6"/><rect x="56" y="148" width="48" height="12" rx="5" fill="#44679A"/>`;
+  s+=sh?sh.w:`<ellipse cx="67" cy="227" rx="13" ry="6.4" fill="#F4F4F2"/><ellipse cx="93" cy="227" rx="13" ry="6.4" fill="#F4F4F2"/><path d="M55 230h24M81 230h24" stroke="#C9CDD6" stroke-width="2.4" stroke-linecap="round"/>`;
+  s+=`<rect x="38" y="92" width="15" height="54" rx="7.5" fill="${sk}"/><rect x="107" y="92" width="15" height="54" rx="7.5" fill="${sk}"/>`;
+  s+=top?top.w:gmTop("#E8E4DA",false);
+  s+=`<circle cx="45.5" cy="148" r="7.5" fill="${sk}"/><circle cx="114.5" cy="148" r="7.5" fill="${sk}"/>`;
+  if(bk&&bk.w)s+=bk.w;
+  if(ct)s+=ct.w;
+  s+=`<rect x="72" y="80" width="16" height="16" rx="5" fill="${GM_SKD}"/>`;
+  if(nk)s+=nk.w;
+  s+=`<circle cx="54" cy="60" r="5.5" fill="${sk}"/><circle cx="106" cy="60" r="5.5" fill="${sk}"/><circle cx="80" cy="58" r="26" fill="${sk}"/>`;
+  s+=`<path d="M54 54C50 30 64 24 80 24C98 24 110 32 106 54C101 44 92 38 80 38C69 38 60 44 54 54Z" fill="${H}"/>`;
+  s+=gmFace(ex||"idle");
+  if(fc)s+=fc.w;
+  if(ht)s+=ht.w;
+  if(hd)s+=hd.w;
+  return `<svg class="${cls||"gmc"}" viewBox="${vb||"0 0 160 250"}" role="img" aria-label="${C.n}">${s}</svg>`;
+}
+function gmSuitcase(got){
+  let s=`<ellipse cx="110" cy="182" rx="86" ry="6" fill="#000" opacity=".09"/>`;
+  s+=`<path d="M84 46v-12a8 8 0 0 1 8-8h36a8 8 0 0 1 8 8v12" fill="none" stroke="#24486B" stroke-width="7" stroke-linecap="round"/>`;
+  s+=`<rect x="12" y="42" width="196" height="132" rx="18" fill="#2F5D8A"/><rect x="12" y="42" width="196" height="16" rx="10" fill="#3B6FA3"/>`;
+  s+=`<rect x="34" y="40" width="8" height="136" fill="#24486B" opacity=".55"/><rect x="178" y="40" width="8" height="136" fill="#24486B" opacity=".55"/>`;
+  s+=`<rect x="26" y="174" width="14" height="9" rx="4" fill="#17181C"/><rect x="180" y="174" width="14" height="9" rx="4" fill="#17181C"/>`;
+  GM_CASE.forEach((it,i)=>{const c=i%5,r=Math.floor(i/5),x=24+c*36,y=64+r*34,rot=((i*37)%13)-6;
+    if(got[it.id])s+=`<g transform="translate(${x} ${y}) rotate(${rot} 16 16)"><circle cx="16" cy="16" r="16.5" fill="#FBFBFA"/><g transform="translate(3 3) scale(.65)">${it.ic}</g></g>`;
+    else s+=`<circle cx="${x+16}" cy="${y+16}" r="15" fill="none" stroke="#fff" stroke-width="1.6" stroke-dasharray="3 4" opacity=".4"/>`});
+  return `<svg class="gmcase" viewBox="0 0 220 190" role="img" aria-label="Чемодан">${s}</svg>`;
+}
+
+/* ================== ПУТЕШЕСТВЕННИК: состояние, награды, интерактив ================== */
+const gmG=()=>state.gm||(state.gm={char:null,got:{},wear:{}});
+const gmChar=()=>(state.gm&&state.gm.char)||"a";
+const gmOwned=id=>!!(state.gm&&state.gm.got&&state.gm.got[id]);
+const gmHint=it=>it.mod?"Сдай модуль «"+((COURSE.find(m=>m.id===it.mod)||{}).t||"?")+"»":"Достигни уровня "+it.lvl+" · "+LEVEL_T[it.lvl-1][0];
+function gmEarned(it){try{return it.mod?modPassed(it.mod):levelOf(totalXP())>=it.lvl}catch(e){return false}}
+function gmWear(){const g=gmG(),w={};for(const[s,id]of Object.entries(g.wear||{}))if(g.got[id]&&GM_BY[id]&&GM_BY[id].s===s)w[s]=id;return w}
+// выдача вещей за пройденные модули и уровни опыта; возвращает число новых вещей
+function gmCheck(){
+  const g=gmG(),fresh=[];
+  for(const it of GM_ITEMS){if(!g.got[it.id]&&gmEarned(it)){g.got[it.id]=Date.now();fresh.push(it);if(it.s!=="case"&&!g.wear[it.s])g.wear[it.s]=it.id}}
+  if(fresh.length){
+    if(fresh.length>2)celebrate("🧳","Новые вещи: "+fresh.length,"Загляни в гардероб и чемодан",true);
+    else fresh.forEach(it=>celebrate(gmIcon(it),"Новая вещь: "+it.n,it.s==="case"?"Лежит в чемодане":"Уже на тебе",true));
+    gmReact("dance",null,1500);
+  }
+  return fresh.length;
+}
+function gmPost(){try{if(gmCheck())save()}catch(e){}}
+
+/* ---- реакции и анимация ---- */
+let gmEx="idle",gmExUntil=0,gmAnimK="",gmExT=null,gmSig="",gmLastSay=0;
+const gmExpr=()=>Date.now()<gmExUntil?gmEx:"idle";
+function gmApplyAnim(){if(Date.now()<gmExUntil&&gmAnimK)document.querySelectorAll(".gmc").forEach(el=>el.classList.add(gmAnimK))}
+function gmRefresh(force){
+  const ch=gmChar(),w=gmWear(),ex=gmExpr(),L=levelOf(totalXP());
+  const sig=ch+"|"+JSON.stringify(w)+"|"+ex+"|"+gmAnimK+"|"+L+"|"+(gmExUntil>Date.now());
+  const side=document.getElementById("gmSide"),hd=document.getElementById("gmHead");
+  if(force||sig!==gmSig||(side&&!side.firstChild)){
+    gmSig=sig;
+    if(side)side.innerHTML=`<div class="gmbtn" role="button" tabindex="0" data-gmtalk aria-label="Поговорить с ${GM_CHARS[ch].n}">${gmAvatar(ch,w,ex,"gmc gmbig")}</div><div class="gmname" role="button" tabindex="0" data-gmopen>${GM_CHARS[ch].n} · гардероб</div>`;
+    if(hd)hd.innerHTML=gmAvatar(ch,w,ex,"gmc gmmini","28 6 104 104")+`<i class="gmlv">${L}</i>`;
+  }
+  gmApplyAnim();
+}
+function gmReact(kind,ex,ms){
+  ms=ms||1300;
+  gmEx=ex||({hop:"happy",shake:"sad",dance:"happy"}[kind]||"idle");gmExUntil=Date.now()+ms;gmAnimK=kind;
+  gmRefresh(true);
+  document.querySelectorAll(".gmc").forEach(el=>{el.classList.remove("hop","shake","dance");void el.getBoundingClientRect();el.classList.add(kind)});
+  clearTimeout(gmExT);gmExT=setTimeout(()=>{gmAnimK="";gmRefresh(true)},ms+60);
+}
+let gmBT=null;
+function gmSay(it,ru,o){
+  const b=document.getElementById("gmb");if(!b)return;o=o||{};
+  b.innerHTML=`<div class="gmit">${esc(it)}</div>${ru?`<div class="gmru">${esc(ru)}</div>`:""}${o.link?`<div class="gmlink" role="button" tabindex="0" data-gmopen>Гардероб и чемодан →</div>`:""}`;
+  b.classList.add("on");clearTimeout(gmBT);gmBT=setTimeout(()=>b.classList.remove("on"),o.ms||5200);gmLastSay=Date.now();
+}
+const GM_PRAISE=[["Bravo!","Молодец!"],["Perfetto!","Отлично!"],["Esatto!","Точно!"],["Che bravo!","Какой молодец!"],["Ottimo lavoro!","Отличная работа!"]];
+const GM_OOPS=[["Dai, riprova!","Давай, ещё раз!"],["Non fa niente!","Ничего страшного!"],["Piano piano!","Потихоньку!"]];
+const gmPick=a=>a[Math.floor(Math.random()*a.length)];
+function gmMaybeSay(kind){
+  if(Date.now()-gmLastSay<25000)return;
+  if(Math.random()>(kind==="happy"?.12:.28))return;
+  const p=gmPick(kind==="happy"?GM_PRAISE:GM_OOPS);gmSay(p[0],p[1],{ms:2600});
+}
+let gmSayI=-1;
+function gmPhrases(){
+  const m=gmChar()==="a";
+  return [["Ciao! Come va?","Привет! Как дела?"],["Piano piano si va lontano.","Тише едешь — дальше будешь."],["Che bella giornata!","Какой прекрасный день!"],["Andiamo in Italia!","Поехали в Италию!"],["Un caffè, per favore!","Кофе, пожалуйста!"],
+  ["Dove si va oggi?","Куда сегодня?"],["Mi piace imparare con te.","Мне нравится учиться с тобой."],["La valigia è quasi pronta!","Чемодан почти готов!"],["Un po' di italiano?","Немного итальянского?"],["Non vedo l'ora di partire!","Не могу дождаться поездки!"],
+  ["Buon viaggio!","Счастливого пути!"],[m?"Sono pronto, e tu?":"Sono pronta, e tu?",m?"Я готов, а ты?":"Я готова, а ты?"],["Ogni giorno un po'.","Каждый день понемногу."],["Che fame! Mangiamo?","Как есть хочется! Поедим?"],["Mi piace la Sicilia!","Мне нравится Сицилия!"]];
+}
+function gmTalk(){
+  if(!(state.gm&&state.gm.char)){go("me");return}
+  const L=gmPhrases();let i;do{i=Math.floor(Math.random()*L.length)}while(i===gmSayI&&L.length>1);gmSayI=i;
+  const p=L[i];gmSay(p[0],p[1],{link:true,ms:6500});
+  try{speak(p[0])}catch(e){}
+  gmReact("hop","talk",1900);
+}
+function gmGreet(){
+  setTimeout(()=>{try{
+    const t=today();let last="";try{last=localStorage.getItem("gm.greet")||""}catch(e){}
+    if(last===t)return;try{localStorage.setItem("gm.greet",t)}catch(e){}
+    const ch=GM_CHARS[gmChar()];
+    if(!(state.gm&&state.gm.char)){gmSay("Ciao! Sono il tuo compagno di viaggio.","Привет! Я твой попутчик в Италию. Нажми на меня и выбери героя.",{ms:8000});gmReact("hop","happy",1500);return}
+    const h=new Date().getHours(),it=h<12?"Buongiorno!":h<18?"Buon pomeriggio!":"Buonasera!",ru=h<12?"Доброе утро!":h<18?"Добрый день!":"Добрый вечер!";
+    gmSay(it,ru+" "+(gmChar()==="a"?"Я готов":"Я готова")+" заниматься.",{ms:4500});gmReact("hop","happy",1500);
+  }catch(e){}},1600);
+}
+
+/* ---- экраны ---- */
+function gmCounts(){const n=GM_ITEMS.filter(i=>gmOwned(i.id)).length;return{n,tot:GM_ITEMS.length,pct:Math.round(100*n/GM_ITEMS.length)}}
+function gmHomeCard(){
+  const g=state.gm||{},ch=gmChar(),{n,tot,pct}=gmCounts();
+  return `<div class="card row gmhome" role="button" tabindex="0" data-gmopen style="margin-top:12px;cursor:pointer"><div class="gmhomeav" data-gmtalk>${gmAvatar(ch,gmWear(),"idle","gmc gmcard")}</div><div class="grow"><b>${g.char?"Мой путешественник · "+GM_CHARS[ch].n:"Выбери путешественника"}</b><div class="muted small">Собрано вещей: ${n} из ${tot}. Вещи — за модули и уровни.</div><div class="bar mt" style="height:6px"><i style="width:${pct}%"></i></div></div><span class="link">Открыть</span></div>`;
+}
+function gmChooser(){
+  return `<button class="back" data-tab="today">${ICON.back} Сегодня</button><h1>Выбери путешественника</h1>
+  <p class="muted">Он будет с тобой на каждом экране и вместе с тобой поедет в Италию. За модули и уровни он получает вещи: одежду, аксессуары и сувениры для чемодана.</p>
+  <div class="gmpick">${Object.entries(GM_CHARS).map(([k,c])=>`<button class="card gmpickc" data-gmpick="${k}">${gmAvatar(k,{},"happy","gmc gmpicks")}<b>${c.n}</b></button>`).join("")}</div>`;
+}
+function vMe(){
+  const g=gmG();if(!g.char)return gmChooser();
+  const ch=g.char,C=GM_CHARS[ch],w=gmWear(),{n,tot,pct}=gmCounts();
+  const tile=it=>{const own=gmOwned(it.id),on=it.s!=="case"&&w[it.s]===it.id;
+    return `<button class="gmt ${own?"":"lock"} ${on?"on":""}" data-gmtile="${it.id}">${gmIcon(it)}<b>${own?esc(it.n):"???"}</b><span>${own?(it.s==="case"?"В чемодане":on?"Надето":"Надеть"):esc(gmHint(it))}</span></button>`};
+  const wn=GM_WEAR.filter(i=>gmOwned(i.id)).length,cn=GM_CASE.filter(i=>gmOwned(i.id)).length;
+  return `<button class="back" data-tab="today">${ICON.back} Сегодня</button>
+  <h1>Мой путешественник</h1>
+  <div class="split">
+   <div class="sticky"><div class="card gmscene">
+    <div class="gmstage"><div class="gmbtn gmherobtn" role="button" tabindex="0" data-gmtalk>${gmAvatar(ch,w,"idle","gmc gmhero")}</div>${gmSuitcase(g.got||{})}</div>
+    <div class="row between"><div><b>${C.n}</b><div class="muted small">Собрано ${n} из ${tot}</div></div><span class="pill">${pct}%</span></div>
+    <div class="bar mt"><i style="width:${pct}%"></i></div>
+    <div class="gmact"><button class="btn sea" data-gmtalk>💬 Поговорить</button><button class="link" data-gmundress>Снять всё</button><button class="link" data-gmchange>Сменить героя</button></div>
+    ${n===tot?`<div class="verdict ok mt">Чемодан собран. Partenza! ✈️</div>`:`<div class="muted small mt">Нажми на вещь, чтобы надеть или снять. Серые вещи ещё не получены: на них написано, как их заработать.</div>`}
+   </div></div>
+   <div>
+    <h2 class="h2top">Одежда и аксессуары <span class="muted small">${wn}/${GM_WEAR.length}</span></h2><div class="gmgrid">${GM_WEAR.map(tile).join("")}</div>
+    <h2>В чемодане <span class="muted small">${cn}/${GM_CASE.length}</span></h2><div class="gmgrid">${GM_CASE.map(tile).join("")}</div>
+   </div>
+  </div>`;
+}
+document.addEventListener("click",e=>{
+  const t=e.target.closest("[data-gmtalk],[data-gmopen],[data-gmpick],[data-gmtile],[data-gmundress],[data-gmchange]");if(!t)return;
+  const d=t.dataset,g=gmG();
+  if(d.gmtile){
+    const it=GM_BY[d.gmtile];if(!it)return;
+    if(!gmOwned(it.id)){toast(gmHint(it));return}
+    if(it.s==="case"){toast(it.n+" лежит в твоём чемодане");gmReact("hop");return}
+    if(g.wear[it.s]===it.id)delete g.wear[it.s];else g.wear[it.s]=it.id;
+    save();render();gmReact("hop");return}
+  if(d.gmpick){g.char=d.gmpick;save();render();gmReact("dance","happy",1500);gmSay("Ciao! Mi chiamo "+GM_CHARS[g.char].n+".","Привет! Меня зовут "+GM_CHARS[g.char].n+".",{ms:4500});return}
+  if(d.gmundress!==undefined){g.wear={};save();render();return}
+  if(d.gmchange!==undefined){g.char=null;save();render();return}
+  if(d.gmopen!==undefined){go("me");return}
+  if(d.gmtalk!==undefined){gmTalk();return}
+});
+document.addEventListener("keydown",e=>{if((e.key==="Enter"||e.key===" ")&&e.target&&e.target.matches&&e.target.matches("[data-gmtalk],[data-gmopen]")){e.preventDefault();e.target.click()}});
+
 const ACH=[
 ["w1","🌱","Первое слово","Выучи первое слово",()=>learnedCount()>=1],
 ["w50","📚","Полсотни","50 слов в изучении",()=>learnedCount()>=50],
@@ -2589,7 +2885,9 @@ const ACH=[
 ["lv10","🍋","Siciliano","Достигни 10 уровня",()=>levelOf(totalXP())>=10],
 ["mod1","🧭","Первый модуль","Сдай тест модуля 1",()=>modPassed("m1")],
 ["mod5","🛵","Полкурса","Сдай 5 модулей",()=>COURSE.filter(m=>modPassed(m.id)).length>=5],
-["a1","🏆","Уровень A1","Сдай все 10 модулей",()=>COURSE.every(m=>modPassed(m.id))]
+["a1","🏆","Уровень A1","Сдай все модули A1",()=>COURSE.filter(m=>m.lvl==="A1").every(m=>modPassed(m.id))],
+["trip1","🧳","Чемодан A1","Получи все вещи за модули A1",()=>GM_ITEMS.filter(i=>i.mod&&((COURSE.find(m=>m.id===i.mod)||{}).lvl==="A1")).every(i=>gmOwned(i.id))],
+["trip2","✈️","Partenza!","Собери все вещи путешественника",()=>GM_ITEMS.every(i=>gmOwned(i.id))]
 ];
 
 let gaming=false;
@@ -2597,6 +2895,7 @@ function checkGame(){
   if(gaming)return;gaming=true;
   try{
     const t=today(),d=dayRec(),qs=todayQuests();
+    try{gmCheck()}catch(e){}
     for(const q of qs){if(!d["q:"+q.id]&&(d[q.k]||0)>=q.n){d["q:"+q.id]=1;state.xp[t]=(state.xp[t]||0)+10;celebrate("✅","Задание выполнено",q.t+" · +10 очков")}}
     if(qs.every(q=>d["q:"+q.id])&&!d.chest){d.chest=1;state.flags.chest=1;state.xp[t]=(state.xp[t]||0)+20;celebrate("🎁","Все задания дня!","Бонус +20 очков",true)}
     for(const a of ACH){if(!state.ach[a[0]]){let ok=false;try{ok=a[4]()}catch(e){}if(ok){state.ach[a[0]]=Date.now();celebrate(a[1],"Награда: "+a[2],a[3],true)}}}
@@ -2814,7 +3113,7 @@ async function initTG(){
   await srvInit(best);
   document.addEventListener("visibilitychange",()=>{if(document.visibilityState==="hidden"){clearTimeout(tgTimer);tgPush();clearTimeout(statTimer);pushStats()}});
 }
-function tgHaptic(kind){try{if(TG&&TG.HapticFeedback){kind==="success"||kind==="error"?TG.HapticFeedback.notificationOccurred(kind):TG.HapticFeedback.impactOccurred("light")}}catch(e){}}
+function tgHaptic(kind){try{if(kind==="success"){gmReact("hop");gmMaybeSay("happy")}else if(kind==="error"){gmReact("shake");gmMaybeSay("sad")}}catch(e){}try{if(TG&&TG.HapticFeedback){kind==="success"||kind==="error"?TG.HapticFeedback.notificationOccurred(kind):TG.HapticFeedback.impactOccurred("light")}}catch(e){}}
 
 /* ================== HELPERS ================== */
 const $=s=>document.querySelector(s);
@@ -2903,6 +3202,7 @@ function fromHash(){
   if(h==="sounds"){view="practice";prac={mode:"sounds"};return}
   if(h==="dialogs"){view="phrases";phMode="dialogs";return}
   if(h==="grammar"){view="course";cact="glist";return}
+  if(h==="me"){view="me";return}
   if(TABS.some(t=>t[0]===h))view=h;
 }
 
@@ -2955,6 +3255,7 @@ function vToday(){
   <h2>Курс ${COURSE[currentModIndex()].lvl}</h2>
   ${(()=>{const ci=currentModIndex(),m=COURSE[ci],pr=modProgress(m),allDone=COURSE.every(x=>modPassed(x.id));
     return `<button class="card row mrow ${allDone?"pass":"cur"}" data-mod="${m.id}" style="width:100%;text-align:left"><div style="font-size:30px;width:44px;text-align:center">${m.em}</div><div class="grow"><div class="muted small">${allDone?"Курс пройден · повторение":m.lvl+" · модуль "+modNum(m)+" из "+lvlMods(m.lvl).length}</div><b>${m.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*pr.done/pr.total)}%"></i></div><div class="muted small" style="margin-top:4px">${pr.done} из ${pr.total} частей</div></div><span class="link">Продолжить</span></button>`})()}
+  ${gmHomeCard()}
   <h2>Задания дня</h2>
   ${(()=>{const d=(state.daily||{})[today()]||{},qs=todayQuests();return `<div class="card">${qs.map(q=>{const v=Math.min(d[q.k]||0,q.n),dn=d["q:"+q.id];return `<div class="quest"><div class="chk ${dn?"done":""}">${dn?ICON.check:""}</div><div class="grow"><b class="small">${q.t}</b><div class="bar" style="height:6px;margin-top:6px"><i style="width:${Math.round(100*v/q.n)}%;${dn?"background:var(--olive)":""}"></i></div></div><span class="muted small">${dn?"+10":v+"/"+q.n}</span></div>`}).join("")}<div class="row" style="padding-top:10px"><span style="font-size:22px">${d.chest?"🎁":"🔒"}</span><span class="muted small">${d.chest?"Бонус за все задания получен: +20":"Выполни все три задания и получи бонус +20"}</span></div></div>`})()}
 </div><div class="dashside">
@@ -3784,8 +4085,9 @@ function confirmReset(){
 function render(){
   const app=$("#app");hideGloss();
   app.className=(les||(view==="words"&&wordsMode!=="home")||(view==="course"&&["write","speak","test"].includes(cact))||(view==="practice"&&prac&&prac.mode!=="sounds")||(view==="phrases"&&(dlg||sub)))?"narrow":"";
-  app.innerHTML=view==="today"?vToday():view==="words"?vWords():view==="phrases"?vPhrases():view==="course"?vCourse():vPractice();
+  app.innerHTML=view==="today"?vToday():view==="words"?vWords():view==="phrases"?vPhrases():view==="course"?vCourse():view==="me"?vMe():vPractice();
   {const L=levelOf(totalXP());$("#lvchip").textContent="⭐ Ур. "+L;}
+  try{gmRefresh();gmApplyAnim()}catch(e){}
   $("#tabs").innerHTML=TABS.map(t=>`<button class="${view===t[0]?"on":""}" data-tab="${t[0]}">${t[2]}<span>${t[1]}</span></button>`).join("");
   if(view==="practice"&&prac&&prac.items&&!prac.answered&&(prac.mode==="write"||prac.mode==="numbers")){const p=$("#pin");if(p&&document.activeElement!==p)try{p.focus({preventScroll:true})}catch(e){}}
 }
@@ -3940,7 +4242,7 @@ document.addEventListener("keydown",e=>{
 });
 window.addEventListener("hashchange",()=>{stopDialog();sub=null;les=null;dlg=null;prac=null;fromHash();render()});
 
-fromHash();render();
+fromHash();render();try{gmPost();gmGreet()}catch(e){}
 setTimeout(()=>{pickVoice();if(view==="practice")render()},800);
 if(TG)initTG();else if(window.claude&&typeof window.claude.use==="function")initSync();else initWeb();
 </script>
