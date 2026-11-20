@@ -480,6 +480,7 @@ nav.tabs .gmside .gmbg{width:100%;height:100%;position:absolute;inset:0;max-widt
 .gmgrid-sc{grid-template-columns:repeat(auto-fill,minmax(130px,1fr))}
 .gmt .gmprev{width:100%;height:auto;border-radius:10px;display:block}
 .gmt.scn{padding:6px 6px 10px;min-height:0}
+.gmh3{font-size:14px;margin:14px 0 2px}
 .learnseg{margin-top:0;max-width:440px}
 .gmpick{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:18px;max-width:520px}
 .gmpickc{display:flex;flex-direction:column;align-items:center;gap:8px;padding:18px 10px}
@@ -2739,6 +2740,31 @@ const GM_X=[
 {id:"compass",n:"Компас",s:"case",ach:"l8",ic:`<circle cx="20" cy="20" r="15" fill="#F4EFE0" stroke="#9A9CA6" stroke-width="3"/><path d="M20 8L24 20H16Z" fill="#D6454B"/><path d="M20 32L24 20H16Z" fill="#9A9CA6"/><circle cx="20" cy="20" r="2" fill="#24262E"/>`}
 ];
 GM_ITEMS.push(...GM_X);
+const gmLeg=(c,c2,l)=>`<rect x="56" y="148" width="22" height="${l}" rx="9" fill="${c}"/><rect x="82" y="148" width="22" height="${l}" rx="9" fill="${c}"/><rect x="56" y="148" width="48" height="12" rx="5" fill="${c2}"/>`;
+const GM_Y=[
+{id:"polo",n:"Поло",s:"top",req:["words",25],vb:"30 70 100 100",w:gmTop("#5F9A4A",false,`<path d="M68 90l12 14 12-14-4-4-8 8-8-8z" fill="#fff"/><path d="M80 104v14" stroke="#fff" stroke-width="2"/><circle cx="80" cy="110" r="1.4" fill="#2F6A2A"/>`)},
+{id:"hoodie",n:"Худи",s:"top",req:["xp",500],vb:"30 70 100 100",w:gmTop("#6B7A8F",false,`<path d="M62 90Q80 114 98 90L102 95Q80 124 58 95Z" fill="#5B6A7F"/><rect x="62" y="132" width="36" height="16" rx="6" fill="#5B6A7F"/><path d="M75 106v14M85 106v14" stroke="#fff" stroke-width="2" stroke-linecap="round"/>`)},
+{id:"jersey",n:"Майка Azzurri",s:"top",req:["mods",3],vb:"30 70 100 100",w:gmTop("#2F7FC1",false,`<path d="M70 90l10 12 10-12" fill="none" stroke="#fff" stroke-width="3"/><circle cx="93" cy="110" r="3.5" fill="#fff"/><path d="M73 122h14M80 122v20" stroke="#fff" stroke-width="3.6" stroke-linecap="round"/>`)},
+{id:"blazer",n:"Пиджак",s:"top",req:["mods",7],vb:"30 70 100 100",w:gmTop("#26324A",false,`<path d="M72 92l8 20 8-20z" fill="#F4F1E8"/><path d="M80 92L66 90 62 134 80 112z M80 92L94 90 98 134 80 112z" fill="#1D2638"/><circle cx="80" cy="126" r="1.8" fill="#E9C95A"/><circle cx="80" cy="138" r="1.8" fill="#E9C95A"/>`)},
+{id:"hawaii",n:"Гавайская рубашка",s:"top",req:["lessons",5],vb:"30 70 100 100",w:gmTop("#F2D45C",false,`<path d="M68 90l12 14 12-14-4-4-8 8-8-8z" fill="#fff" opacity=".9"/><circle cx="64" cy="116" r="4.5" fill="#D6454B"/><circle cx="92" cy="126" r="4.5" fill="#E8913A"/><circle cx="74" cy="138" r="4" fill="#D6456B"/><circle cx="98" cy="108" r="3.5" fill="#D6454B"/><path d="M60 126q4-6 8 0M86 112q4-6 8 0" stroke="#5F9A4A" stroke-width="2.4" fill="none" stroke-linecap="round"/>`)},
+{id:"sweater",n:"Свитер",s:"top",req:["xp",1500],vb:"30 70 100 100",w:gmTop("#E9DFC9",false,`<rect x="66" y="86" width="28" height="10" rx="5" fill="#DDD1B6"/><path d="M72 100v50M80 100v50M88 100v50" stroke="#D3C6A8" stroke-width="3"/><rect x="37" y="114" width="17" height="4" fill="#DDD1B6"/><rect x="106" y="114" width="17" height="4" fill="#DDD1B6"/>`)},
+{id:"blackpants",n:"Чёрные брюки",s:"bottom",req:["lessons",3],vb:"40 140 80 90",w:gmLeg("#2B2D35","#22242B",76)},
+{id:"khaki",n:"Бермуды хаки",s:"bottom",req:["words",200],vb:"40 140 80 60",w:gmLeg("#C9B07A","#B89D66",44)+`<rect x="60" y="164" width="14" height="10" rx="2" fill="#B89D66"/><rect x="86" y="164" width="14" height="10" rx="2" fill="#B89D66"/>`},
+{id:"skirt",n:"Плиссе-юбка",s:"bottom",req:["mods",9],vb:"40 140 80 70",w:`<path d="M54 148h52l10 42H44z" fill="#D6454B"/><path d="M62 150l-6 40M72 150l-3 40M80 150v40M88 150l3 40M98 150l6 40" stroke="#B93A3F" stroke-width="2"/><rect x="54" y="146" width="52" height="8" rx="3" fill="#B93A3F"/>`},
+{id:"whitepants",n:"Белые брюки",s:"bottom",req:["xp",3000],vb:"40 140 80 90",w:gmLeg("#F1EEE6","#E2DED2",76)+`<path d="M67 162v60M93 162v60" stroke="#E2DED2" stroke-width="1.6"/>`},
+{id:"joggers",n:"Спортивные штаны",s:"bottom",req:["lessons",14],vb:"40 140 80 90",w:gmLeg("#4A4F5A","#3E424C",76)+`<rect x="56" y="214" width="22" height="9" rx="4" fill="#3A3E47"/><rect x="82" y="214" width="22" height="9" rx="4" fill="#3A3E47"/><path d="M60 162v50M100 162v50" stroke="#fff" stroke-width="2.2"/>`},
+{id:"espadrilles",n:"Эспадрильи",s:"shoes",req:["words",75],vb:"50 196 60 60",w:`<ellipse cx="67" cy="226" rx="13" ry="6.2" fill="#2F5D8A"/><ellipse cx="93" cy="226" rx="13" ry="6.2" fill="#2F5D8A"/><path d="M54 231h26M80 231h26" stroke="#C9A36A" stroke-width="4" stroke-linecap="round"/>`},
+{id:"boots",n:"Ботинки",s:"shoes",req:["words",400],vb:"50 196 60 60",w:`<rect x="56" y="208" width="22" height="20" rx="5" fill="#7A4A2A"/><rect x="82" y="208" width="22" height="20" rx="5" fill="#7A4A2A"/><ellipse cx="67" cy="228" rx="14" ry="6.2" fill="#6B3E22"/><ellipse cx="93" cy="228" rx="14" ry="6.2" fill="#6B3E22"/><path d="M58 214h18M84 214h18" stroke="#5C331A" stroke-width="2"/>`},
+{id:"flats",n:"Красные балетки",s:"shoes",req:["lessons",20],vb:"50 196 60 60",w:`<ellipse cx="67" cy="227" rx="13" ry="6" fill="#D6454B"/><ellipse cx="93" cy="227" rx="13" ry="6" fill="#D6454B"/><circle cx="62" cy="225" r="2.2" fill="#B93A3F"/><circle cx="98" cy="225" r="2.2" fill="#B93A3F"/>`},
+{id:"converse",n:"Чёрные кеды",s:"shoes",req:["mods",5],vb:"50 196 60 60",w:`<rect x="57" y="212" width="20" height="14" rx="5" fill="#24262E"/><rect x="83" y="212" width="20" height="14" rx="5" fill="#24262E"/><ellipse cx="67" cy="227" rx="14" ry="6.4" fill="#24262E"/><ellipse cx="93" cy="227" rx="14" ry="6.4" fill="#24262E"/><path d="M53 231h28M79 231h28" stroke="#fff" stroke-width="3" stroke-linecap="round"/><path d="M60 217h14M86 217h14" stroke="#fff" stroke-width="1.6"/>`},
+{id:"beanie",n:"Шапка-бини",s:"hat",req:["xp",800],vb:"40 0 80 60",w:`<path d="M55 44C52 18 108 18 105 44Z" fill="#C9453A"/><rect x="53" y="38" width="54" height="9" rx="4" fill="#A83A31"/><circle cx="80" cy="19" r="5" fill="#E9C95A"/>`},
+{id:"panama",n:"Панама",s:"hat",req:["mods",11],vb:"40 0 80 60",w:`<ellipse cx="80" cy="38" rx="36" ry="8" fill="#EADFB8"/><path d="M58 36C58 16 102 16 102 36Z" fill="#F1E8C8"/><rect x="58" y="30" width="44" height="5" fill="#2F5D8A"/>`},
+{id:"fedora",n:"Федора",s:"hat",req:["xp",2000],vb:"40 0 80 60",w:`<ellipse cx="80" cy="38" rx="34" ry="7.5" fill="#3B3F4A"/><path d="M60 36C58 14 102 14 100 36Z" fill="#4A4F5C"/><path d="M72 18q8 6 16 0" stroke="#3B3F4A" stroke-width="2" fill="none"/><rect x="60" y="30" width="40" height="6" fill="#D6454B"/>`},
+{id:"mustache",n:"Усы",s:"face",req:["xp",1200],vb:"48 28 64 64",w:`<path d="M65 68q7-6 15 0q8-6 15 0q-4 7-15 3q-11 4-15-3z" fill="#2B2220"/>`},
+{id:"umbrella",n:"Зонтик",s:"hand",req:["lessons",25],vb:"70 40 90 120",w:`<g transform="rotate(20 114 148)"><path d="M114 150V92" stroke="#4A4F5A" stroke-width="3" stroke-linecap="round"/><path d="M86 94Q114 52 142 94Q128 84 114 94Q100 84 86 94z" fill="#D6454B"/><path d="M114 94q-3 8-8 8" stroke="#4A4F5A" stroke-width="0"/></g>`}
+];
+GM_ITEMS.push(...GM_Y);
+
 
 const GM_BY=Object.fromEntries(GM_ITEMS.map(i=>[i.id,i]));
 const GM_CASE=GM_ITEMS.filter(i=>i.s==="case"),GM_WEAR=GM_ITEMS.filter(i=>i.s!=="case");
@@ -2823,8 +2849,10 @@ const gmChar=()=>(state.gm&&state.gm.char)||"a";
 const gmLook=()=>{const g=state.gm||{},b=GM_CHARS[g.char]||GM_CHARS.a,L=Object.assign({},b,g.look||{});L.n=((g.name||"").trim())||b.n;return L};
 const gmScene=()=>{const s=state.gm&&state.gm.scene;return GM_SCBY[s]&&gmOwned("sc:"+s)?s:"home"};
 const gmOwned=id=>!!(state.gm&&state.gm.got&&state.gm.got[id]);
-const gmHint=it=>it.mod?"Сдай модуль «"+((COURSE.find(m=>m.id===it.mod)||{}).t||"?")+"»":it.ach?"Получи награду «"+((ACH.find(a=>a[0]===it.ach)||[])[2]||"?")+"»":"Достигни уровня "+it.lvl+" · "+LEVEL_T[it.lvl-1][0];
-function gmEarned(it){try{return it.mod?modPassed(it.mod):it.ach?!!(state.ach&&state.ach[it.ach]):it.lvl?levelOf(totalXP())>=it.lvl:true}catch(e){return false}}
+const gmHint=it=>it.mod?"Сдай модуль «"+((COURSE.find(m=>m.id===it.mod)||{}).t||"?")+"»":it.req?GM_REQT[it.req[0]](it.req[1]):it.ach?"Получи награду «"+((ACH.find(a=>a[0]===it.ach)||[])[2]||"?")+"»":"Достигни уровня "+it.lvl+" · "+LEVEL_T[it.lvl-1][0];
+const GM_REQT={words:n=>"Выучи "+n+" слов",xp:n=>"Набери "+n+" очков за всё время",lessons:n=>"Пройди уроков грамматики: "+n,mods:n=>"Сдай модулей: "+n};
+function gmReq(r){const n=r[1];switch(r[0]){case"words":return learnedCount()>=n;case"xp":return totalXP()>=n;case"lessons":return Object.keys(state.lessons).length>=n;case"mods":return COURSE.filter(m=>modPassed(m.id)).length>=n}return false}
+function gmEarned(it){try{return it.mod?modPassed(it.mod):it.ach?!!(state.ach&&state.ach[it.ach]):it.req?gmReq(it.req):it.lvl?levelOf(totalXP())>=it.lvl:true}catch(e){return false}}
 function gmWear(){const g=gmG(),w={};for(const[s,id]of Object.entries(g.wear||{}))if(g.got[id]&&GM_BY[id]&&GM_BY[id].s===s)w[s]=id;return w}
 // выдача вещей за пройденные модули и уровни опыта; возвращает число новых вещей
 function gmCheck(){
@@ -2888,7 +2916,7 @@ function gmTalk(){
   if(!(state.gm&&state.gm.char)){go("me");return}
   const L=gmPhrases();let i;do{i=Math.floor(Math.random()*L.length)}while(i===gmSayI&&L.length>1);gmSayI=i;
   const p=L[i];gmSay(p[0],p[1],{link:true,ms:6500});
-  try{speak(p[0])}catch(e){}
+  try{speak(p[0],false,gmChar()==="b"?"f":"m")}catch(e){}
   gmReact("hop","talk",1900);
 }
 function gmGreet(){
@@ -2924,6 +2952,7 @@ function gmEditor(L){
   <div class="gmlab">Цвет волос</div><div class="gmsws">${sw("hc",GM_HC,L.hc)}</div>
   <div class="gmlab">Глаза</div><div class="gmsws">${sw("eye",GM_EYES,L.eye)}<button class="gmchip ${L.fr?"on":""}" data-gmlook="fr:${L.fr?0:1}">Веснушки</button></div></div>`;
 }
+const GM_ORDER=["top","bottom","shoes","hat","face","neck","chest","back","hand"],GM_SLN={top:"Верх",bottom:"Низ",shoes:"Обувь",hat:"Головные уборы",face:"Лицо",neck:"Шея",chest:"Грудь",back:"Спина",hand:"В руке"};
 function vMe(){
   const g=gmG();if(!g.char)return gmChooser();
   const L=gmLook(),w=gmWear(),{n,tot,pct}=gmCounts(),sc=gmScCounts(),cur=gmScene();
@@ -2946,7 +2975,7 @@ function vMe(){
    <div>
     <h2 class="h2top">Внешность</h2>${gmEditor(L)}
     <h2>Места <span class="muted small">${sc.n}/${sc.tot}</span></h2><div class="gmgrid gmgrid-sc">${GM_SC.map(stile).join("")}</div>
-    <h2>Одежда и аксессуары <span class="muted small">${wn}/${GM_WEAR.length}</span></h2><div class="gmgrid">${GM_WEAR.map(tile).join("")}</div>
+    <h2>Одежда и аксессуары <span class="muted small">${wn}/${GM_WEAR.length}</span></h2>${GM_ORDER.map(s=>{const L=GM_WEAR.filter(i=>i.s===s);return `<h3 class="gmh3">${GM_SLN[s]} <span class="muted small">${L.filter(i=>gmOwned(i.id)).length}/${L.length}</span></h3><div class="gmgrid">${L.map(tile).join("")}</div>`}).join("")}
     <h2>В чемодане <span class="muted small">${cn}/${GM_CASE.length}</span></h2><div class="gmgrid">${GM_CASE.map(tile).join("")}</div>
    </div>
   </div>`;
@@ -3069,13 +3098,15 @@ function unlockTTS(){
   try{const u=new SpeechSynthesisUtterance(" ");u.volume=0;u.lang="it-IT";speechSynthesis.speak(u);pickVoice()}catch(e){}
 }
 ["touchstart","pointerdown","keydown"].forEach(ev=>document.addEventListener(ev,unlockTTS,{capture:true,passive:true}));
-function speak(text,slow){
+function pickGenderVoice(g){try{const vs=speechSynthesis.getVoices().filter(v=>(v.lang||"").toLowerCase().replace("_","-").startsWith("it"));const M=/luca|cosimo|diego|giorgio|lorenzo|matteo|davide|stefano|paolo|male|maschio/i,F=/alice|elsa|isabella|federica|paola|emma|silvia|alessandra|carla|chiara|female|femmina/i;return vs.find(v=>(g==="m"?M:F).test(v.name))||null}catch(e){return null}}
+function speak(text,slow,g){
   if(typeof dlg!=="undefined"&&dlg&&dlg.playing){stopDialog();render()}
   try{
     if(!("speechSynthesis" in window)){toast("Озвучка не поддерживается этим браузером");return}
     if(!itVoice)pickVoice();
     const u=new SpeechSynthesisUtterance(String(text).replace(/\(.*?\)/g,"").replace(/→/g,",").replace(/___/g," "));
     u.lang="it-IT"; if(itVoice)u.voice=itVoice;
+    if(g){const gv=pickGenderVoice(g);if(gv)u.voice=gv;else u.pitch=g==="m"?0.55:1.12}
     u.rate=slow?0.6:state.settings.rate; u.volume=1;
     const busy=speechSynthesis.speaking||speechSynthesis.pending;
     if(busy){speechSynthesis.cancel();setTimeout(()=>speechSynthesis.speak(u),80)}
