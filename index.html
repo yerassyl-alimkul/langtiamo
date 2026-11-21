@@ -335,6 +335,7 @@ input:focus,textarea:focus{outline:none;border-color:var(--ink)}
 .toast{background:var(--ink);color:var(--on-ink);border-radius:18px;padding:13px 18px;bottom:calc(104px + var(--sab))}
 .sheet{border-radius:22px 22px 0 0;background:var(--bg)}
 .modal{background:rgba(23,24,28,.45)}
+body:has(#gate) .modal{z-index:90}
 .gloss{border-radius:22px;border:1px solid var(--line);box-shadow:0 10px 30px rgba(23,24,28,.18)}
 .ex{border-radius:999px}.ex span{color:var(--accent-text)}.ex .play{width:34px;height:34px}
 mark.err{border-bottom-color:var(--red)}
@@ -3255,7 +3256,7 @@ async function srvInit(local){
   const m=r.state?mergeStates(r.state,local||null):(local||DEF());
   srvBase=Number(r.updatedAt)||0;
   applyState(m);
-  srvReady=true;srvPoll();
+  srvReady=true;srvPoll();gateOff();
   if(!r.state||!sameProgress(m,r.state)||state.updatedAt>(r.updatedAt||0)){if(r.state&&!sameProgress(m,r.state))state.updatedAt=Math.max(Date.now(),r.updatedAt||0);srvPush()}
   pushStats();
   return true;
@@ -3266,8 +3267,18 @@ document.addEventListener("visibilitychange",()=>{
   if(document.visibilityState==="hidden"){clearTimeout(srvTimer);srvPush();clearTimeout(statTimer);pushStats()}
   else srvPull();
 });
+// вход на сайт только через Telegram: без аккаунта показываем экран входа
+function gateOn(){
+  if(TG||window.claude||$("#gate"))return;
+  const g=document.createElement("div");g.id="gate";
+  g.style.cssText="position:fixed;inset:0;z-index:80;background:var(--bg);display:flex;align-items:center;justify-content:center;padding:24px;text-align:center";
+  g.innerHTML=`<div style="max-width:340px"><div style="font-size:54px">🇮🇹</div><h1 style="margin:10px 0 6px">Langtiamo</h1><p class="muted">Чтобы прогресс был общим с ботом и не терялся, на сайт входят через Telegram.</p><button class="btn block mt" id="gateLogin">✈️ Войти через Telegram</button><p class="muted small mt">Или открой бота @${BOT_NAME} и отправь /site, там будет кнопка со входом.</p></div>`;
+  document.body.appendChild(g);
+  $("#gateLogin").onclick=startLogin;
+}
+function gateOff(){const g=$("#gate");if(g)g.remove()}
 async function initWeb(){
-  if(!acct||!acct.token){syncMode="local";render();return}
+  if(!acct||!acct.token){syncMode="local";render();gateOn();return}
   uid="tg"+acct.id;syncMode="account";
   const mine=lsGet(KEY+":"+uid);
   if(mine)useState(mine,uid);
@@ -3303,7 +3314,7 @@ function logout(silent){
   acct=null;srvReady=false;try{localStorage.removeItem(ACC_KEY)}catch(e){}
   uid=null;syncMode="local";state=DEF();sess=null;les=null;prac=null;
   if(!silent){$("#modal").classList.remove("on");toast("Ты вышел из аккаунта")}
-  render();
+  render();gateOn();
 }
 async function initTG(){
   const u=TG&&TG.initDataUnsafe&&TG.initDataUnsafe.user;if(!u)return;
