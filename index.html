@@ -2585,7 +2585,7 @@ function mergeStates(a,b){
   const maxMap=k=>{const r=Object.assign({},o[k]||{});for(const[x,v]of Object.entries(n[k]||{}))r[x]=Math.max(Number(v)||0,Number(r[x])||0);out[k]=r};
   ["lessons","sounds","topicsSeen","dialogs","flags","best","practice","newLog","xp"].forEach(maxMap);
   out.ach=Object.assign({},o.ach||{});for(const[x,v]of Object.entries(n.ach||{}))out.ach[x]=out.ach[x]?Math.min(out.ach[x],v):v;
-  out.cards=Object.assign({},o.cards||{},n.cards||{});
+  out.cards=Object.assign({},o.cards||{});for(const[id,c]of Object.entries(n.cards||{})){const p=out.cards[id];out.cards[id]=(!p||((c.reps||0)+(c.lapses||0))>=((p.reps||0)+(p.lapses||0)))?c:p}
   out.mist=Object.assign({},n.mist||{});
   out.custom=Object.assign({},o.custom||{},n.custom||{});
   out.mod=JSON.parse(JSON.stringify(o.mod||{}));for(const[id,v]of Object.entries(n.mod||{})){const r=out.mod[id]||(out.mod[id]={});for(const[k,x]of Object.entries(v||{}))r[k]=Math.max(Number(x)||0,Number(r[k])||0)}
@@ -3205,11 +3205,12 @@ function authBody(){if(TG&&TG.initData)return{initData:TG.initData};if(acct&&acc
 function pushStats(){const a=authBody();if(!a)return;try{fetch(FUNC_URL+"?a=sync",{method:"POST",headers:{"content-type":"application/json"},body:JSON.stringify({...a,stats:statsPayload()}),keepalive:true}).catch(()=>{})}catch(e){}}
 function tgSaved(){
   if(tgReady&&TGS){clearTimeout(tgTimer);tgTimer=setTimeout(tgPush,1500)}
-  if(srvReady){clearTimeout(srvTimer);srvTimer=setTimeout(srvPush,2000);clearTimeout(statTimer);statTimer=setTimeout(pushStats,4000)}
+  if(srvReady){clearTimeout(srvTimer);srvTimer=setTimeout(srvPush,500);clearTimeout(statTimer);statTimer=setTimeout(pushStats,4000)}
 }
 /* ---- общий аккаунт: прогресс на сервере, один для бота и сайта ---- */
 const ACC_KEY="pianopiano.session",BOT_NAME="langtiamo_bot";
-let srvBase=0,acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null;
+let srvBase=0,acct=null,srvReady=false,srvTimer=null,srvWriting=false,srvAgain=false,loginPoll=null,srvDirty=false,srvRetryT=null,srvPollT=null;
+function srvRetry(){srvDirty=true;clearTimeout(srvRetryT);srvRetryT=setTimeout(()=>{if(srvDirty)srvPush()},5000)}
 try{acct=JSON.parse(localStorage.getItem(ACC_KEY)||"null")}catch(e){}
 // ссылка на сайт из бота (/site): #login=<токен> — сразу входим в общий аккаунт
 try{const m=location.hash.match(/(?:^#|&)login=([A-Za-z0-9_\-]+\.[a-f0-9]+)/);if(m){const p=decodeToken(m[1]);
@@ -3220,20 +3221,32 @@ async function srvPush(){
   const a=authBody();if(!srvReady||!a)return;
   if(srvWriting){srvAgain=true;return}srvWriting=true;
   try{const at=Math.max(state.updatedAt||0,srvBase+1);const r=await api("save",{...a,state,updatedAt:at,base:srvBase});
-    if(r&&r.ok)srvBase=at;else if(r&&r.stale){srvWriting=false;await srvPull(true);return}}
-  catch(e){}
+    if(r&&r.ok){srvBase=at;srvDirty=state.updatedAt>at}else if(r&&r.stale){srvWriting=false;await srvPull(true);return}else srvRetry()}
+  catch(e){srvRetry()}
   srvWriting=false;if(srvAgain){srvAgain=false;srvPush()}
 }
 async function srvPull(){
   const a=authBody();if(!a)return null;
-  try{const r=await api("load",a);
+  try{const r=await api("load",{...a,since:srvBase});
+    if(r&&r.ok&&r.same)return r;
     if(r&&r.ok&&r.state&&(Number(r.updatedAt)||0)!==srvBase){
       srvBase=Number(r.updatedAt)||0;
       const m=mergeStates(r.state,state);
-      if(!sameProgress(m,r.state)){m.updatedAt=Math.max(srvBase+1,Date.now());applyState(m);srvPush()}else{m.updatedAt=Math.max(m.updatedAt||0,srvBase);applyState(m)}
+      const changed=!sameProgress(m,state)||JSON.stringify(m.gm||null)!==JSON.stringify(state.gm||null);
+      const busy=!!(sess||les||prac);
+      if(!sameProgress(m,r.state)){m.updatedAt=Math.max(srvBase+1,Date.now());srvApply(m,busy,changed);srvPush()}
+      else{m.updatedAt=Math.max(m.updatedAt||0,srvBase);srvApply(m,busy,changed)}
     }else if(r&&r.ok&&!r.state&&srvBase===0)srvPush();
     return r}catch(e){return null}
 }
+// во время урока или тренировки подтягиваем данные тихо, без перерисовки
+function srvApply(m,busy,changed){
+  if(busy){state=merge(m);if(uid){state.owner=uid;lsSet(KEY+":"+uid,state)}return}
+  if(changed)applyState(m);else{state=merge(m);if(uid){state.owner=uid;lsSet(KEY+":"+uid,state)}}
+}
+function srvPoll(){clearInterval(srvPollT);srvPollT=setInterval(()=>{if(srvReady&&document.visibilityState==="visible"&&!srvWriting)srvPull()},6000)}
+window.addEventListener("focus",()=>{if(srvReady)srvPull()});
+window.addEventListener("online",()=>{if(srvReady){srvDirty=false;srvPush();srvPull()}});
 // первая загрузка: если на сервере уже есть прогресс, берём его; если нет, отправляем то, что есть на устройстве
 async function srvInit(local){
   const a=authBody();if(!a)return false;
@@ -3242,7 +3255,7 @@ async function srvInit(local){
   const m=r.state?mergeStates(r.state,local||null):(local||DEF());
   srvBase=Number(r.updatedAt)||0;
   applyState(m);
-  srvReady=true;
+  srvReady=true;srvPoll();
   if(!r.state||!sameProgress(m,r.state)||state.updatedAt>(r.updatedAt||0)){if(r.state&&!sameProgress(m,r.state))state.updatedAt=Math.max(Date.now(),r.updatedAt||0);srvPush()}
   pushStats();
   return true;

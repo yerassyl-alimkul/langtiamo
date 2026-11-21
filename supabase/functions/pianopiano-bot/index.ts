@@ -149,6 +149,10 @@ async function onLoginPoll(body: any) {
 async function onLoad(body: any) {
   const u = await whoami(body);
   if (!u) return json({ ok: false }, 401);
+  if (body?.since !== undefined) {
+    const { data: v } = await sb.from("pp_progress").select("updated_at").eq("tg_id", u.id).maybeSingle();
+    if (v && Number(v.updated_at) === Number(body.since)) return json({ ok: true, same: true, updatedAt: v.updated_at });
+  }
   const { data } = await sb.from("pp_progress").select("state, updated_at").eq("tg_id", u.id).maybeSingle();
   return json({ ok: true, id: u.id, name: u.first_name || "", state: data?.state ?? null, updatedAt: data?.updated_at ?? 0 });
 }
